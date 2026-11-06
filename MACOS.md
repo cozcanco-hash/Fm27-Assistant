@@ -22,6 +22,15 @@ ChatGPT sign-in still need an end-to-end test on the owner's Mac.
 
 ## Get a build
 
+The [2026-11-06 ARM64 preview](https://github.com/cozcanco-hash/Fm27-Assistant/actions/runs/42161326949/artifacts/13477226606)
+is available until 2026-11-20. Code commit
+[`61e2b01`](https://github.com/cozcanco-hash/Fm27-Assistant/commit/61e2b01b670be6752837e9d883395df1cb62dafa)
+passed full verification on the `macos-15` ARM64 runner: 403 tests passed,
+9 opt-in local/live tests were skipped, and coverage thresholds passed. The
+packaged launcher started with its bundled runtime, health returned `UP`, and
+the root URL returned HTTP 200. See the
+[complete workflow](https://github.com/cozcanco-hash/Fm27-Assistant/actions/runs/42161326949).
+
 Open the repository's **Actions → macOS Apple Silicon preview** workflow. A
 successful run uploads `FM27-Assistant-macos-arm64-preview` as a private artifact
 for 14 days. Extract the artifact, then its application ZIP. The ZIP includes a
