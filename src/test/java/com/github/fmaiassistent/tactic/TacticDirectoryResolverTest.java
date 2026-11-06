@@ -1,5 +1,6 @@
 package com.github.fmaiassistent.tactic;
 
+import com.github.fmaiassistent.platform.OperatingSystem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -59,7 +60,7 @@ class TacticDirectoryResolverTest {
 
     @Test
     void resolvesCandidatesUnderHome(@TempDir Path home) {
-        List<Path> candidates = TacticDirectoryResolver.candidates(home);
+        List<Path> candidates = TacticDirectoryResolver.candidates(home, OperatingSystem.LINUX);
 
         assertThat(candidates).hasSize(3);
         assertThat(candidates.getFirst()).isEqualTo(home.resolve(
@@ -79,7 +80,7 @@ class TacticDirectoryResolverTest {
                 "\"libraryfolders\"\n{\n\t\"0\"\n\t{\n\t\t\"path\"\t\t\"" + home.resolve(".local/share/Steam") + "\"\n\t}\n"
                         + "\t\"1\"\n\t{\n\t\t\"path\"\t\t\"" + customLib + "\"\n\t}\n}");
 
-        List<Path> candidates = TacticDirectoryResolver.candidates(home);
+        List<Path> candidates = TacticDirectoryResolver.candidates(home, OperatingSystem.LINUX);
 
         assertThat(candidates).contains(tactics.toAbsolutePath().normalize());
 
@@ -106,5 +107,17 @@ class TacticDirectoryResolverTest {
     @Test
     void returnsEmptyLibrariesWhenVdfIsMissing(@TempDir Path home) {
         assertThat(TacticDirectoryResolver.parseLibraryFolders(home.resolve("libraryfolders.vdf"))).isEmpty();
+    }
+
+    @Test
+    void macUsesNativeTacticsFolderAndNeverAProtonPrefix(@TempDir Path home) throws Exception {
+        Path tactics = home.resolve("Library/Application Support/Sports Interactive/Football Manager 27/tactics");
+        Files.createDirectories(tactics);
+        Files.write(tactics.resolve("mac.fmf"), new byte[]{1});
+        List<Path> candidates = TacticDirectoryResolver.candidates(home, OperatingSystem.MACOS);
+
+        assertThat(candidates).containsExactly(tactics.toAbsolutePath().normalize());
+        assertThat(new TacticDirectoryResolver(candidates).listTactics())
+                .extracting(TacticDirectoryResolver.DiskTactic::fileName).containsExactly("mac.fmf");
     }
 }

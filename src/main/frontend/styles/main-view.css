@@ -1358,3 +1358,11 @@ vaadin-select:hover::part(input-field) {
     font-size: 13px;
     font-weight: 650;
 }
+.macos-preview-banner {
+    padding: 10px 24px;
+    background: var(--lumo-contrast-5pct);
+    color: var(--lumo-body-text-color);
+    border-top: 1px solid var(--lumo-contrast-10pct);
+    font-size: var(--lumo-font-size-s);
+    line-height: 1.5;
+}

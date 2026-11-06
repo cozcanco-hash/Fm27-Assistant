@@ -21,3 +21,11 @@ src/main/frontend/index.html
 /website/dist/
 /website/.astro/
 /docs/
+.DS_Store
+.env
+.env.*
+!.env.example
+*.fm
+*.h2.db
+*.mv.db
+*.trace.db

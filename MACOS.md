@@ -1,24 +1,123 @@
-# FM27 Assistant for macOS
+# macOS developer preview
 
-Private development workspace for Can Özcan's Football Manager 27 AI assistant.
+This private adaptation targets Can's Apple Silicon Mac. It packages the existing
+Java/Vaadin application as a macOS `.app`; the interface opens in the default
+browser on the local computer. It is not a SwiftUI rewrite or a plugin injected
+into Football Manager.
 
-## Status
+## Current scope
 
-macOS adaptation in progress. The original project currently supports Windows and Linux; this repository does not yet claim a tested macOS live-game connection.
+- Build a native Apple Silicon `.app` with Java 25 bundled inside.
+- Discover macOS Steam libraries and the native FM27 tactics/shortlists folders.
+- Find a locally installed Codex CLI when launched from Finder's minimal PATH.
+- Keep the packaged app's AI workspace in a writable user directory.
+- Show a clear preview notice and prevent unsupported live memory reads on Mac.
 
-## Upstream
+**Live Mac squad loading is not implemented.** Player form, attributes, recruitment
+and squad-based tactical advice require a verified data source. They must not be
+presented as working simply because the interface starts. Existing Windows/Linux
+memory offsets are not assumed to match the native Mac game. Tactic `.fmf` parsing
+and Codex conversations are inherited features; real FM27 Mac files and a real
+ChatGPT sign-in still need an end-to-end test on the owner's Mac.
 
-- Project: https://github.com/JelmerBouma1985/fm-ai-assistent
-- Baseline commit: `a06ac845acfd6c0eccbd61e3a633b3518584e457`
-- Upstream author: JelmerBouma1985 and contributors
+## Get a build
 
-The upstream source will be imported with attribution. No new license or redistribution grant is asserted for upstream code.
+Open the repository's **Actions → macOS Apple Silicon preview** workflow. A
+successful run uploads `FM27-Assistant-macos-arm64-preview` as a private artifact
+for 14 days. Extract the artifact, then its application ZIP. The ZIP includes a
+`.app` and has a companion SHA-256 checksum. The app contains its Java runtime;
+an end user does not need a separate JDK.
 
-## Goals
+These development builds are not Developer ID signed or notarized. Distribution
+and Gatekeeper installation testing are a later milestone. Prefer a local source
+build for development; do not disable macOS security features to test live reads.
 
-1. Package an Apple Silicon macOS application with its Java runtime.
-2. Discover native FM27 tactics, shortlists and Steam installations.
-3. Connect the user's locally authenticated Codex CLI.
-4. Validate a macOS-specific game-data integration before enabling live squad analysis.
+## Build on your Mac
 
-No game saves, account credentials or API keys belong in this repository.
+Install a full **JDK 25** and **Node.js 24**, then:
+
+```bash
+git clone https://github.com/cozcanco-hash/Fm27-Assistant.git
+cd Fm27-Assistant
+export JAVA_HOME="$(/usr/libexec/java_home -v 25)"
+./mvnw --batch-mode --no-transfer-progress clean verify -Pdesktop
+open "target/dist/FM AI Assistent.app"
+```
+
+The JDK and build machine determine the output architecture. CI targets ARM64;
+Intel packaging has not been validated. Stop the application using **Exit** in
+its desktop control window. Closing a browser tab alone does not stop the server.
+
+For a headless application health check after building:
+
+```bash
+bash scripts/macos-smoke.sh
+```
+
+CI runs the full Maven verification gate, including unit/integration/architecture
+tests, coverage, production frontend and SBOM, then starts the actual `.app`
+launcher with a minimal PATH and checks `/actuator/health` and `/`. This verifies
+startup, not graphical Finder interaction, a Codex account or a running FM game.
+
+## Codex and ChatGPT
+
+Install the official Codex CLI on the Mac and sign in using your ChatGPT account
+through its normal login flow. The existing application uses the local Codex
+app-server. The ChatGPT subscription's applicable Codex limits apply; this does
+not turn the subscription into an OpenAI API key or promise unlimited usage.
+
+Executable search keeps an explicit setting first, then PATH, then user
+installations, Homebrew (`/opt/homebrew/bin` and `/usr/local/bin`) and NVM.
+For a custom install, launch the app with:
+
+```bash
+"target/dist/FM AI Assistent.app/Contents/MacOS/FM AI Assistent" \
+  --app.codex.executable=/absolute/path/to/codex
+```
+
+No account credentials or model access are bundled in the app. Do not commit
+Codex authentication files, game saves or local database snapshots.
+
+## Local folders and overrides
+
+| Purpose | Default on macOS |
+| --- | --- |
+| Steam | `~/Library/Application Support/Steam` |
+| FM27 tactics | `~/Library/Application Support/Sports Interactive/Football Manager 27/tactics` |
+| FM27 shortlists | `~/Library/Application Support/Sports Interactive/Football Manager 27/shortlists` |
+| Packaged AI workspace | `~/Library/Application Support/FM27 Assistant/workspace` |
+| Existing database and desktop log | `~/.fm-ai-assistent/` |
+
+Custom FM user-data locations are supported through Java system properties:
+`fmaiassistent.tactics.directory`, `fmaiassistent.shortlists.directory`, and
+`fmaiassistent.steam.directory`. Example for a custom tactics folder:
+
+```bash
+JAVA_TOOL_OPTIONS='-Dfmaiassistent.tactics.directory="/Users/you/FM Data/tactics"' \
+  "target/dist/FM AI Assistent.app/Contents/MacOS/FM AI Assistent"
+```
+
+The desktop profile binds HTTP/MCP to `127.0.0.1`. AI workspaces remain outside
+the application bundle, which may be read-only after installation.
+
+## Next acceptance milestone: actual squad advice
+
+1. Validate app launch, Codex sign-in and a real exported tactic on the M5 Mac.
+2. Establish a supported Mac game-data route: structured user exports first, or
+   a native reader only if the game's process permissions and layout permit it.
+3. Record FM build, architecture and field provenance; validate player identity,
+   attribute ranges and data freshness before replacing a stored snapshot.
+4. Add bounded parsing and malformed/stale-data fixtures. Reject incompatible
+   layouts without discarding the previous snapshot.
+5. Compare tactical recommendations with the same squad in FM, then enable
+   squad features for that verified route.
+
+There is no automated change to the running game's tactics in this preview.
+Signing/notarization and Intel testing are separate distribution milestones.
+
+## Source provenance
+
+Imported from [JelmerBouma1985/fm-ai-assistent](https://github.com/JelmerBouma1985/fm-ai-assistent)
+at commit `a06ac845acfd6c0eccbd61e3a633b3518584e457`. The imported README is retained
+as `README_UPSTREAM.md`. No new license grant is asserted for upstream code; this
+repository remains private. The original snapshot contains no root LICENSE file.

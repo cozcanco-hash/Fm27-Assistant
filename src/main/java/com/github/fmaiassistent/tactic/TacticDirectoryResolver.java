@@ -1,6 +1,8 @@
 package com.github.fmaiassistent.tactic;
 
 import com.github.fmaiassistent.steam.SteamLibraries;
+import com.github.fmaiassistent.platform.FmDirectories;
+import com.github.fmaiassistent.platform.OperatingSystem;
 
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
@@ -56,9 +58,8 @@ public final class TacticDirectoryResolver {
     public Path directory() {
         return directories.stream().filter(Files::isDirectory).findFirst()
                 .orElseGet(() -> directories.isEmpty()
-                        ? Path.of(System.getProperty("user.home"),
-                                "Documents/Sports Interactive/Football Manager 27/tactics")
-                                .toAbsolutePath().normalize()
+                        ? FmDirectories.nativeUserData(Path.of(System.getProperty("user.home")),
+                                OperatingSystem.current()).resolve("tactics")
                         : directories.getFirst());
     }
 
@@ -130,11 +131,19 @@ public final class TacticDirectoryResolver {
         return directoriesForHome(home);
     }
 
+    static List<Path> candidates(Path home, OperatingSystem os) {
+        return directoriesForHome(home, os);
+    }
+
     private static List<Path> directoriesForHome(Path home) {
+        return directoriesForHome(home, OperatingSystem.current());
+    }
+
+    private static List<Path> directoriesForHome(Path home, OperatingSystem os) {
         String suffix = "Sports Interactive/Football Manager 27/tactics";
         List<Path> candidates = new ArrayList<>();
-        candidates.add(home.resolve("Documents/" + suffix));
-        for (Path userDir : SteamLibraries.fmProtonUserDirectories(home)) {
+        candidates.add(FmDirectories.nativeUserData(home, os).resolve("tactics"));
+        for (Path userDir : SteamLibraries.fmProtonUserDirectories(home, os)) {
             candidates.add(userDir.resolve("Documents/" + suffix));
             candidates.add(userDir.resolve("AppData/Local/" + suffix.replace("tactics", "cloud/tactics")));
         }

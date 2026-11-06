@@ -1,5 +1,7 @@
 package com.github.fmaiassistent.steam;
 
+import com.github.fmaiassistent.platform.OperatingSystem;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -8,7 +10,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.OptionalLong;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -16,7 +17,7 @@ import java.util.regex.Pattern;
 
 /**
  * Locates Steam libraries on disk by reading {@code libraryfolders.vdf}.
- * FM27 (Steam appid 4530370) runs under Proton, so per-game user files live below
+ * On Linux, FM27 (Steam appid 4530370) runs under Proton, so user files live below
  * {@code steamapps/compatdata/4530370/pfx/...} inside whichever library holds the game.
  * Read-only: never writes to the Steam folders.
  */
@@ -36,7 +37,20 @@ public final class SteamLibraries {
      * {@code libraryfolders.vdf} plus the default location as fallback.
      */
     public static List<Path> libraries(Path home) {
-        return libraries(home, steamInstallRoots(home));
+        return libraries(home, OperatingSystem.current());
+    }
+
+    public static List<Path> libraries(Path home, OperatingSystem os) {
+        List<Path> roots = steamInstallRoots(home, os);
+        if (os == OperatingSystem.MACOS) {
+            Set<Path> libraries = new LinkedHashSet<>();
+            for (Path root : roots) {
+                libraries.addAll(parseLibraryFolders(root.resolve("steamapps/libraryfolders.vdf")));
+            }
+            libraries.addAll(roots);
+            return libraries.stream().map(path -> path.toAbsolutePath().normalize()).distinct().toList();
+        }
+        return libraries(home, roots);
     }
 
     static List<Path> libraries(Path home, List<Path> installRoots) {
@@ -52,7 +66,7 @@ public final class SteamLibraries {
         return libraries.stream().map(path -> path.toAbsolutePath().normalize()).distinct().toList();
     }
 
-    private static List<Path> steamInstallRoots(Path home) {
+    private static List<Path> steamInstallRoots(Path home, OperatingSystem os) {
         String configured = System.getProperty(DIRECTORY_PROPERTY);
         if (configured != null && !configured.isBlank()) {
             try {
@@ -61,7 +75,10 @@ public final class SteamLibraries {
                 return List.of();
             }
         }
-        if (!System.getProperty("os.name", "").toLowerCase(Locale.ROOT).startsWith("windows")
+        if (os == OperatingSystem.MACOS) {
+            return List.of(home.resolve("Library/Application Support/Steam"));
+        }
+        if (os != OperatingSystem.WINDOWS
                 || !home.toAbsolutePath().normalize().equals(
                         Path.of(System.getProperty("user.home")).toAbsolutePath().normalize())) {
             return List.of();
@@ -81,8 +98,15 @@ public final class SteamLibraries {
      * FM27 per library, in library order.
      */
     public static List<Path> fmProtonUserDirectories(Path home) {
+        return fmProtonUserDirectories(home, OperatingSystem.current());
+    }
+
+    public static List<Path> fmProtonUserDirectories(Path home, OperatingSystem os) {
+        if (os == OperatingSystem.MACOS) {
+            return List.of();
+        }
         String prefix = "steamapps/compatdata/" + FM27_APP_ID + "/pfx/drive_c/users/steamuser";
-        return libraries(home).stream()
+        return libraries(home, os).stream()
                 .map(library -> library.resolve(prefix).toAbsolutePath().normalize())
                 .distinct()
                 .toList();
@@ -93,7 +117,11 @@ public final class SteamLibraries {
      * {@code appmanifest_*.acf}; empty when the game is not found in any library.
      */
     public static java.util.Optional<Path> libraryWithApp(Path home, int appId) {
-        return libraries(home).stream()
+        return libraryWithApp(home, appId, OperatingSystem.current());
+    }
+
+    public static java.util.Optional<Path> libraryWithApp(Path home, int appId, OperatingSystem os) {
+        return libraries(home, os).stream()
                 .filter(library -> Files.isRegularFile(
                         library.resolve("steamapps/appmanifest_" + appId + ".acf")))
                 .findFirst();
@@ -105,7 +133,11 @@ public final class SteamLibraries {
      * unreadable, oversized or lacks a numeric build id. Read-only.
      */
     public static OptionalLong installedBuildId(Path home, int appId) {
-        var manifest = libraryWithApp(home, appId)
+        return installedBuildId(home, appId, OperatingSystem.current());
+    }
+
+    public static OptionalLong installedBuildId(Path home, int appId, OperatingSystem os) {
+        var manifest = libraryWithApp(home, appId, os)
                 .map(library -> library.resolve("steamapps/appmanifest_" + appId + ".acf"));
         if (manifest.isEmpty()) {
             return OptionalLong.empty();

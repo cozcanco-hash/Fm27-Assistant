@@ -1,5 +1,6 @@
 package com.github.fmaiassistent.steam;
 
+import com.github.fmaiassistent.platform.OperatingSystem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -19,7 +20,7 @@ class SteamLibrariesTest {
                 "\"libraryfolders\"\n{\n\t\"0\"\n\t{\n\t\t\"path\"\t\t\"" + home.resolve(".local/share/Steam") + "\"\n\t}\n"
                         + "\t\"1\"\n\t{\n\t\t\"path\"\t\t\"" + customLib + "\"\n\t}\n}");
 
-        List<Path> libraries = SteamLibraries.libraries(home);
+        List<Path> libraries = SteamLibraries.libraries(home, OperatingSystem.LINUX);
 
         assertThat(libraries).contains(
                 home.resolve(".local/share/Steam").toAbsolutePath().normalize(),
@@ -28,7 +29,7 @@ class SteamLibrariesTest {
 
     @Test
     void buildsProtonUserDirectoriesPerLibrary(@TempDir Path home) {
-        List<Path> userDirs = SteamLibraries.fmProtonUserDirectories(home);
+        List<Path> userDirs = SteamLibraries.fmProtonUserDirectories(home, OperatingSystem.LINUX);
 
         assertThat(userDirs).allMatch(path -> path.endsWith(
                 "steamapps/compatdata/4530370/pfx/drive_c/users/steamuser"));
@@ -50,9 +51,9 @@ class SteamLibrariesTest {
                 "\"libraryfolders\"\n{\n\t\"1\"\n\t{\n\t\t\"path\"\t\t\"" + customLib + "\"\n\t}\n}");
         Files.writeString(customLib.resolve("steamapps/appmanifest_4530370.acf"), "\"AppState\"{}");
 
-        assertThat(SteamLibraries.libraryWithApp(home, 4530370))
+        assertThat(SteamLibraries.libraryWithApp(home, 4530370, OperatingSystem.LINUX))
                 .hasValue(customLib.toAbsolutePath().normalize());
-        assertThat(SteamLibraries.libraryWithApp(home, 12345)).isEmpty();
+        assertThat(SteamLibraries.libraryWithApp(home, 12345, OperatingSystem.LINUX)).isEmpty();
     }
 
     @Test
@@ -61,7 +62,7 @@ class SteamLibrariesTest {
                 "\"AppState\"\n{\n\t\"appid\"\t\t\"4530370\"\n\t\"name\"\t\t\"Football Manager 27\"\n"
                         + "\t\"buildid\"\t\t\"26227640\"\n}");
 
-        assertThat(SteamLibraries.installedBuildId(home, 4530370)).hasValue(26227640L);
+        assertThat(SteamLibraries.installedBuildId(home, 4530370, OperatingSystem.LINUX)).hasValue(26227640L);
     }
 
     @Test
@@ -111,14 +112,31 @@ class SteamLibrariesTest {
     void emptyBuildIdWhenManifestLacksBuildId(@TempDir Path home) throws Exception {
         writeLibraryWithManifest(home, "\"AppState\"{}");
 
-        assertThat(SteamLibraries.installedBuildId(home, 4530370)).isEmpty();
+        assertThat(SteamLibraries.installedBuildId(home, 4530370, OperatingSystem.LINUX)).isEmpty();
     }
 
     @Test
     void emptyBuildIdWhenManifestOversized(@TempDir Path home) throws Exception {
         writeLibraryWithManifest(home, "\"AppState\"\n{\n\t\"buildid\"\t\t\"1\"\n}\n" + "x".repeat(64 * 1024));
 
-        assertThat(SteamLibraries.installedBuildId(home, 4530370)).isEmpty();
+        assertThat(SteamLibraries.installedBuildId(home, 4530370, OperatingSystem.LINUX)).isEmpty();
+    }
+
+    @Test
+    void macReadsCustomLibrariesFromNativeSteamRoot(@TempDir Path home) throws Exception {
+        Path steam = home.resolve("Library/Application Support/Steam");
+        Path custom = home.resolve("External Volume/SteamLibrary");
+        Files.createDirectories(steam.resolve("steamapps"));
+        Files.createDirectories(custom.resolve("steamapps"));
+        Files.writeString(steam.resolve("steamapps/libraryfolders.vdf"),
+                "\"libraryfolders\" { \"0\" { \"path\" \"" + custom + "\" } }");
+        Files.writeString(custom.resolve("steamapps/appmanifest_4530370.acf"),
+                "\"AppState\" { \"buildid\" \"26227640\" }");
+
+        assertThat(SteamLibraries.libraries(home, OperatingSystem.MACOS))
+                .containsExactly(custom.toAbsolutePath().normalize(), steam.toAbsolutePath().normalize());
+        assertThat(SteamLibraries.installedBuildId(home, 4530370, OperatingSystem.MACOS)).hasValue(26227640L);
+        assertThat(SteamLibraries.fmProtonUserDirectories(home, OperatingSystem.MACOS)).isEmpty();
     }
 
     private static Path writeLibraryWithManifest(Path home, String manifest) throws Exception {

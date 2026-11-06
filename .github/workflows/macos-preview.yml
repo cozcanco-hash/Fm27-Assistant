@@ -1,0 +1,79 @@
+name: macOS Apple Silicon preview
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '**.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: macos-preview-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  apple-silicon:
+    name: Test, package and start on Apple Silicon
+    runs-on: macos-15
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Confirm native architecture
+        run: |
+          test "$(uname -m)" = arm64
+          java -version
+
+      - name: Full verification and native application package
+        run: ./mvnw --batch-mode --no-transfer-progress clean verify -Pdesktop
+
+      - name: Start the packaged application with a minimal PATH
+        run: bash scripts/macos-smoke.sh
+
+      - name: Archive application and checksum
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent \
+            "target/dist/FM AI Assistent.app" "target/FM27-Assistant-macos-arm64-preview.zip"
+          cd target
+          shasum -a 256 FM27-Assistant-macos-arm64-preview.zip > FM27-Assistant-macos-arm64-preview.sha256
+
+      - name: Upload private developer preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: FM27-Assistant-macos-arm64-preview
+          path: |
+            target/FM27-Assistant-macos-arm64-preview.zip
+            target/FM27-Assistant-macos-arm64-preview.sha256
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload verification reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-verification-reports
+          path: |
+            target/surefire-reports
+            target/site/jacoco
+            target/macos-smoke.log
+            target/classes/META-INF/sbom/application.cdx.json
+          if-no-files-found: ignore
+          retention-days: 14

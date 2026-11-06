@@ -1,6 +1,8 @@
 package com.github.fmaiassistent.web.ui;
 
 import com.github.fmaiassistent.domain.entity.ClubEntity;
+import com.github.fmaiassistent.memory.ProcessReaders;
+import com.github.fmaiassistent.platform.OperatingSystem;
 import com.github.fmaiassistent.domain.entity.CompetitionEntity;
 import com.github.fmaiassistent.domain.entity.FixtureEntity;
 import com.github.fmaiassistent.domain.entity.PlayerEntity;
@@ -276,6 +278,14 @@ public class MainView extends VerticalLayout {
 
         Div header = new Div(appBar);
         header.addClassName("app-header");
+        if (OperatingSystem.current() == OperatingSystem.MACOS) {
+            loadButton.setEnabled(false);
+            loadButton.setTooltipText("Live squad loading is not available in the macOS preview");
+            Div preview = new Div(new Span(ProcessReaders.macOsPreviewMessage()));
+            preview.addClassName("macos-preview-banner");
+            preview.getElement().setAttribute("role", "note");
+            header.add(preview);
+        }
         return header;
     }
 
@@ -386,6 +396,10 @@ public class MainView extends VerticalLayout {
     }
 
     private void loadAllData() {
+        if (OperatingSystem.current() == OperatingSystem.MACOS) {
+            Notification.show(ProcessReaders.macOsPreviewMessage(), 8000, Notification.Position.TOP_CENTER);
+            return;
+        }
         UI ui = UI.getCurrent();
         loadButton.setEnabled(false);
         loadButton.setText("Loading...");

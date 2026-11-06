@@ -303,7 +303,7 @@
                                 <configuration>
                                     <rules>
                                         <requireFilesExist>
-                                            <message>Desktop packaging requires a full Java 25 JDK with jpackage. Run Maven with that JDK on Windows or Linux.</message>
+                                            <message>Desktop packaging requires a full Java 25 JDK with jpackage. Run Maven with that JDK on Windows, Linux or macOS.</message>
                                             <files>
                                                 <file>${desktop.jpackage.executable}</file>
                                             </files>
@@ -438,6 +438,18 @@
             </activation>
             <properties>
                 <desktop.jpackage.executable>${java.home}/bin/jpackage.exe</desktop.jpackage.executable>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>desktop-macos</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <properties>
+                <desktop.jpackage.executable>${java.home}/bin/jpackage</desktop.jpackage.executable>
             </properties>
         </profile>
 

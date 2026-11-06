@@ -3,6 +3,8 @@ package com.github.fmaiassistent.shortlist;
 import com.github.fmaiassistent.domain.entity.PlayerEntity;
 import com.github.fmaiassistent.service.PlayerDatabaseService;
 import com.github.fmaiassistent.steam.SteamLibraries;
+import com.github.fmaiassistent.platform.FmDirectories;
+import com.github.fmaiassistent.platform.OperatingSystem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -120,17 +122,20 @@ public class ShortlistFileService {
     }
 
     static Path resolveOutputDirectory(Path home) {
+        return resolveOutputDirectory(home, OperatingSystem.current());
+    }
+
+    static Path resolveOutputDirectory(Path home, OperatingSystem os) {
         String configured = System.getProperty(OUTPUT_DIRECTORY_PROPERTY);
         if (configured != null && !configured.isBlank()) {
             return Path.of(configured);
         }
-        Path nativeDefault = home.resolve("Documents/Sports Interactive/Football Manager 27/shortlists")
-                .toAbsolutePath().normalize();
-        if (Files.isDirectory(nativeDefault)) {
+        Path nativeDefault = FmDirectories.nativeUserData(home, os).resolve("shortlists");
+        if (os == OperatingSystem.MACOS || Files.isDirectory(nativeDefault)) {
             return nativeDefault;
         }
         // The library holding FM27 wins over stale shortlists folders in other libraries.
-        java.util.Optional<Path> gameLib = SteamLibraries.libraryWithApp(home, SteamLibraries.FM27_APP_ID);
+        java.util.Optional<Path> gameLib = SteamLibraries.libraryWithApp(home, SteamLibraries.FM27_APP_ID, os);
         if (gameLib.isPresent()) {
             return gameLib.get()
                     .resolve("steamapps/compatdata/" + SteamLibraries.FM27_APP_ID
@@ -138,7 +143,7 @@ public class ShortlistFileService {
                     .toAbsolutePath().normalize();
         }
         List<Path> candidates = new ArrayList<>();
-        for (Path userDir : SteamLibraries.fmProtonUserDirectories(home)) {
+        for (Path userDir : SteamLibraries.fmProtonUserDirectories(home, os)) {
             candidates.add(userDir.resolve("Documents/Sports Interactive/Football Manager 27/shortlists"));
             candidates.add(userDir.resolve("AppData/Local/Sports Interactive/Football Manager 27/cloud/shortlists"));
         }

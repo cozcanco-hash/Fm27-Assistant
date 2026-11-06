@@ -1,5 +1,6 @@
 package com.github.fmaiassistent.shortlist;
 
+import com.github.fmaiassistent.platform.OperatingSystem;
 import com.github.fmaiassistent.domain.entity.PlayerEntity;
 import com.github.fmaiassistent.exporter.PlayerExporter;
 import com.github.fmaiassistent.service.PlayerDatabaseService;
@@ -87,7 +88,7 @@ class ShortlistFileServiceTest {
         Path existing = home.resolve("Documents/Sports Interactive/Football Manager 27/shortlists");
         Files.createDirectories(existing);
 
-        assertThat(ShortlistFileService.resolveOutputDirectory(home)).isEqualTo(existing.toAbsolutePath().normalize());
+        assertThat(ShortlistFileService.resolveOutputDirectory(home, OperatingSystem.LINUX)).isEqualTo(existing.toAbsolutePath().normalize());
     }
 
     @Test
@@ -95,7 +96,7 @@ class ShortlistFileServiceTest {
         Path oldFolder = home.resolve("Documents/Sports Interactive/Football Manager 25/shortlists");
         Files.createDirectories(oldFolder);
 
-        assertThat(ShortlistFileService.resolveOutputDirectory(home)).isEqualTo(home.resolve(
+        assertThat(ShortlistFileService.resolveOutputDirectory(home, OperatingSystem.LINUX)).isEqualTo(home.resolve(
                 "Documents/Sports Interactive/Football Manager 27/shortlists").toAbsolutePath().normalize());
     }
 
@@ -109,7 +110,7 @@ class ShortlistFileServiceTest {
                 "\"libraryfolders\"\n{\n\t\"1\"\n\t{\n\t\t\"path\"\t\t\"" + customLib + "\"\n\t}\n}");
         Files.writeString(customLib.resolve("steamapps/appmanifest_4530370.acf"), "\"AppState\"{}");
 
-        Path resolved = ShortlistFileService.resolveOutputDirectory(home);
+        Path resolved = ShortlistFileService.resolveOutputDirectory(home, OperatingSystem.LINUX);
 
         assertThat(resolved.toString()).startsWith(customLib.toAbsolutePath().normalize().toString());
         assertThat(resolved.getFileName().toString()).isEqualTo("shortlists");
@@ -127,10 +128,35 @@ class ShortlistFileServiceTest {
                         + "\t\"1\"\n\t{\n\t\t\"path\"\t\t\"" + customLib + "\"\n\t}\n}");
         Files.writeString(customLib.resolve("steamapps/appmanifest_4530370.acf"), "\"AppState\"{}");
 
-        Path resolved = ShortlistFileService.resolveOutputDirectory(home);
+        Path resolved = ShortlistFileService.resolveOutputDirectory(home, OperatingSystem.LINUX);
 
         assertThat(resolved.toString()).startsWith(customLib.toAbsolutePath().normalize().toString());
     }
+    @Test
+    void macCreatesNativeShortlistsFolderEvenBeforeItExists(@TempDir Path home) throws Exception {
+        Path legacy = home.resolve("Documents/Sports Interactive/Football Manager 27/shortlists");
+        Files.createDirectories(legacy);
+
+        assertThat(ShortlistFileService.resolveOutputDirectory(home, OperatingSystem.MACOS))
+                .isEqualTo(home.resolve("Library/Application Support/Sports Interactive/Football Manager 27/shortlists")
+                        .toAbsolutePath().normalize());
+    }
+
+    @Test
+    void explicitShortlistDirectoryOverridesTheMacDefault(@TempDir Path home) {
+        String key = "fmaiassistent.shortlists.directory";
+        String previous = System.getProperty(key);
+        Path custom = home.resolve("custom-output");
+        System.setProperty(key, custom.toString());
+        try {
+            assertThat(ShortlistFileService.resolveOutputDirectory(home, OperatingSystem.MACOS))
+                    .isEqualTo(custom.toAbsolutePath().normalize());
+        } finally {
+            if (previous == null) System.clearProperty(key);
+            else System.setProperty(key, previous);
+        }
+    }
+
     private static PlayerEntity player(String name, long uniqueId) {
         Map<String, Object> row = new HashMap<>();
         PlayerExporter.FIELD_NAMES.forEach(field -> row.put(field, null));

@@ -1,8 +1,10 @@
 package com.github.fmaiassistent.ai;
 
 import com.github.fmaiassistent.FmAiAssistentApplication;
+import com.github.fmaiassistent.platform.OperatingSystem;
 import org.springframework.boot.system.ApplicationHome;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -24,6 +26,9 @@ public final class WorkspaceResolver {
     static Path findProjectRoot(Path start) {
         Path candidate = start;
         for (int depth = 0; candidate != null && depth < MAX_PARENT_DEPTH; depth++, candidate = candidate.getParent()) {
+            if (candidate.getFileName() != null && candidate.getFileName().toString().endsWith(".app")) {
+                return null;
+            }
             if (Files.isRegularFile(candidate.resolve("pom.xml")) || Files.isDirectory(candidate.resolve(".git"))) {
                 return candidate;
             }
@@ -39,9 +44,24 @@ public final class WorkspaceResolver {
                     .toAbsolutePath()
                     .normalize();
             Path root = findProjectRoot(home);
-            return root == null ? home : root;
+            if (root != null) {
+                return root;
+            }
+            Path workspace = packagedDirectory(home, Path.of(System.getProperty("user.home")),
+                    OperatingSystem.current());
+            Files.createDirectories(workspace);
+            return workspace;
+        } catch (IOException exception) {
+            throw new IllegalStateException("Could not create the assistant workspace", exception);
         } catch (RuntimeException ignored) {
             return Path.of(System.getProperty("user.dir")).toAbsolutePath().normalize();
         }
+    }
+
+    static Path packagedDirectory(Path applicationHome, Path userHome, OperatingSystem os) {
+        return os == OperatingSystem.MACOS
+                ? userHome.resolve("Library/Application Support/FM27 Assistant/workspace")
+                        .toAbsolutePath().normalize()
+                : applicationHome;
     }
 }
