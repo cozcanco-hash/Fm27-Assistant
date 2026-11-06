@@ -3,6 +3,32 @@
 Can için özel, oyun öncesinde de kullanılabilen bir taktik çalışma alanı.
 Aktif geliştirme **Rust + Tauri 2 + React + SQLite** üzerinde `desktop/` altında sürüyor.
 
+## İlk Rust Mac sürümü — 6 Kasım 2026
+
+[Apple Silicon paketini indir](https://github.com/cozcanco-hash/Fm27-Assistant/actions/runs/42180058741/artifacts/13485093096).
+İndirilen ZIP içinde `.dmg`, `.app` arşivi ve SHA-256 kontrol dosyası bulunur.
+Paket 20 Kasım 2026'ya kadar saklanır; sonraki derlemeler Actions bölümünden alınabilir.
+Bu, ad-hoc imzalı bir geliştirici önizlemesidir.
+
+[Doğrulanan kaynak: `fa66465`](https://github.com/cozcanco-hash/Fm27-Assistant/commit/fa66465e02e145e6f7ca0ca4827ff5e85248ee39).
+[Başarılı test ve paketleme çalıştırması](https://github.com/cozcanco-hash/Fm27-Assistant/actions/runs/42180058741):
+**21 Rust testi + 4 arayüz testi başarılı**. Mac'teki gerçek paket WebView'i açtı;
+React arayüzü Rust/SQLite çekirdeğinden 24 oyuncuyu ve 11 kişilik öneriyi yükledi.
+
+| Apple Silicon CI ölçümü | Sonuç |
+| --- | --- |
+| Uygulama paketi | 7,72 MiB |
+| DMG | 3,35 MiB |
+| Açılış → arayüz ve veri hazır | 4,152 saniye |
+| Sentetik 5.000 oyuncu / ilk 11 analizi | Ortanca 7,01 ms; p95 11,96 ms (25 tekrar) |
+
+Ölçümler GitHub'ın Apple Silicon test ortamına aittir. Analiz süresi yerel rol ve
+ilk 11 hesabını kapsar. Kullanıcının Mac'inde ChatGPT girişi ve gerçek oyun verisiyle
+test henüz yapılmadı. Rust sürümünün kapsamı Java referansından farklı olduğu için
+bu rakamlar birebir Java/Rust hız karşılaştırması olarak sunulmaz.
+
+![Rust arayüzünün tarayıcı önizlemesi, kurgusal kadro](screenshots/rust-desktop-overview.png)
+
 ## Rust sürümünde
 
 - 24 kurgusal oyuncuyla hemen başlayan çalışma alanı.
