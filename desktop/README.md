@@ -12,7 +12,7 @@ the repository README and the generated macOS icon set. Regenerate platform icon
 with `npm run icons`. The mark combines a tactics board, passing route and
 conversation bubble in the app’s charcoal/lime palette.
 
-## Implemented in this first Rust version
+## Implemented in the Rust app
 
 - Turkish interface: overview, searchable/paginated squad, player profile,
   tactic board, AI chat and data/connection settings.
@@ -24,6 +24,9 @@ conversation bubble in the app’s charcoal/lime palette.
   commits before new state becomes visible. Last three valid snapshots retained.
 - Persistent roster and formation between launches. Demo/manual provenance and
   the source timestamp remain visible.
+- Optional CA/PA and hidden attributes, advanced combined filters, three-player
+  role comparison, named local shortlists and development across game dates.
+  Existing role weights are unchanged. See [the scouting contract](SCOUTING.md).
 - Local Codex app-server integration: account check, official ChatGPT browser
   login, account model discovery, streamed replies, stop and timeout handling.
   The integration requires the official Codex CLI; credentials stay there.
@@ -118,6 +121,13 @@ a condition penalty to the assignment cost. Displayed role skill remains
 separate from that penalty. Overall XI fit appears only when all 11 slots
 are covered. These are transparent product heuristics, not FM match-engine
 formulas or guarantees of winning tactics.
+
+Optional additions keep schema version 1 backward compatible: player fields
+`currentAbility`, `potentialAbility` (1–200) and `hiddenAttributes` (known keys,
+1–20). Root `careerId` identifies a career and `gameDate` is `YYYY-MM-DD` in
+game time. Manual development requires both. Unknown values are never inferred.
+Lists and 24 distinct game-date points persist by career; unidentified imports
+are isolated instead of merging unrelated saves.
 
 ## Storage and ChatGPT
 

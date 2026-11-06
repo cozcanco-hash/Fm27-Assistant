@@ -252,6 +252,8 @@ pub struct PlayerRow {
     pub form: Option<f64>,
     pub injured: bool,
     pub role: Option<RoleFit>,
+    pub current_ability: Option<u16>,
+    pub potential_ability: Option<u16>,
 }
 
 pub fn player_row(player: &Player) -> PlayerRow {
@@ -264,6 +266,8 @@ pub fn player_row(player: &Player) -> PlayerRow {
         form: player.form,
         injured: player.injured,
         role: fits(player).into_iter().next(),
+        current_ability: player.current_ability,
+        potential_ability: player.potential_ability,
     }
 }
 

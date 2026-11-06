@@ -1,6 +1,7 @@
 use fm27_core::{
     analysis::{player_detail, prompt_context, PlayerDetail},
     codex::{ChatEvent, ChatMessage, CodexBridge, Status},
+    scouting::{PlayerHistory, Shortlist},
     store::{Dashboard, PlayerPage, PlayerQuery},
     Formation, Store,
 };
@@ -42,7 +43,55 @@ async fn list_players(
     query: PlayerQuery,
     state: tauri::State<'_, AppState>,
 ) -> Result<PlayerPage, String> {
-    with_store(state.store.clone(), move |store| Ok(store.players(query))).await
+    with_store(state.store.clone(), move |store| store.players(query)).await
+}
+
+#[tauri::command]
+async fn list_shortlists(state: tauri::State<'_, AppState>) -> Result<Vec<Shortlist>, String> {
+    with_store(state.store.clone(), |store| store.shortlists()).await
+}
+
+#[tauri::command]
+async fn create_shortlist(
+    name: String,
+    state: tauri::State<'_, AppState>,
+) -> Result<Vec<Shortlist>, String> {
+    with_store(state.store.clone(), move |store| {
+        store.create_shortlist(&name)
+    })
+    .await
+}
+
+#[tauri::command]
+async fn delete_empty_shortlist(
+    id: i64,
+    state: tauri::State<'_, AppState>,
+) -> Result<Vec<Shortlist>, String> {
+    with_store(state.store.clone(), move |store| {
+        store.delete_empty_shortlist(id)
+    })
+    .await
+}
+
+#[tauri::command]
+async fn set_shortlisted(
+    list_id: i64,
+    player_id: u32,
+    selected: bool,
+    state: tauri::State<'_, AppState>,
+) -> Result<Vec<Shortlist>, String> {
+    with_store(state.store.clone(), move |store| {
+        store.set_shortlisted(list_id, player_id, selected)
+    })
+    .await
+}
+
+#[tauri::command]
+async fn player_history(
+    id: u32,
+    state: tauri::State<'_, AppState>,
+) -> Result<PlayerHistory, String> {
+    with_store(state.store.clone(), move |store| store.player_history(id)).await
 }
 
 #[tauri::command]
@@ -178,6 +227,11 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             dashboard,
             list_players,
+            list_shortlists,
+            create_shortlist,
+            delete_empty_shortlist,
+            set_shortlisted,
+            player_history,
             get_player,
             set_formation,
             import_roster,

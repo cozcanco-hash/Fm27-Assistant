@@ -1,5 +1,21 @@
 # MacBook testing guide
 
+## Scouting checks in 0.2.0
+
+- In **Kadro**, combine advanced age/attribute filters and clear them.
+- Select up to three players, choose one comparison role and inspect position eligibility.
+- Open a profile and reveal CA/PA/hidden values. Missing values must say unknown.
+- Create a list under **Takip listeleri**, add a player from the roster/profile,
+  restart the native app and confirm membership persists.
+- Import two valid custom JSON rosters with the same `careerId`, stable player
+  IDs/names and increasing `gameDate` values. Confirm actual changes in the
+  profile's development table. A same-date import must not create another point.
+- Import a different `careerId` and confirm its lists/history are isolated.
+
+The browser preview's lists are read-only and its development data is fictional.
+The native app still does not read `.fm` saves or connect to a running FM27 game.
+See [the scouting data contract](desktop/SCOUTING.md).
+
 Thank you for testing FM27 Assistant. The current preview is for **Apple Silicon Macs (M1 or later)** and has a Turkish interface. You do not need Football Manager or an AI account for the local squad and tactics features.
 
 ## Install

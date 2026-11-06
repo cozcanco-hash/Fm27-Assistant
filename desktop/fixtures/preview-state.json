@@ -45,6 +45,7 @@
             "player": {
               "age": 27,
               "condition": 96,
+              "currentAbility": 100,
               "form": 6.83,
               "id": 1,
               "injured": false,
@@ -52,6 +53,7 @@
               "positions": [
                 "GK"
               ],
+              "potentialAbility": 115,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -94,6 +96,7 @@
             "player": {
               "age": 24,
               "condition": 92,
+              "currentAbility": 135,
               "form": 7.25,
               "id": 6,
               "injured": false,
@@ -101,6 +104,7 @@
               "positions": [
                 "DL"
               ],
+              "potentialAbility": 165,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -143,6 +147,7 @@
             "player": {
               "age": 26,
               "condition": 94,
+              "currentAbility": 114,
               "form": 6.5,
               "id": 3,
               "injured": false,
@@ -150,6 +155,7 @@
               "positions": [
                 "DC"
               ],
+              "potentialAbility": 135,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -191,6 +197,7 @@
             "player": {
               "age": 29,
               "condition": 89,
+              "currentAbility": 121,
               "form": 7.75,
               "id": 4,
               "injured": false,
@@ -198,6 +205,7 @@
               "positions": [
                 "DC"
               ],
+              "potentialAbility": 145,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -239,6 +247,7 @@
             "player": {
               "age": 23,
               "condition": 93,
+              "currentAbility": null,
               "form": 7.88,
               "id": 7,
               "injured": false,
@@ -246,6 +255,7 @@
               "positions": [
                 "DR"
               ],
+              "potentialAbility": null,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -287,6 +297,7 @@
             "player": {
               "age": 28,
               "condition": 91,
+              "currentAbility": 106,
               "form": 7.46,
               "id": 9,
               "injured": false,
@@ -295,6 +306,7 @@
                 "DM",
                 "MC"
               ],
+              "potentialAbility": 145,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -336,6 +348,7 @@
             "player": {
               "age": 25,
               "condition": 94,
+              "currentAbility": 120,
               "form": 6.96,
               "id": 11,
               "injured": false,
@@ -344,6 +357,7 @@
                 "MC",
                 "AMC"
               ],
+              "potentialAbility": 140,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -384,6 +398,7 @@
             "player": {
               "age": 24,
               "condition": 93,
+              "currentAbility": 127,
               "form": 7.51,
               "id": 12,
               "injured": false,
@@ -391,6 +406,7 @@
               "positions": [
                 "MC"
               ],
+              "potentialAbility": 150,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -432,6 +448,7 @@
             "player": {
               "age": 23,
               "condition": 95,
+              "currentAbility": 148,
               "form": 7.84,
               "id": 15,
               "injured": false,
@@ -440,6 +457,7 @@
                 "AML",
                 "AMR"
               ],
+              "potentialAbility": 180,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -481,6 +499,7 @@
             "player": {
               "age": 24,
               "condition": 92,
+              "currentAbility": 105,
               "form": 7.03,
               "id": 16,
               "injured": false,
@@ -488,6 +507,7 @@
               "positions": [
                 "AMR"
               ],
+              "potentialAbility": 140,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -529,6 +549,7 @@
             "player": {
               "age": 26,
               "condition": 94,
+              "currentAbility": 126,
               "form": 6.92,
               "id": 19,
               "injured": false,
@@ -536,6 +557,7 @@
               "positions": [
                 "ST"
               ],
+              "potentialAbility": 145,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -560,7 +582,65 @@
       },
       "capturedAt": "2026-11-06T09:00:00+03:00",
       "club": "KUTRA FC",
+      "gameDate": "2026-08-01",
       "playerCount": 24,
+      "roles": [
+        {
+          "id": "keeper",
+          "name": "Kaleci",
+          "position": "GK"
+        },
+        {
+          "id": "centreBack",
+          "name": "Stoper",
+          "position": "DC"
+        },
+        {
+          "id": "leftBack",
+          "name": "Sol bek",
+          "position": "DL"
+        },
+        {
+          "id": "rightBack",
+          "name": "Sağ bek",
+          "position": "DR"
+        },
+        {
+          "id": "anchor",
+          "name": "Savunma önü",
+          "position": "DM"
+        },
+        {
+          "id": "playmaker",
+          "name": "Oyun kurucu",
+          "position": "MC"
+        },
+        {
+          "id": "runner",
+          "name": "İki yönlü orta saha",
+          "position": "MC"
+        },
+        {
+          "id": "leftWing",
+          "name": "Sol kanat",
+          "position": "AML"
+        },
+        {
+          "id": "rightWing",
+          "name": "Sağ kanat",
+          "position": "AMR"
+        },
+        {
+          "id": "creator",
+          "name": "Hücum oyun kurucu",
+          "position": "AMC"
+        },
+        {
+          "id": "striker",
+          "name": "Bitirici forvet",
+          "position": "ST"
+        }
+      ],
       "season": "2026/27",
       "source": "demo"
     },
@@ -609,6 +689,7 @@
             "player": {
               "age": 27,
               "condition": 96,
+              "currentAbility": 100,
               "form": 6.83,
               "id": 1,
               "injured": false,
@@ -616,6 +697,7 @@
               "positions": [
                 "GK"
               ],
+              "potentialAbility": 115,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -658,6 +740,7 @@
             "player": {
               "age": 24,
               "condition": 92,
+              "currentAbility": 135,
               "form": 7.25,
               "id": 6,
               "injured": false,
@@ -665,6 +748,7 @@
               "positions": [
                 "DL"
               ],
+              "potentialAbility": 165,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -707,6 +791,7 @@
             "player": {
               "age": 26,
               "condition": 94,
+              "currentAbility": 114,
               "form": 6.5,
               "id": 3,
               "injured": false,
@@ -714,6 +799,7 @@
               "positions": [
                 "DC"
               ],
+              "potentialAbility": 135,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -755,6 +841,7 @@
             "player": {
               "age": 29,
               "condition": 89,
+              "currentAbility": 121,
               "form": 7.75,
               "id": 4,
               "injured": false,
@@ -762,6 +849,7 @@
               "positions": [
                 "DC"
               ],
+              "potentialAbility": 145,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -803,6 +891,7 @@
             "player": {
               "age": 23,
               "condition": 93,
+              "currentAbility": null,
               "form": 7.88,
               "id": 7,
               "injured": false,
@@ -810,6 +899,7 @@
               "positions": [
                 "DR"
               ],
+              "potentialAbility": null,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -851,6 +941,7 @@
             "player": {
               "age": 24,
               "condition": 93,
+              "currentAbility": 127,
               "form": 7.51,
               "id": 12,
               "injured": false,
@@ -858,6 +949,7 @@
               "positions": [
                 "MC"
               ],
+              "potentialAbility": 150,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -899,6 +991,7 @@
             "player": {
               "age": 28,
               "condition": 91,
+              "currentAbility": 106,
               "form": 7.46,
               "id": 9,
               "injured": false,
@@ -907,6 +1000,7 @@
                 "DM",
                 "MC"
               ],
+              "potentialAbility": 145,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -948,6 +1042,7 @@
             "player": {
               "age": 25,
               "condition": 94,
+              "currentAbility": 120,
               "form": 6.96,
               "id": 11,
               "injured": false,
@@ -956,6 +1051,7 @@
                 "MC",
                 "AMC"
               ],
+              "potentialAbility": 140,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -997,6 +1093,7 @@
             "player": {
               "age": 23,
               "condition": 95,
+              "currentAbility": 148,
               "form": 7.84,
               "id": 15,
               "injured": false,
@@ -1005,6 +1102,7 @@
                 "AML",
                 "AMR"
               ],
+              "potentialAbility": 180,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -1046,6 +1144,7 @@
             "player": {
               "age": 24,
               "condition": 92,
+              "currentAbility": 105,
               "form": 7.03,
               "id": 16,
               "injured": false,
@@ -1053,6 +1152,7 @@
               "positions": [
                 "AMR"
               ],
+              "potentialAbility": 140,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -1094,6 +1194,7 @@
             "player": {
               "age": 26,
               "condition": 94,
+              "currentAbility": 126,
               "form": 6.92,
               "id": 19,
               "injured": false,
@@ -1101,6 +1202,7 @@
               "positions": [
                 "ST"
               ],
+              "potentialAbility": 145,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -1125,7 +1227,65 @@
       },
       "capturedAt": "2026-11-06T09:00:00+03:00",
       "club": "KUTRA FC",
+      "gameDate": "2026-08-01",
       "playerCount": 24,
+      "roles": [
+        {
+          "id": "keeper",
+          "name": "Kaleci",
+          "position": "GK"
+        },
+        {
+          "id": "centreBack",
+          "name": "Stoper",
+          "position": "DC"
+        },
+        {
+          "id": "leftBack",
+          "name": "Sol bek",
+          "position": "DL"
+        },
+        {
+          "id": "rightBack",
+          "name": "Sağ bek",
+          "position": "DR"
+        },
+        {
+          "id": "anchor",
+          "name": "Savunma önü",
+          "position": "DM"
+        },
+        {
+          "id": "playmaker",
+          "name": "Oyun kurucu",
+          "position": "MC"
+        },
+        {
+          "id": "runner",
+          "name": "İki yönlü orta saha",
+          "position": "MC"
+        },
+        {
+          "id": "leftWing",
+          "name": "Sol kanat",
+          "position": "AML"
+        },
+        {
+          "id": "rightWing",
+          "name": "Sağ kanat",
+          "position": "AMR"
+        },
+        {
+          "id": "creator",
+          "name": "Hücum oyun kurucu",
+          "position": "AMC"
+        },
+        {
+          "id": "striker",
+          "name": "Bitirici forvet",
+          "position": "ST"
+        }
+      ],
       "season": "2026/27",
       "source": "demo"
     },
@@ -1174,6 +1334,7 @@
             "player": {
               "age": 27,
               "condition": 96,
+              "currentAbility": 100,
               "form": 6.83,
               "id": 1,
               "injured": false,
@@ -1181,6 +1342,7 @@
               "positions": [
                 "GK"
               ],
+              "potentialAbility": 115,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -1223,6 +1385,7 @@
             "player": {
               "age": 24,
               "condition": 92,
+              "currentAbility": 135,
               "form": 7.25,
               "id": 6,
               "injured": false,
@@ -1230,6 +1393,7 @@
               "positions": [
                 "DL"
               ],
+              "potentialAbility": 165,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -1272,6 +1436,7 @@
             "player": {
               "age": 26,
               "condition": 94,
+              "currentAbility": 114,
               "form": 6.5,
               "id": 3,
               "injured": false,
@@ -1279,6 +1444,7 @@
               "positions": [
                 "DC"
               ],
+              "potentialAbility": 135,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -1320,6 +1486,7 @@
             "player": {
               "age": 29,
               "condition": 89,
+              "currentAbility": 121,
               "form": 7.75,
               "id": 4,
               "injured": false,
@@ -1327,6 +1494,7 @@
               "positions": [
                 "DC"
               ],
+              "potentialAbility": 145,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -1368,6 +1536,7 @@
             "player": {
               "age": 23,
               "condition": 93,
+              "currentAbility": null,
               "form": 7.88,
               "id": 7,
               "injured": false,
@@ -1375,6 +1544,7 @@
               "positions": [
                 "DR"
               ],
+              "potentialAbility": null,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -1416,6 +1586,7 @@
             "player": {
               "age": 25,
               "condition": 94,
+              "currentAbility": 120,
               "form": 6.96,
               "id": 11,
               "injured": false,
@@ -1424,6 +1595,7 @@
                 "MC",
                 "AMC"
               ],
+              "potentialAbility": 140,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -1465,6 +1637,7 @@
             "player": {
               "age": 28,
               "condition": 91,
+              "currentAbility": 106,
               "form": 7.46,
               "id": 9,
               "injured": false,
@@ -1473,6 +1646,7 @@
                 "DM",
                 "MC"
               ],
+              "potentialAbility": 145,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -1514,6 +1688,7 @@
             "player": {
               "age": 23,
               "condition": 95,
+              "currentAbility": 148,
               "form": 7.84,
               "id": 15,
               "injured": false,
@@ -1522,6 +1697,7 @@
                 "AML",
                 "AMR"
               ],
+              "potentialAbility": 180,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -1563,6 +1739,7 @@
             "player": {
               "age": 24,
               "condition": 92,
+              "currentAbility": 105,
               "form": 7.03,
               "id": 16,
               "injured": false,
@@ -1570,6 +1747,7 @@
               "positions": [
                 "AMR"
               ],
+              "potentialAbility": 140,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -1611,6 +1789,7 @@
             "player": {
               "age": 26,
               "condition": 94,
+              "currentAbility": 126,
               "form": 6.92,
               "id": 19,
               "injured": false,
@@ -1618,6 +1797,7 @@
               "positions": [
                 "ST"
               ],
+              "potentialAbility": 145,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -1658,6 +1838,7 @@
             "player": {
               "age": 22,
               "condition": 96,
+              "currentAbility": 133,
               "form": 7.38,
               "id": 20,
               "injured": false,
@@ -1665,6 +1846,7 @@
               "positions": [
                 "ST"
               ],
+              "potentialAbility": 155,
               "role": {
                 "coverage": 100.0,
                 "missing": [],
@@ -1688,7 +1870,65 @@
       },
       "capturedAt": "2026-11-06T09:00:00+03:00",
       "club": "KUTRA FC",
+      "gameDate": "2026-08-01",
       "playerCount": 24,
+      "roles": [
+        {
+          "id": "keeper",
+          "name": "Kaleci",
+          "position": "GK"
+        },
+        {
+          "id": "centreBack",
+          "name": "Stoper",
+          "position": "DC"
+        },
+        {
+          "id": "leftBack",
+          "name": "Sol bek",
+          "position": "DL"
+        },
+        {
+          "id": "rightBack",
+          "name": "Sağ bek",
+          "position": "DR"
+        },
+        {
+          "id": "anchor",
+          "name": "Savunma önü",
+          "position": "DM"
+        },
+        {
+          "id": "playmaker",
+          "name": "Oyun kurucu",
+          "position": "MC"
+        },
+        {
+          "id": "runner",
+          "name": "İki yönlü orta saha",
+          "position": "MC"
+        },
+        {
+          "id": "leftWing",
+          "name": "Sol kanat",
+          "position": "AML"
+        },
+        {
+          "id": "rightWing",
+          "name": "Sağ kanat",
+          "position": "AMR"
+        },
+        {
+          "id": "creator",
+          "name": "Hücum oyun kurucu",
+          "position": "AMC"
+        },
+        {
+          "id": "striker",
+          "name": "Bitirici forvet",
+          "position": "ST"
+        }
+      ],
       "season": "2026/27",
       "source": "demo"
     }
@@ -1729,8 +1969,16 @@
           "workRate": 8
         },
         "condition": 96,
+        "currentAbility": 100,
         "foot": "right",
         "form": 6.83,
+        "hiddenAttributes": {
+          "ambition": 12,
+          "consistency": 10,
+          "importantMatches": 9,
+          "injuryProneness": 5,
+          "professionalism": 11
+        },
         "id": 1,
         "injured": false,
         "minutes": 1052,
@@ -1738,7 +1986,8 @@
         "name": "Deniz Arslan",
         "positions": [
           "GK"
-        ]
+        ],
+        "potentialAbility": 115
       },
       "roles": [
         {
@@ -1793,8 +2042,16 @@
           "workRate": 12
         },
         "condition": 100,
+        "currentAbility": 107,
         "foot": "right",
         "form": null,
+        "hiddenAttributes": {
+          "ambition": 13,
+          "consistency": 11,
+          "importantMatches": 10,
+          "injuryProneness": 6,
+          "professionalism": 12
+        },
         "id": 2,
         "injured": false,
         "minutes": 0,
@@ -1802,7 +2059,8 @@
         "name": "Efe Ural",
         "positions": [
           "GK"
-        ]
+        ],
+        "potentialAbility": 125
       },
       "roles": [
         {
@@ -1853,8 +2111,16 @@
           "workRate": 9
         },
         "condition": 94,
+        "currentAbility": 114,
         "foot": "right",
         "form": 6.5,
+        "hiddenAttributes": {
+          "ambition": 14,
+          "consistency": 12,
+          "importantMatches": 11,
+          "injuryProneness": 7,
+          "professionalism": 13
+        },
         "id": 3,
         "injured": false,
         "minutes": 1131,
@@ -1862,7 +2128,8 @@
         "name": "Mert Aydın",
         "positions": [
           "DC"
-        ]
+        ],
+        "potentialAbility": 135
       },
       "roles": [
         {
@@ -1917,8 +2184,16 @@
           "workRate": 11
         },
         "condition": 89,
+        "currentAbility": 121,
         "foot": "right",
         "form": 7.75,
+        "hiddenAttributes": {
+          "ambition": 15,
+          "consistency": 13,
+          "importantMatches": 12,
+          "injuryProneness": 8,
+          "professionalism": 14
+        },
         "id": 4,
         "injured": false,
         "minutes": 1467,
@@ -1926,7 +2201,8 @@
         "name": "Bora Erden",
         "positions": [
           "DC"
-        ]
+        ],
+        "potentialAbility": 145
       },
       "roles": [
         {
@@ -1981,8 +2257,16 @@
           "workRate": 10
         },
         "condition": 98,
+        "currentAbility": 128,
         "foot": "right",
         "form": 6.66,
+        "hiddenAttributes": {
+          "ambition": 16,
+          "consistency": 14,
+          "importantMatches": 13,
+          "injuryProneness": 9,
+          "professionalism": 15
+        },
         "id": 5,
         "injured": false,
         "minutes": 1550,
@@ -1991,7 +2275,8 @@
         "positions": [
           "DC",
           "DM"
-        ]
+        ],
+        "potentialAbility": 155
       },
       "roles": [
         {
@@ -2057,8 +2342,16 @@
           "workRate": 14
         },
         "condition": 92,
+        "currentAbility": 135,
         "foot": "left",
         "form": 7.25,
+        "hiddenAttributes": {
+          "ambition": 17,
+          "consistency": 15,
+          "importantMatches": 14,
+          "injuryProneness": 10,
+          "professionalism": 16
+        },
         "id": 6,
         "injured": false,
         "minutes": 351,
@@ -2066,7 +2359,8 @@
         "name": "Arda Eren",
         "positions": [
           "DL"
-        ]
+        ],
+        "potentialAbility": 165
       },
       "roles": [
         {
@@ -2186,8 +2480,16 @@
           "workRate": 13
         },
         "condition": 99,
+        "currentAbility": 149,
         "foot": "left",
         "form": 7.78,
+        "hiddenAttributes": {
+          "ambition": 12,
+          "consistency": 10,
+          "importantMatches": 16,
+          "injuryProneness": 12,
+          "professionalism": 18
+        },
         "id": 8,
         "injured": false,
         "minutes": 344,
@@ -2196,7 +2498,8 @@
         "positions": [
           "DL",
           "DR"
-        ]
+        ],
+        "potentialAbility": 185
       },
       "roles": [
         {
@@ -2260,8 +2563,16 @@
           "workRate": 16
         },
         "condition": 91,
+        "currentAbility": 106,
         "foot": "right",
         "form": 7.46,
+        "hiddenAttributes": {
+          "ambition": 13,
+          "consistency": 11,
+          "importantMatches": 9,
+          "injuryProneness": 13,
+          "professionalism": 11
+        },
         "id": 9,
         "injured": false,
         "minutes": 765,
@@ -2270,7 +2581,8 @@
         "positions": [
           "DM",
           "MC"
-        ]
+        ],
+        "potentialAbility": 145
       },
       "roles": [
         {
@@ -2355,8 +2667,16 @@
           "workRate": 9
         },
         "condition": 97,
+        "currentAbility": 113,
         "foot": "right",
         "form": 7.35,
+        "hiddenAttributes": {
+          "ambition": 14,
+          "consistency": 12,
+          "importantMatches": 10,
+          "injuryProneness": 5,
+          "professionalism": 12
+        },
         "id": 10,
         "injured": false,
         "minutes": 1813,
@@ -2364,7 +2684,8 @@
         "name": "Ali Sarp",
         "positions": [
           "DM"
-        ]
+        ],
+        "potentialAbility": 130
       },
       "roles": [
         {
@@ -2418,8 +2739,16 @@
           "workRate": 15
         },
         "condition": 94,
+        "currentAbility": 120,
         "foot": "right",
         "form": 6.96,
+        "hiddenAttributes": {
+          "ambition": 15,
+          "consistency": 13,
+          "importantMatches": 11,
+          "injuryProneness": 6,
+          "professionalism": 13
+        },
         "id": 11,
         "injured": false,
         "minutes": 726,
@@ -2428,7 +2757,8 @@
         "positions": [
           "MC",
           "AMC"
-        ]
+        ],
+        "potentialAbility": 140
       },
       "roles": [
         {
@@ -2512,8 +2842,16 @@
           "workRate": 16
         },
         "condition": 93,
+        "currentAbility": 127,
         "foot": "right",
         "form": 7.51,
+        "hiddenAttributes": {
+          "ambition": 16,
+          "consistency": 14,
+          "importantMatches": 12,
+          "injuryProneness": 7,
+          "professionalism": 14
+        },
         "id": 12,
         "injured": false,
         "minutes": 1576,
@@ -2521,7 +2859,8 @@
         "name": "Emir Tan",
         "positions": [
           "MC"
-        ]
+        ],
+        "potentialAbility": 150
       },
       "roles": [
         {
@@ -2590,8 +2929,16 @@
           "workRate": 15
         },
         "condition": 100,
+        "currentAbility": 134,
         "foot": "right",
         "form": null,
+        "hiddenAttributes": {
+          "ambition": 17,
+          "consistency": 15,
+          "importantMatches": 13,
+          "injuryProneness": 8,
+          "professionalism": 15
+        },
         "id": 13,
         "injured": false,
         "minutes": 0,
@@ -2599,7 +2946,8 @@
         "name": "Berk Önal",
         "positions": [
           "MC"
-        ]
+        ],
+        "potentialAbility": 160
       },
       "roles": [
         {
@@ -2757,8 +3105,16 @@
           "workRate": 12
         },
         "condition": 95,
+        "currentAbility": 148,
         "foot": "left",
         "form": 7.84,
+        "hiddenAttributes": {
+          "ambition": 12,
+          "consistency": 10,
+          "importantMatches": 15,
+          "injuryProneness": 10,
+          "professionalism": 17
+        },
         "id": 15,
         "injured": false,
         "minutes": 795,
@@ -2767,7 +3123,8 @@
         "positions": [
           "AML",
           "AMR"
-        ]
+        ],
+        "potentialAbility": 180
       },
       "roles": [
         {
@@ -2837,8 +3194,16 @@
           "workRate": 10
         },
         "condition": 92,
+        "currentAbility": 105,
         "foot": "right",
         "form": 7.03,
+        "hiddenAttributes": {
+          "ambition": 13,
+          "consistency": 11,
+          "importantMatches": 16,
+          "injuryProneness": 11,
+          "professionalism": 18
+        },
         "id": 16,
         "injured": false,
         "minutes": 764,
@@ -2846,7 +3211,8 @@
         "name": "Sarp Deniz",
         "positions": [
           "AMR"
-        ]
+        ],
+        "potentialAbility": 140
       },
       "roles": [
         {
@@ -2901,8 +3267,16 @@
           "workRate": 7
         },
         "condition": 98,
+        "currentAbility": 112,
         "foot": "left",
         "form": 7.43,
+        "hiddenAttributes": {
+          "ambition": 14,
+          "consistency": 12,
+          "importantMatches": 9,
+          "injuryProneness": 12,
+          "professionalism": 11
+        },
         "id": 17,
         "injured": false,
         "minutes": 1550,
@@ -2910,7 +3284,8 @@
         "name": "Onur Kaya",
         "positions": [
           "AML"
-        ]
+        ],
+        "potentialAbility": 150
       },
       "roles": [
         {
@@ -2964,8 +3339,16 @@
           "workRate": 7
         },
         "condition": 96,
+        "currentAbility": 119,
         "foot": "right",
         "form": 6.47,
+        "hiddenAttributes": {
+          "ambition": 15,
+          "consistency": 13,
+          "importantMatches": 10,
+          "injuryProneness": 13,
+          "professionalism": 12
+        },
         "id": 18,
         "injured": false,
         "minutes": 842,
@@ -2974,7 +3357,8 @@
         "positions": [
           "AMR",
           "AMC"
-        ]
+        ],
+        "potentialAbility": 135
       },
       "roles": [
         {
@@ -3038,8 +3422,16 @@
           "workRate": 10
         },
         "condition": 94,
+        "currentAbility": 126,
         "foot": "right",
         "form": 6.92,
+        "hiddenAttributes": {
+          "ambition": 16,
+          "consistency": 14,
+          "importantMatches": 11,
+          "injuryProneness": 5,
+          "professionalism": 13
+        },
         "id": 19,
         "injured": false,
         "minutes": 1067,
@@ -3047,7 +3439,8 @@
         "name": "Doruk Can",
         "positions": [
           "ST"
-        ]
+        ],
+        "potentialAbility": 145
       },
       "roles": [
         {
@@ -3102,8 +3495,16 @@
           "workRate": 11
         },
         "condition": 96,
+        "currentAbility": 133,
         "foot": "right",
         "form": 7.38,
+        "hiddenAttributes": {
+          "ambition": 17,
+          "consistency": 15,
+          "importantMatches": 12,
+          "injuryProneness": 6,
+          "professionalism": 14
+        },
         "id": 20,
         "injured": false,
         "minutes": 1198,
@@ -3111,7 +3512,8 @@
         "name": "Umut Aral",
         "positions": [
           "ST"
-        ]
+        ],
+        "potentialAbility": 155
       },
       "roles": [
         {
@@ -3225,8 +3627,16 @@
           "workRate": 16
         },
         "condition": 88,
+        "currentAbility": 147,
         "foot": "right",
         "form": 6.95,
+        "hiddenAttributes": {
+          "ambition": 12,
+          "consistency": 10,
+          "importantMatches": 14,
+          "injuryProneness": 8,
+          "professionalism": 16
+        },
         "id": 22,
         "injured": false,
         "minutes": 495,
@@ -3235,7 +3645,8 @@
         "positions": [
           "AMC",
           "MC"
-        ]
+        ],
+        "potentialAbility": 175
       },
       "roles": [
         {
@@ -3319,8 +3730,16 @@
           "workRate": 14
         },
         "condition": 79,
+        "currentAbility": 104,
         "foot": "right",
         "form": 6.99,
+        "hiddenAttributes": {
+          "ambition": 13,
+          "consistency": 11,
+          "importantMatches": 15,
+          "injuryProneness": 9,
+          "professionalism": 17
+        },
         "id": 23,
         "injured": true,
         "minutes": 1588,
@@ -3329,7 +3748,8 @@
         "positions": [
           "DC",
           "DR"
-        ]
+        ],
+        "potentialAbility": 135
       },
       "roles": [
         {
@@ -3390,8 +3810,16 @@
           "workRate": 14
         },
         "condition": 84,
+        "currentAbility": 111,
         "foot": "left",
         "form": 7.56,
+        "hiddenAttributes": {
+          "ambition": 14,
+          "consistency": 12,
+          "importantMatches": 16,
+          "injuryProneness": 10,
+          "professionalism": 18
+        },
         "id": 24,
         "injured": true,
         "minutes": 1162,
@@ -3399,7 +3827,8 @@
         "name": "Özgür Yalın",
         "positions": [
           "DL"
-        ]
+        ],
+        "potentialAbility": 145
       },
       "roles": [
         {
@@ -3419,128 +3848,2000 @@
       ]
     }
   ],
+  "histories": [
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 10,
+              "aerialReach": 16,
+              "agility": 15,
+              "anticipation": 8,
+              "composure": 12,
+              "concentration": 14,
+              "crossing": 10,
+              "decisions": 16,
+              "dribbling": 7,
+              "finishing": 12,
+              "firstTouch": 8,
+              "handling": 16,
+              "heading": 7,
+              "jumpingReach": 12,
+              "kicking": 18,
+              "marking": 12,
+              "offTheBall": 10,
+              "oneOnOnes": 16,
+              "pace": 8,
+              "passing": 7,
+              "positioning": 8,
+              "reflexes": 16,
+              "stamina": 12,
+              "strength": 12,
+              "tackling": 11,
+              "teamwork": 7,
+              "technique": 10,
+              "vision": 12,
+              "workRate": 8
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 97,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 115
+          },
+          {
+            "attributes": {
+              "acceleration": 10,
+              "aerialReach": 16,
+              "agility": 15,
+              "anticipation": 8,
+              "composure": 12,
+              "concentration": 14,
+              "crossing": 10,
+              "decisions": 16,
+              "dribbling": 7,
+              "finishing": 12,
+              "firstTouch": 8,
+              "handling": 16,
+              "heading": 7,
+              "jumpingReach": 12,
+              "kicking": 18,
+              "marking": 12,
+              "offTheBall": 10,
+              "oneOnOnes": 16,
+              "pace": 8,
+              "passing": 8,
+              "positioning": 8,
+              "reflexes": 16,
+              "stamina": 12,
+              "strength": 12,
+              "tackling": 11,
+              "teamwork": 7,
+              "technique": 10,
+              "vision": 12,
+              "workRate": 8
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 100,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 115
+          }
+        ]
+      },
+      "id": 1
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 12,
+              "aerialReach": 15,
+              "agility": 14,
+              "anticipation": 10,
+              "composure": 12,
+              "concentration": 13,
+              "crossing": 9,
+              "decisions": 13,
+              "dribbling": 9,
+              "finishing": 9,
+              "firstTouch": 9,
+              "handling": 13,
+              "heading": 8,
+              "jumpingReach": 9,
+              "kicking": 14,
+              "marking": 8,
+              "offTheBall": 11,
+              "oneOnOnes": 12,
+              "pace": 7,
+              "passing": 9,
+              "positioning": 12,
+              "reflexes": 12,
+              "stamina": 9,
+              "strength": 9,
+              "tackling": 10,
+              "teamwork": 8,
+              "technique": 9,
+              "vision": 8,
+              "workRate": 12
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 104,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 125
+          },
+          {
+            "attributes": {
+              "acceleration": 12,
+              "aerialReach": 15,
+              "agility": 14,
+              "anticipation": 10,
+              "composure": 12,
+              "concentration": 13,
+              "crossing": 9,
+              "decisions": 13,
+              "dribbling": 9,
+              "finishing": 9,
+              "firstTouch": 9,
+              "handling": 13,
+              "heading": 8,
+              "jumpingReach": 9,
+              "kicking": 14,
+              "marking": 8,
+              "offTheBall": 11,
+              "oneOnOnes": 12,
+              "pace": 7,
+              "passing": 10,
+              "positioning": 12,
+              "reflexes": 12,
+              "stamina": 9,
+              "strength": 9,
+              "tackling": 10,
+              "teamwork": 8,
+              "technique": 9,
+              "vision": 8,
+              "workRate": 12
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 107,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 125
+          }
+        ]
+      },
+      "id": 2
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 10,
+              "aerialReach": 3,
+              "agility": 12,
+              "anticipation": 15,
+              "composure": 11,
+              "concentration": 14,
+              "crossing": 9,
+              "decisions": 12,
+              "dribbling": 7,
+              "finishing": 12,
+              "firstTouch": 9,
+              "handling": 1,
+              "heading": 14,
+              "jumpingReach": 18,
+              "kicking": 4,
+              "marking": 16,
+              "offTheBall": 11,
+              "oneOnOnes": 3,
+              "pace": 8,
+              "passing": 7,
+              "positioning": 15,
+              "reflexes": 2,
+              "stamina": 12,
+              "strength": 16,
+              "tackling": 15,
+              "teamwork": 12,
+              "technique": 11,
+              "vision": 7,
+              "workRate": 9
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 111,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 135
+          },
+          {
+            "attributes": {
+              "acceleration": 10,
+              "aerialReach": 3,
+              "agility": 12,
+              "anticipation": 15,
+              "composure": 11,
+              "concentration": 14,
+              "crossing": 9,
+              "decisions": 12,
+              "dribbling": 7,
+              "finishing": 12,
+              "firstTouch": 9,
+              "handling": 1,
+              "heading": 14,
+              "jumpingReach": 18,
+              "kicking": 4,
+              "marking": 16,
+              "offTheBall": 11,
+              "oneOnOnes": 3,
+              "pace": 8,
+              "passing": 8,
+              "positioning": 15,
+              "reflexes": 2,
+              "stamina": 12,
+              "strength": 16,
+              "tackling": 15,
+              "teamwork": 12,
+              "technique": 11,
+              "vision": 7,
+              "workRate": 9
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 114,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 135
+          }
+        ]
+      },
+      "id": 3
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 7,
+              "aerialReach": 2,
+              "agility": 8,
+              "anticipation": 15,
+              "composure": 10,
+              "concentration": 17,
+              "crossing": 12,
+              "decisions": 10,
+              "dribbling": 10,
+              "finishing": 8,
+              "firstTouch": 8,
+              "handling": 2,
+              "heading": 15,
+              "jumpingReach": 14,
+              "kicking": 1,
+              "marking": 16,
+              "offTheBall": 8,
+              "oneOnOnes": 1,
+              "pace": 7,
+              "passing": 6,
+              "positioning": 16,
+              "reflexes": 1,
+              "stamina": 11,
+              "strength": 14,
+              "tackling": 17,
+              "teamwork": 8,
+              "technique": 11,
+              "vision": 9,
+              "workRate": 11
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 118,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 145
+          },
+          {
+            "attributes": {
+              "acceleration": 7,
+              "aerialReach": 2,
+              "agility": 8,
+              "anticipation": 15,
+              "composure": 10,
+              "concentration": 17,
+              "crossing": 12,
+              "decisions": 10,
+              "dribbling": 10,
+              "finishing": 8,
+              "firstTouch": 8,
+              "handling": 2,
+              "heading": 15,
+              "jumpingReach": 14,
+              "kicking": 1,
+              "marking": 16,
+              "offTheBall": 8,
+              "oneOnOnes": 1,
+              "pace": 7,
+              "passing": 7,
+              "positioning": 16,
+              "reflexes": 1,
+              "stamina": 11,
+              "strength": 14,
+              "tackling": 17,
+              "teamwork": 8,
+              "technique": 11,
+              "vision": 9,
+              "workRate": 11
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 121,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 145
+          }
+        ]
+      },
+      "id": 4
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 12,
+              "aerialReach": 1,
+              "agility": 11,
+              "anticipation": 12,
+              "composure": 9,
+              "concentration": 15,
+              "crossing": 9,
+              "decisions": 16,
+              "dribbling": 9,
+              "finishing": 9,
+              "firstTouch": 7,
+              "handling": 4,
+              "heading": 14,
+              "jumpingReach": 14,
+              "kicking": 3,
+              "marking": 13,
+              "offTheBall": 9,
+              "oneOnOnes": 2,
+              "pace": 8,
+              "passing": 13,
+              "positioning": 14,
+              "reflexes": 2,
+              "stamina": 8,
+              "strength": 15,
+              "tackling": 13,
+              "teamwork": 14,
+              "technique": 8,
+              "vision": 11,
+              "workRate": 10
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 125,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 155
+          },
+          {
+            "attributes": {
+              "acceleration": 12,
+              "aerialReach": 1,
+              "agility": 11,
+              "anticipation": 12,
+              "composure": 9,
+              "concentration": 15,
+              "crossing": 9,
+              "decisions": 16,
+              "dribbling": 9,
+              "finishing": 9,
+              "firstTouch": 7,
+              "handling": 4,
+              "heading": 14,
+              "jumpingReach": 14,
+              "kicking": 3,
+              "marking": 13,
+              "offTheBall": 9,
+              "oneOnOnes": 2,
+              "pace": 8,
+              "passing": 14,
+              "positioning": 14,
+              "reflexes": 2,
+              "stamina": 8,
+              "strength": 15,
+              "tackling": 13,
+              "teamwork": 14,
+              "technique": 8,
+              "vision": 11,
+              "workRate": 10
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 128,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 155
+          }
+        ]
+      },
+      "id": 5
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 16,
+              "aerialReach": 1,
+              "agility": 10,
+              "anticipation": 7,
+              "composure": 8,
+              "concentration": 10,
+              "crossing": 14,
+              "decisions": 11,
+              "dribbling": 8,
+              "finishing": 8,
+              "firstTouch": 11,
+              "handling": 3,
+              "heading": 8,
+              "jumpingReach": 7,
+              "kicking": 1,
+              "marking": 9,
+              "offTheBall": 12,
+              "oneOnOnes": 2,
+              "pace": 17,
+              "passing": 13,
+              "positioning": 18,
+              "reflexes": 4,
+              "stamina": 16,
+              "strength": 8,
+              "tackling": 18,
+              "teamwork": 10,
+              "technique": 8,
+              "vision": 8,
+              "workRate": 14
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 132,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 165
+          },
+          {
+            "attributes": {
+              "acceleration": 16,
+              "aerialReach": 1,
+              "agility": 10,
+              "anticipation": 7,
+              "composure": 8,
+              "concentration": 10,
+              "crossing": 14,
+              "decisions": 11,
+              "dribbling": 8,
+              "finishing": 8,
+              "firstTouch": 11,
+              "handling": 3,
+              "heading": 8,
+              "jumpingReach": 7,
+              "kicking": 1,
+              "marking": 9,
+              "offTheBall": 12,
+              "oneOnOnes": 2,
+              "pace": 17,
+              "passing": 14,
+              "positioning": 18,
+              "reflexes": 4,
+              "stamina": 16,
+              "strength": 8,
+              "tackling": 18,
+              "teamwork": 10,
+              "technique": 8,
+              "vision": 8,
+              "workRate": 14
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 135,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 165
+          }
+        ]
+      },
+      "id": 6
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 15,
+              "aerialReach": 4,
+              "agility": 7,
+              "anticipation": 8,
+              "composure": 7,
+              "concentration": 12,
+              "crossing": 13,
+              "decisions": 10,
+              "dribbling": 7,
+              "finishing": 8,
+              "firstTouch": 10,
+              "handling": 4,
+              "heading": 12,
+              "jumpingReach": 12,
+              "kicking": 4,
+              "marking": 11,
+              "offTheBall": 12,
+              "oneOnOnes": 1,
+              "pace": 16,
+              "passing": 14,
+              "positioning": 15,
+              "reflexes": 4,
+              "stamina": 16,
+              "strength": 7,
+              "tackling": 17,
+              "teamwork": 10,
+              "technique": 7,
+              "vision": 7,
+              "workRate": 17
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": null,
+            "gameDate": "2026-07-01",
+            "potentialAbility": null
+          },
+          {
+            "attributes": {
+              "acceleration": 15,
+              "aerialReach": 4,
+              "agility": 7,
+              "anticipation": 8,
+              "composure": 7,
+              "concentration": 12,
+              "crossing": 13,
+              "decisions": 10,
+              "dribbling": 7,
+              "finishing": 8,
+              "firstTouch": 10,
+              "handling": 4,
+              "heading": 12,
+              "jumpingReach": 12,
+              "kicking": 4,
+              "marking": 11,
+              "offTheBall": 12,
+              "oneOnOnes": 1,
+              "pace": 16,
+              "passing": 15,
+              "positioning": 15,
+              "reflexes": 4,
+              "stamina": 16,
+              "strength": 7,
+              "tackling": 17,
+              "teamwork": 10,
+              "technique": 7,
+              "vision": 7,
+              "workRate": 17
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": null,
+            "gameDate": "2026-08-01",
+            "potentialAbility": null
+          }
+        ]
+      },
+      "id": 7
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 11,
+              "aerialReach": 2,
+              "agility": 10,
+              "anticipation": 12,
+              "composure": 10,
+              "concentration": 7,
+              "crossing": 15,
+              "decisions": 9,
+              "dribbling": 11,
+              "finishing": 8,
+              "firstTouch": 12,
+              "handling": 3,
+              "heading": 12,
+              "jumpingReach": 11,
+              "kicking": 2,
+              "marking": 8,
+              "offTheBall": 7,
+              "oneOnOnes": 1,
+              "pace": 11,
+              "passing": 14,
+              "positioning": 12,
+              "reflexes": 2,
+              "stamina": 14,
+              "strength": 9,
+              "tackling": 11,
+              "teamwork": 10,
+              "technique": 9,
+              "vision": 8,
+              "workRate": 13
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 146,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 185
+          },
+          {
+            "attributes": {
+              "acceleration": 11,
+              "aerialReach": 2,
+              "agility": 10,
+              "anticipation": 12,
+              "composure": 10,
+              "concentration": 7,
+              "crossing": 15,
+              "decisions": 9,
+              "dribbling": 11,
+              "finishing": 8,
+              "firstTouch": 12,
+              "handling": 3,
+              "heading": 12,
+              "jumpingReach": 11,
+              "kicking": 2,
+              "marking": 8,
+              "offTheBall": 7,
+              "oneOnOnes": 1,
+              "pace": 11,
+              "passing": 15,
+              "positioning": 12,
+              "reflexes": 2,
+              "stamina": 14,
+              "strength": 9,
+              "tackling": 11,
+              "teamwork": 10,
+              "technique": 9,
+              "vision": 8,
+              "workRate": 13
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 149,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 185
+          }
+        ]
+      },
+      "id": 8
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 9,
+              "aerialReach": 3,
+              "agility": 9,
+              "anticipation": 16,
+              "composure": 16,
+              "concentration": 16,
+              "crossing": 8,
+              "decisions": 16,
+              "dribbling": 11,
+              "finishing": 12,
+              "firstTouch": 14,
+              "handling": 3,
+              "heading": 11,
+              "jumpingReach": 10,
+              "kicking": 3,
+              "marking": 8,
+              "offTheBall": 18,
+              "oneOnOnes": 2,
+              "pace": 10,
+              "passing": 17,
+              "positioning": 14,
+              "reflexes": 1,
+              "stamina": 16,
+              "strength": 18,
+              "tackling": 16,
+              "teamwork": 14,
+              "technique": 16,
+              "vision": 14,
+              "workRate": 16
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 103,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 145
+          },
+          {
+            "attributes": {
+              "acceleration": 9,
+              "aerialReach": 3,
+              "agility": 9,
+              "anticipation": 16,
+              "composure": 16,
+              "concentration": 16,
+              "crossing": 8,
+              "decisions": 16,
+              "dribbling": 11,
+              "finishing": 12,
+              "firstTouch": 14,
+              "handling": 3,
+              "heading": 11,
+              "jumpingReach": 10,
+              "kicking": 3,
+              "marking": 8,
+              "offTheBall": 18,
+              "oneOnOnes": 2,
+              "pace": 10,
+              "passing": 18,
+              "positioning": 14,
+              "reflexes": 1,
+              "stamina": 16,
+              "strength": 18,
+              "tackling": 16,
+              "teamwork": 14,
+              "technique": 16,
+              "vision": 14,
+              "workRate": 16
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 106,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 145
+          }
+        ]
+      },
+      "id": 9
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 7,
+              "aerialReach": 1,
+              "agility": 10,
+              "anticipation": 14,
+              "composure": 10,
+              "concentration": 14,
+              "crossing": 8,
+              "decisions": 16,
+              "dribbling": 8,
+              "finishing": 9,
+              "firstTouch": 9,
+              "handling": 4,
+              "heading": 8,
+              "jumpingReach": 7,
+              "kicking": 2,
+              "marking": 7,
+              "offTheBall": 10,
+              "oneOnOnes": 3,
+              "pace": 9,
+              "passing": 13,
+              "positioning": 12,
+              "reflexes": 2,
+              "stamina": 10,
+              "strength": 13,
+              "tackling": 15,
+              "teamwork": 14,
+              "technique": 7,
+              "vision": 10,
+              "workRate": 9
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 110,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 130
+          },
+          {
+            "attributes": {
+              "acceleration": 7,
+              "aerialReach": 1,
+              "agility": 10,
+              "anticipation": 14,
+              "composure": 10,
+              "concentration": 14,
+              "crossing": 8,
+              "decisions": 16,
+              "dribbling": 8,
+              "finishing": 9,
+              "firstTouch": 9,
+              "handling": 4,
+              "heading": 8,
+              "jumpingReach": 7,
+              "kicking": 2,
+              "marking": 7,
+              "offTheBall": 10,
+              "oneOnOnes": 3,
+              "pace": 9,
+              "passing": 14,
+              "positioning": 12,
+              "reflexes": 2,
+              "stamina": 10,
+              "strength": 13,
+              "tackling": 15,
+              "teamwork": 14,
+              "technique": 7,
+              "vision": 10,
+              "workRate": 9
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 113,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 130
+          }
+        ]
+      },
+      "id": 10
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 12,
+              "aerialReach": 2,
+              "agility": 9,
+              "anticipation": 12,
+              "composure": 17,
+              "concentration": 9,
+              "crossing": 8,
+              "decisions": 17,
+              "dribbling": 16,
+              "finishing": 10,
+              "firstTouch": 16,
+              "handling": 1,
+              "heading": 9,
+              "jumpingReach": 9,
+              "kicking": 4,
+              "marking": 7,
+              "offTheBall": 18,
+              "oneOnOnes": 4,
+              "pace": 9,
+              "passing": 16,
+              "positioning": 11,
+              "reflexes": 2,
+              "stamina": 15,
+              "strength": 10,
+              "tackling": 7,
+              "teamwork": 17,
+              "technique": 18,
+              "vision": 15,
+              "workRate": 15
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 117,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 140
+          },
+          {
+            "attributes": {
+              "acceleration": 12,
+              "aerialReach": 2,
+              "agility": 9,
+              "anticipation": 12,
+              "composure": 17,
+              "concentration": 9,
+              "crossing": 8,
+              "decisions": 17,
+              "dribbling": 16,
+              "finishing": 10,
+              "firstTouch": 16,
+              "handling": 1,
+              "heading": 9,
+              "jumpingReach": 9,
+              "kicking": 4,
+              "marking": 7,
+              "offTheBall": 18,
+              "oneOnOnes": 4,
+              "pace": 9,
+              "passing": 17,
+              "positioning": 11,
+              "reflexes": 2,
+              "stamina": 15,
+              "strength": 10,
+              "tackling": 7,
+              "teamwork": 17,
+              "technique": 18,
+              "vision": 15,
+              "workRate": 15
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 120,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 140
+          }
+        ]
+      },
+      "id": 11
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 9,
+              "aerialReach": 1,
+              "agility": 9,
+              "anticipation": 12,
+              "composure": 17,
+              "concentration": 7,
+              "crossing": 11,
+              "decisions": 14,
+              "dribbling": 10,
+              "finishing": 7,
+              "firstTouch": 15,
+              "handling": 4,
+              "heading": 12,
+              "jumpingReach": 10,
+              "kicking": 1,
+              "marking": 11,
+              "offTheBall": 16,
+              "oneOnOnes": 4,
+              "pace": 12,
+              "passing": 15,
+              "positioning": 10,
+              "reflexes": 3,
+              "stamina": 15,
+              "strength": 8,
+              "tackling": 10,
+              "teamwork": 17,
+              "technique": 17,
+              "vision": 18,
+              "workRate": 16
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 124,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 150
+          },
+          {
+            "attributes": {
+              "acceleration": 9,
+              "aerialReach": 1,
+              "agility": 9,
+              "anticipation": 12,
+              "composure": 17,
+              "concentration": 7,
+              "crossing": 11,
+              "decisions": 14,
+              "dribbling": 10,
+              "finishing": 7,
+              "firstTouch": 15,
+              "handling": 4,
+              "heading": 12,
+              "jumpingReach": 10,
+              "kicking": 1,
+              "marking": 11,
+              "offTheBall": 16,
+              "oneOnOnes": 4,
+              "pace": 12,
+              "passing": 16,
+              "positioning": 10,
+              "reflexes": 3,
+              "stamina": 15,
+              "strength": 8,
+              "tackling": 10,
+              "teamwork": 17,
+              "technique": 17,
+              "vision": 18,
+              "workRate": 16
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 127,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 150
+          }
+        ]
+      },
+      "id": 12
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 10,
+              "aerialReach": 2,
+              "agility": 8,
+              "anticipation": 11,
+              "composure": 13,
+              "concentration": 10,
+              "crossing": 11,
+              "decisions": 13,
+              "dribbling": 11,
+              "finishing": 11,
+              "firstTouch": 14,
+              "handling": 1,
+              "heading": 12,
+              "jumpingReach": 10,
+              "kicking": 4,
+              "marking": 8,
+              "offTheBall": 14,
+              "oneOnOnes": 2,
+              "pace": 8,
+              "passing": 12,
+              "positioning": 10,
+              "reflexes": 2,
+              "stamina": 11,
+              "strength": 10,
+              "tackling": 7,
+              "teamwork": 14,
+              "technique": 14,
+              "vision": 12,
+              "workRate": 15
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 131,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 160
+          },
+          {
+            "attributes": {
+              "acceleration": 10,
+              "aerialReach": 2,
+              "agility": 8,
+              "anticipation": 11,
+              "composure": 13,
+              "concentration": 10,
+              "crossing": 11,
+              "decisions": 13,
+              "dribbling": 11,
+              "finishing": 11,
+              "firstTouch": 14,
+              "handling": 1,
+              "heading": 12,
+              "jumpingReach": 10,
+              "kicking": 4,
+              "marking": 8,
+              "offTheBall": 14,
+              "oneOnOnes": 2,
+              "pace": 8,
+              "passing": 13,
+              "positioning": 10,
+              "reflexes": 2,
+              "stamina": 11,
+              "strength": 10,
+              "tackling": 7,
+              "teamwork": 14,
+              "technique": 14,
+              "vision": 12,
+              "workRate": 15
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 134,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 160
+          }
+        ]
+      },
+      "id": 13
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 12,
+              "aerialReach": 1,
+              "agility": 11,
+              "anticipation": 15,
+              "composure": 17,
+              "concentration": 17,
+              "crossing": 7,
+              "decisions": 14,
+              "dribbling": 11,
+              "finishing": 9,
+              "firstTouch": 17,
+              "handling": 3,
+              "heading": 12,
+              "jumpingReach": 7,
+              "kicking": 3,
+              "marking": 12,
+              "offTheBall": 17,
+              "oneOnOnes": 3,
+              "pace": 10,
+              "passing": 13,
+              "positioning": 16,
+              "reflexes": 3,
+              "stamina": 15,
+              "strength": 17,
+              "tackling": 17,
+              "teamwork": 16,
+              "technique": 15,
+              "vision": 15,
+              "workRate": 16
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": null,
+            "gameDate": "2026-07-01",
+            "potentialAbility": null
+          },
+          {
+            "attributes": {
+              "acceleration": 12,
+              "aerialReach": 1,
+              "agility": 11,
+              "anticipation": 15,
+              "composure": 17,
+              "concentration": 17,
+              "crossing": 7,
+              "decisions": 14,
+              "dribbling": 11,
+              "finishing": 9,
+              "firstTouch": 17,
+              "handling": 3,
+              "heading": 12,
+              "jumpingReach": 7,
+              "kicking": 3,
+              "marking": 12,
+              "offTheBall": 17,
+              "oneOnOnes": 3,
+              "pace": 10,
+              "passing": 14,
+              "positioning": 16,
+              "reflexes": 3,
+              "stamina": 15,
+              "strength": 17,
+              "tackling": 17,
+              "teamwork": 16,
+              "technique": 15,
+              "vision": 15,
+              "workRate": 16
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": null,
+            "gameDate": "2026-08-01",
+            "potentialAbility": null
+          }
+        ]
+      },
+      "id": 14
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 19,
+              "aerialReach": 4,
+              "agility": 11,
+              "anticipation": 7,
+              "composure": 8,
+              "concentration": 8,
+              "crossing": 18,
+              "decisions": 7,
+              "dribbling": 16,
+              "finishing": 10,
+              "firstTouch": 17,
+              "handling": 3,
+              "heading": 11,
+              "jumpingReach": 12,
+              "kicking": 4,
+              "marking": 10,
+              "offTheBall": 17,
+              "oneOnOnes": 3,
+              "pace": 16,
+              "passing": 8,
+              "positioning": 8,
+              "reflexes": 1,
+              "stamina": 11,
+              "strength": 9,
+              "tackling": 8,
+              "teamwork": 7,
+              "technique": 17,
+              "vision": 11,
+              "workRate": 12
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 145,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 180
+          },
+          {
+            "attributes": {
+              "acceleration": 19,
+              "aerialReach": 4,
+              "agility": 11,
+              "anticipation": 7,
+              "composure": 8,
+              "concentration": 8,
+              "crossing": 18,
+              "decisions": 7,
+              "dribbling": 16,
+              "finishing": 10,
+              "firstTouch": 17,
+              "handling": 3,
+              "heading": 11,
+              "jumpingReach": 12,
+              "kicking": 4,
+              "marking": 10,
+              "offTheBall": 17,
+              "oneOnOnes": 3,
+              "pace": 16,
+              "passing": 9,
+              "positioning": 8,
+              "reflexes": 1,
+              "stamina": 11,
+              "strength": 9,
+              "tackling": 8,
+              "teamwork": 7,
+              "technique": 17,
+              "vision": 11,
+              "workRate": 12
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 148,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 180
+          }
+        ]
+      },
+      "id": 15
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 15,
+              "aerialReach": 3,
+              "agility": 10,
+              "anticipation": 9,
+              "composure": 11,
+              "concentration": 8,
+              "crossing": 15,
+              "decisions": 9,
+              "dribbling": 15,
+              "finishing": 10,
+              "firstTouch": 15,
+              "handling": 1,
+              "heading": 8,
+              "jumpingReach": 11,
+              "kicking": 1,
+              "marking": 8,
+              "offTheBall": 16,
+              "oneOnOnes": 1,
+              "pace": 18,
+              "passing": 10,
+              "positioning": 11,
+              "reflexes": 3,
+              "stamina": 10,
+              "strength": 8,
+              "tackling": 10,
+              "teamwork": 7,
+              "technique": 16,
+              "vision": 7,
+              "workRate": 10
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 102,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 140
+          },
+          {
+            "attributes": {
+              "acceleration": 15,
+              "aerialReach": 3,
+              "agility": 10,
+              "anticipation": 9,
+              "composure": 11,
+              "concentration": 8,
+              "crossing": 15,
+              "decisions": 9,
+              "dribbling": 15,
+              "finishing": 10,
+              "firstTouch": 15,
+              "handling": 1,
+              "heading": 8,
+              "jumpingReach": 11,
+              "kicking": 1,
+              "marking": 8,
+              "offTheBall": 16,
+              "oneOnOnes": 1,
+              "pace": 18,
+              "passing": 11,
+              "positioning": 11,
+              "reflexes": 3,
+              "stamina": 10,
+              "strength": 8,
+              "tackling": 10,
+              "teamwork": 7,
+              "technique": 16,
+              "vision": 7,
+              "workRate": 10
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 105,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 140
+          }
+        ]
+      },
+      "id": 16
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 16,
+              "aerialReach": 2,
+              "agility": 8,
+              "anticipation": 12,
+              "composure": 11,
+              "concentration": 11,
+              "crossing": 15,
+              "decisions": 7,
+              "dribbling": 14,
+              "finishing": 11,
+              "firstTouch": 14,
+              "handling": 1,
+              "heading": 8,
+              "jumpingReach": 12,
+              "kicking": 1,
+              "marking": 12,
+              "offTheBall": 15,
+              "oneOnOnes": 2,
+              "pace": 16,
+              "passing": 7,
+              "positioning": 9,
+              "reflexes": 3,
+              "stamina": 8,
+              "strength": 7,
+              "tackling": 9,
+              "teamwork": 10,
+              "technique": 13,
+              "vision": 8,
+              "workRate": 7
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 109,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 150
+          },
+          {
+            "attributes": {
+              "acceleration": 16,
+              "aerialReach": 2,
+              "agility": 8,
+              "anticipation": 12,
+              "composure": 11,
+              "concentration": 11,
+              "crossing": 15,
+              "decisions": 7,
+              "dribbling": 14,
+              "finishing": 11,
+              "firstTouch": 14,
+              "handling": 1,
+              "heading": 8,
+              "jumpingReach": 12,
+              "kicking": 1,
+              "marking": 12,
+              "offTheBall": 15,
+              "oneOnOnes": 2,
+              "pace": 16,
+              "passing": 8,
+              "positioning": 9,
+              "reflexes": 3,
+              "stamina": 8,
+              "strength": 7,
+              "tackling": 9,
+              "teamwork": 10,
+              "technique": 13,
+              "vision": 8,
+              "workRate": 7
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 112,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 150
+          }
+        ]
+      },
+      "id": 17
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 14,
+              "aerialReach": 4,
+              "agility": 12,
+              "anticipation": 11,
+              "composure": 16,
+              "concentration": 9,
+              "crossing": 14,
+              "decisions": 14,
+              "dribbling": 16,
+              "finishing": 11,
+              "firstTouch": 14,
+              "handling": 4,
+              "heading": 11,
+              "jumpingReach": 12,
+              "kicking": 4,
+              "marking": 7,
+              "offTheBall": 13,
+              "oneOnOnes": 2,
+              "pace": 12,
+              "passing": 14,
+              "positioning": 9,
+              "reflexes": 1,
+              "stamina": 9,
+              "strength": 12,
+              "tackling": 7,
+              "teamwork": 9,
+              "technique": 13,
+              "vision": 12,
+              "workRate": 7
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 116,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 135
+          },
+          {
+            "attributes": {
+              "acceleration": 14,
+              "aerialReach": 4,
+              "agility": 12,
+              "anticipation": 11,
+              "composure": 16,
+              "concentration": 9,
+              "crossing": 14,
+              "decisions": 14,
+              "dribbling": 16,
+              "finishing": 11,
+              "firstTouch": 14,
+              "handling": 4,
+              "heading": 11,
+              "jumpingReach": 12,
+              "kicking": 4,
+              "marking": 7,
+              "offTheBall": 13,
+              "oneOnOnes": 2,
+              "pace": 12,
+              "passing": 15,
+              "positioning": 9,
+              "reflexes": 1,
+              "stamina": 9,
+              "strength": 12,
+              "tackling": 7,
+              "teamwork": 9,
+              "technique": 13,
+              "vision": 12,
+              "workRate": 7
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 119,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 135
+          }
+        ]
+      },
+      "id": 18
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 17,
+              "aerialReach": 1,
+              "agility": 9,
+              "anticipation": 19,
+              "composure": 15,
+              "concentration": 10,
+              "crossing": 7,
+              "decisions": 10,
+              "dribbling": 9,
+              "finishing": 17,
+              "firstTouch": 19,
+              "handling": 1,
+              "heading": 17,
+              "jumpingReach": 8,
+              "kicking": 4,
+              "marking": 11,
+              "offTheBall": 17,
+              "oneOnOnes": 4,
+              "pace": 16,
+              "passing": 8,
+              "positioning": 9,
+              "reflexes": 4,
+              "stamina": 11,
+              "strength": 10,
+              "tackling": 8,
+              "teamwork": 10,
+              "technique": 11,
+              "vision": 12,
+              "workRate": 10
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 123,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 145
+          },
+          {
+            "attributes": {
+              "acceleration": 17,
+              "aerialReach": 1,
+              "agility": 9,
+              "anticipation": 19,
+              "composure": 15,
+              "concentration": 10,
+              "crossing": 7,
+              "decisions": 10,
+              "dribbling": 9,
+              "finishing": 17,
+              "firstTouch": 19,
+              "handling": 1,
+              "heading": 17,
+              "jumpingReach": 8,
+              "kicking": 4,
+              "marking": 11,
+              "offTheBall": 17,
+              "oneOnOnes": 4,
+              "pace": 16,
+              "passing": 9,
+              "positioning": 9,
+              "reflexes": 4,
+              "stamina": 11,
+              "strength": 10,
+              "tackling": 8,
+              "teamwork": 10,
+              "technique": 11,
+              "vision": 12,
+              "workRate": 10
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 126,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 145
+          }
+        ]
+      },
+      "id": 19
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 13,
+              "aerialReach": 1,
+              "agility": 7,
+              "anticipation": 15,
+              "composure": 16,
+              "concentration": 9,
+              "crossing": 9,
+              "decisions": 11,
+              "dribbling": 11,
+              "finishing": 15,
+              "firstTouch": 15,
+              "handling": 3,
+              "heading": 13,
+              "jumpingReach": 9,
+              "kicking": 3,
+              "marking": 7,
+              "offTheBall": 17,
+              "oneOnOnes": 4,
+              "pace": 17,
+              "passing": 8,
+              "positioning": 10,
+              "reflexes": 3,
+              "stamina": 7,
+              "strength": 11,
+              "tackling": 10,
+              "teamwork": 9,
+              "technique": 9,
+              "vision": 9,
+              "workRate": 11
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 130,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 155
+          },
+          {
+            "attributes": {
+              "acceleration": 13,
+              "aerialReach": 1,
+              "agility": 7,
+              "anticipation": 15,
+              "composure": 16,
+              "concentration": 9,
+              "crossing": 9,
+              "decisions": 11,
+              "dribbling": 11,
+              "finishing": 15,
+              "firstTouch": 15,
+              "handling": 3,
+              "heading": 13,
+              "jumpingReach": 9,
+              "kicking": 3,
+              "marking": 7,
+              "offTheBall": 17,
+              "oneOnOnes": 4,
+              "pace": 17,
+              "passing": 9,
+              "positioning": 10,
+              "reflexes": 3,
+              "stamina": 7,
+              "strength": 11,
+              "tackling": 10,
+              "teamwork": 9,
+              "technique": 9,
+              "vision": 9,
+              "workRate": 11
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 133,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 155
+          }
+        ]
+      },
+      "id": 20
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 12,
+              "aerialReach": 4,
+              "agility": 9,
+              "anticipation": 14,
+              "composure": 13,
+              "concentration": 10,
+              "crossing": 10,
+              "decisions": 7,
+              "dribbling": 7,
+              "finishing": 13,
+              "firstTouch": 14,
+              "handling": 1,
+              "heading": 12,
+              "jumpingReach": 9,
+              "kicking": 3,
+              "marking": 10,
+              "offTheBall": 11,
+              "oneOnOnes": 2,
+              "pace": 13,
+              "passing": 6,
+              "positioning": 12,
+              "reflexes": 2,
+              "stamina": 7,
+              "strength": 8,
+              "tackling": 8,
+              "teamwork": 8,
+              "technique": 8,
+              "vision": 11,
+              "workRate": 10
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": null,
+            "gameDate": "2026-07-01",
+            "potentialAbility": null
+          },
+          {
+            "attributes": {
+              "acceleration": 12,
+              "aerialReach": 4,
+              "agility": 9,
+              "anticipation": 14,
+              "composure": 13,
+              "concentration": 10,
+              "crossing": 10,
+              "decisions": 7,
+              "dribbling": 7,
+              "finishing": 13,
+              "firstTouch": 14,
+              "handling": 1,
+              "heading": 12,
+              "jumpingReach": 9,
+              "kicking": 3,
+              "marking": 10,
+              "offTheBall": 11,
+              "oneOnOnes": 2,
+              "pace": 13,
+              "passing": 7,
+              "positioning": 12,
+              "reflexes": 2,
+              "stamina": 7,
+              "strength": 8,
+              "tackling": 8,
+              "teamwork": 8,
+              "technique": 8,
+              "vision": 11,
+              "workRate": 10
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": null,
+            "gameDate": "2026-08-01",
+            "potentialAbility": null
+          }
+        ]
+      },
+      "id": 21
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 11,
+              "aerialReach": 1,
+              "agility": 12,
+              "anticipation": 12,
+              "composure": 18,
+              "concentration": 10,
+              "crossing": 11,
+              "decisions": 16,
+              "dribbling": 16,
+              "finishing": 10,
+              "firstTouch": 14,
+              "handling": 4,
+              "heading": 7,
+              "jumpingReach": 12,
+              "kicking": 4,
+              "marking": 10,
+              "offTheBall": 14,
+              "oneOnOnes": 3,
+              "pace": 7,
+              "passing": 15,
+              "positioning": 9,
+              "reflexes": 4,
+              "stamina": 17,
+              "strength": 8,
+              "tackling": 10,
+              "teamwork": 16,
+              "technique": 16,
+              "vision": 18,
+              "workRate": 16
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 144,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 175
+          },
+          {
+            "attributes": {
+              "acceleration": 11,
+              "aerialReach": 1,
+              "agility": 12,
+              "anticipation": 12,
+              "composure": 18,
+              "concentration": 10,
+              "crossing": 11,
+              "decisions": 16,
+              "dribbling": 16,
+              "finishing": 10,
+              "firstTouch": 14,
+              "handling": 4,
+              "heading": 7,
+              "jumpingReach": 12,
+              "kicking": 4,
+              "marking": 10,
+              "offTheBall": 14,
+              "oneOnOnes": 3,
+              "pace": 7,
+              "passing": 16,
+              "positioning": 9,
+              "reflexes": 4,
+              "stamina": 17,
+              "strength": 8,
+              "tackling": 10,
+              "teamwork": 16,
+              "technique": 16,
+              "vision": 18,
+              "workRate": 16
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 147,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 175
+          }
+        ]
+      },
+      "id": 22
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 16,
+              "aerialReach": 3,
+              "agility": 7,
+              "anticipation": 12,
+              "composure": 9,
+              "concentration": 13,
+              "crossing": 16,
+              "decisions": 7,
+              "dribbling": 10,
+              "finishing": 12,
+              "firstTouch": 10,
+              "handling": 4,
+              "heading": 13,
+              "jumpingReach": 13,
+              "kicking": 3,
+              "marking": 13,
+              "offTheBall": 10,
+              "oneOnOnes": 3,
+              "pace": 13,
+              "passing": 13,
+              "positioning": 12,
+              "reflexes": 2,
+              "stamina": 16,
+              "strength": 13,
+              "tackling": 12,
+              "teamwork": 11,
+              "technique": 8,
+              "vision": 10,
+              "workRate": 14
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 101,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 135
+          },
+          {
+            "attributes": {
+              "acceleration": 16,
+              "aerialReach": 3,
+              "agility": 7,
+              "anticipation": 12,
+              "composure": 9,
+              "concentration": 13,
+              "crossing": 16,
+              "decisions": 7,
+              "dribbling": 10,
+              "finishing": 12,
+              "firstTouch": 10,
+              "handling": 4,
+              "heading": 13,
+              "jumpingReach": 13,
+              "kicking": 3,
+              "marking": 13,
+              "offTheBall": 10,
+              "oneOnOnes": 3,
+              "pace": 13,
+              "passing": 14,
+              "positioning": 12,
+              "reflexes": 2,
+              "stamina": 16,
+              "strength": 13,
+              "tackling": 12,
+              "teamwork": 11,
+              "technique": 8,
+              "vision": 10,
+              "workRate": 14
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 104,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 135
+          }
+        ]
+      },
+      "id": 23
+    },
+    {
+      "history": {
+        "message": "Aynı kariyerin son 24 oyun tarihi. Yalnızca kaydedilmiş değerler gösterilir.",
+        "points": [
+          {
+            "attributes": {
+              "acceleration": 16,
+              "aerialReach": 4,
+              "agility": 12,
+              "anticipation": 12,
+              "composure": 12,
+              "concentration": 8,
+              "crossing": 15,
+              "decisions": 8,
+              "dribbling": 11,
+              "finishing": 11,
+              "firstTouch": 11,
+              "handling": 2,
+              "heading": 8,
+              "jumpingReach": 10,
+              "kicking": 2,
+              "marking": 12,
+              "offTheBall": 8,
+              "oneOnOnes": 1,
+              "pace": 16,
+              "passing": 13,
+              "positioning": 15,
+              "reflexes": 4,
+              "stamina": 12,
+              "strength": 11,
+              "tackling": 13,
+              "teamwork": 12,
+              "technique": 12,
+              "vision": 9,
+              "workRate": 14
+            },
+            "capturedAt": "2026-11-01T12:00:00Z",
+            "currentAbility": 108,
+            "gameDate": "2026-07-01",
+            "potentialAbility": 145
+          },
+          {
+            "attributes": {
+              "acceleration": 16,
+              "aerialReach": 4,
+              "agility": 12,
+              "anticipation": 12,
+              "composure": 12,
+              "concentration": 8,
+              "crossing": 15,
+              "decisions": 8,
+              "dribbling": 11,
+              "finishing": 11,
+              "firstTouch": 11,
+              "handling": 2,
+              "heading": 8,
+              "jumpingReach": 10,
+              "kicking": 2,
+              "marking": 12,
+              "offTheBall": 8,
+              "oneOnOnes": 1,
+              "pace": 16,
+              "passing": 14,
+              "positioning": 15,
+              "reflexes": 4,
+              "stamina": 12,
+              "strength": 11,
+              "tackling": 13,
+              "teamwork": 12,
+              "technique": 12,
+              "vision": 9,
+              "workRate": 14
+            },
+            "capturedAt": "2026-11-06T09:00:00+03:00",
+            "currentAbility": 111,
+            "gameDate": "2026-08-01",
+            "potentialAbility": 145
+          }
+        ]
+      },
+      "id": 24
+    }
+  ],
   "page": {
     "offset": 0,
     "players": [
       {
-        "age": 27,
-        "condition": 96,
-        "form": 6.83,
-        "id": 1,
+        "age": 22,
+        "condition": 97,
+        "currentAbility": 113,
+        "form": 7.35,
+        "id": 10,
         "injured": false,
-        "name": "Deniz Arslan",
+        "name": "Ali Sarp",
         "positions": [
-          "GK"
-        ],
-        "role": {
-          "coverage": 100.0,
-          "missing": [],
-          "roleId": "keeper",
-          "roleName": "Kaleci",
-          "score": 80.8,
-          "strengths": [
-            "reflexes",
-            "handling",
-            "oneOnOnes",
-            "aerialReach",
-            "decisions",
-            "kicking"
-          ]
-        }
-      },
-      {
-        "age": 20,
-        "condition": 100,
-        "form": null,
-        "id": 2,
-        "injured": false,
-        "name": "Efe Ural",
-        "positions": [
-          "GK"
-        ],
-        "role": {
-          "coverage": 100.0,
-          "missing": [],
-          "roleId": "keeper",
-          "roleName": "Kaleci",
-          "score": 65.0,
-          "strengths": [
-            "aerialReach",
-            "kicking"
-          ]
-        }
-      },
-      {
-        "age": 26,
-        "condition": 94,
-        "form": 6.5,
-        "id": 3,
-        "injured": false,
-        "name": "Mert Aydın",
-        "positions": [
-          "DC"
-        ],
-        "role": {
-          "coverage": 100.0,
-          "missing": [],
-          "roleId": "centreBack",
-          "roleName": "Stoper",
-          "score": 75.6,
-          "strengths": [
-            "marking",
-            "tackling",
-            "positioning",
-            "heading",
-            "jumpingReach",
-            "strength"
-          ]
-        }
-      },
-      {
-        "age": 29,
-        "condition": 89,
-        "form": 7.75,
-        "id": 4,
-        "injured": false,
-        "name": "Bora Erden",
-        "positions": [
-          "DC"
-        ],
-        "role": {
-          "coverage": 100.0,
-          "missing": [],
-          "roleId": "centreBack",
-          "roleName": "Stoper",
-          "score": 75.0,
-          "strengths": [
-            "marking",
-            "tackling",
-            "positioning",
-            "heading",
-            "jumpingReach",
-            "strength"
-          ]
-        }
-      },
-      {
-        "age": 21,
-        "condition": 98,
-        "form": 6.66,
-        "id": 5,
-        "injured": false,
-        "name": "Atlas Yaman",
-        "positions": [
-          "DC",
           "DM"
         ],
+        "potentialAbility": 130,
         "role": {
           "coverage": 100.0,
           "missing": [],
           "roleId": "anchor",
           "roleName": "Savunma önü",
-          "score": 68.8,
+          "score": 70.4,
           "strengths": [
-            "positioning",
+            "tackling",
+            "anticipation",
             "decisions",
             "teamwork",
             "passing"
@@ -3548,8 +5849,35 @@
         }
       },
       {
+        "age": 20,
+        "condition": 96,
+        "currentAbility": 119,
+        "form": 6.47,
+        "id": 18,
+        "injured": false,
+        "name": "Alp Tunç",
+        "positions": [
+          "AMR",
+          "AMC"
+        ],
+        "potentialAbility": 135,
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "rightWing",
+          "roleName": "Sağ kanat",
+          "score": 69.6,
+          "strengths": [
+            "dribbling",
+            "acceleration",
+            "crossing"
+          ]
+        }
+      },
+      {
         "age": 24,
         "condition": 92,
+        "currentAbility": 135,
         "form": 7.25,
         "id": 6,
         "injured": false,
@@ -3557,6 +5885,7 @@
         "positions": [
           "DL"
         ],
+        "potentialAbility": 165,
         "role": {
           "coverage": 100.0,
           "missing": [],
@@ -3575,212 +5904,36 @@
         }
       },
       {
-        "age": 23,
-        "condition": 93,
-        "form": 7.88,
-        "id": 7,
+        "age": 21,
+        "condition": 98,
+        "currentAbility": 128,
+        "form": 6.66,
+        "id": 5,
         "injured": false,
-        "name": "Cem Koral",
+        "name": "Atlas Yaman",
         "positions": [
-          "DR"
-        ],
-        "role": {
-          "coverage": 100.0,
-          "missing": [],
-          "roleId": "rightBack",
-          "roleName": "Sağ bek",
-          "score": 78.1,
-          "strengths": [
-            "tackling",
-            "positioning",
-            "pace",
-            "stamina",
-            "workRate",
-            "passing"
-          ]
-        }
-      },
-      {
-        "age": 20,
-        "condition": 99,
-        "form": 7.78,
-        "id": 8,
-        "injured": false,
-        "name": "Kaan Ekin",
-        "positions": [
-          "DL",
-          "DR"
-        ],
-        "role": {
-          "coverage": 100.0,
-          "missing": [],
-          "roleId": "leftBack",
-          "roleName": "Sol bek",
-          "score": 64.2,
-          "strengths": [
-            "stamina",
-            "crossing",
-            "passing"
-          ]
-        }
-      },
-      {
-        "age": 28,
-        "condition": 91,
-        "form": 7.46,
-        "id": 9,
-        "injured": false,
-        "name": "Ozan Demir",
-        "positions": [
-          "DM",
-          "MC"
-        ],
-        "role": {
-          "coverage": 100.0,
-          "missing": [],
-          "roleId": "runner",
-          "roleName": "İki yönlü orta saha",
-          "score": 80.8,
-          "strengths": [
-            "stamina",
-            "workRate",
-            "teamwork",
-            "offTheBall",
-            "passing",
-            "tackling"
-          ]
-        }
-      },
-      {
-        "age": 22,
-        "condition": 97,
-        "form": 7.35,
-        "id": 10,
-        "injured": false,
-        "name": "Ali Sarp",
-        "positions": [
+          "DC",
           "DM"
         ],
+        "potentialAbility": 155,
         "role": {
           "coverage": 100.0,
           "missing": [],
           "roleId": "anchor",
           "roleName": "Savunma önü",
-          "score": 70.4,
+          "score": 68.8,
           "strengths": [
-            "tackling",
-            "anticipation",
+            "positioning",
             "decisions",
             "teamwork",
             "passing"
-          ]
-        }
-      },
-      {
-        "age": 25,
-        "condition": 94,
-        "form": 6.96,
-        "id": 11,
-        "injured": false,
-        "name": "Kerem Akın",
-        "positions": [
-          "MC",
-          "AMC"
-        ],
-        "role": {
-          "coverage": 100.0,
-          "missing": [],
-          "roleId": "creator",
-          "roleName": "Hücum oyun kurucu",
-          "score": 83.1,
-          "strengths": [
-            "vision",
-            "passing",
-            "firstTouch",
-            "technique",
-            "decisions",
-            "offTheBall"
-          ]
-        }
-      },
-      {
-        "age": 24,
-        "condition": 93,
-        "form": 7.51,
-        "id": 12,
-        "injured": false,
-        "name": "Emir Tan",
-        "positions": [
-          "MC"
-        ],
-        "role": {
-          "coverage": 100.0,
-          "missing": [],
-          "roleId": "playmaker",
-          "roleName": "Oyun kurucu",
-          "score": 81.2,
-          "strengths": [
-            "passing",
-            "vision",
-            "decisions",
-            "firstTouch",
-            "technique",
-            "composure"
-          ]
-        }
-      },
-      {
-        "age": 19,
-        "condition": 100,
-        "form": null,
-        "id": 13,
-        "injured": false,
-        "name": "Berk Önal",
-        "positions": [
-          "MC"
-        ],
-        "role": {
-          "coverage": 100.0,
-          "missing": [],
-          "roleId": "playmaker",
-          "roleName": "Oyun kurucu",
-          "score": 65.4,
-          "strengths": [
-            "firstTouch",
-            "technique"
-          ]
-        }
-      },
-      {
-        "age": 30,
-        "condition": 72,
-        "form": 6.59,
-        "id": 14,
-        "injured": false,
-        "name": "Eren Acar",
-        "positions": [
-          "MC",
-          "DM"
-        ],
-        "role": {
-          "coverage": 100.0,
-          "missing": [],
-          "roleId": "runner",
-          "roleName": "İki yönlü orta saha",
-          "score": 79.2,
-          "strengths": [
-            "stamina",
-            "workRate",
-            "teamwork",
-            "offTheBall",
-            "passing",
-            "tackling"
           ]
         }
       },
       {
         "age": 23,
         "condition": 95,
+        "currentAbility": 148,
         "form": 7.84,
         "id": 15,
         "injured": false,
@@ -3789,6 +5942,7 @@
           "AML",
           "AMR"
         ],
+        "potentialAbility": 180,
         "role": {
           "coverage": 100.0,
           "missing": [],
@@ -3806,83 +5960,144 @@
         }
       },
       {
-        "age": 24,
-        "condition": 92,
-        "form": 7.03,
-        "id": 16,
+        "age": 19,
+        "condition": 100,
+        "currentAbility": 134,
+        "form": null,
+        "id": 13,
         "injured": false,
-        "name": "Sarp Deniz",
+        "name": "Berk Önal",
         "positions": [
-          "AMR"
+          "MC"
         ],
+        "potentialAbility": 160,
         "role": {
           "coverage": 100.0,
           "missing": [],
-          "roleId": "rightWing",
-          "roleName": "Sağ kanat",
-          "score": 78.5,
+          "roleId": "playmaker",
+          "roleName": "Oyun kurucu",
+          "score": 65.4,
           "strengths": [
-            "dribbling",
-            "acceleration",
-            "pace",
-            "crossing",
-            "offTheBall",
+            "firstTouch",
             "technique"
           ]
         }
       },
       {
-        "age": 21,
-        "condition": 98,
-        "form": 7.43,
-        "id": 17,
+        "age": 29,
+        "condition": 89,
+        "currentAbility": 121,
+        "form": 7.75,
+        "id": 4,
         "injured": false,
-        "name": "Onur Kaya",
+        "name": "Bora Erden",
         "positions": [
-          "AML"
+          "DC"
         ],
+        "potentialAbility": 145,
         "role": {
           "coverage": 100.0,
           "missing": [],
-          "roleId": "leftWing",
-          "roleName": "Sol kanat",
+          "roleId": "centreBack",
+          "roleName": "Stoper",
           "score": 75.0,
           "strengths": [
-            "dribbling",
-            "acceleration",
-            "pace",
-            "crossing",
-            "offTheBall"
+            "marking",
+            "tackling",
+            "positioning",
+            "heading",
+            "jumpingReach",
+            "strength"
           ]
         }
       },
       {
-        "age": 20,
-        "condition": 96,
-        "form": 6.47,
-        "id": 18,
-        "injured": false,
-        "name": "Alp Tunç",
+        "age": 28,
+        "condition": 79,
+        "currentAbility": 104,
+        "form": 6.99,
+        "id": 23,
+        "injured": true,
+        "name": "Can Efe",
         "positions": [
-          "AMR",
-          "AMC"
+          "DC",
+          "DR"
         ],
+        "potentialAbility": 135,
         "role": {
           "coverage": 100.0,
           "missing": [],
-          "roleId": "rightWing",
-          "roleName": "Sağ kanat",
-          "score": 69.6,
+          "roleId": "rightBack",
+          "roleName": "Sağ bek",
+          "score": 69.2,
           "strengths": [
-            "dribbling",
-            "acceleration",
-            "crossing"
+            "stamina",
+            "crossing",
+            "workRate",
+            "passing"
+          ]
+        }
+      },
+      {
+        "age": 23,
+        "condition": 93,
+        "currentAbility": null,
+        "form": 7.88,
+        "id": 7,
+        "injured": false,
+        "name": "Cem Koral",
+        "positions": [
+          "DR"
+        ],
+        "potentialAbility": null,
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "rightBack",
+          "roleName": "Sağ bek",
+          "score": 78.1,
+          "strengths": [
+            "tackling",
+            "positioning",
+            "pace",
+            "stamina",
+            "workRate",
+            "passing"
+          ]
+        }
+      },
+      {
+        "age": 27,
+        "condition": 96,
+        "currentAbility": 100,
+        "form": 6.83,
+        "id": 1,
+        "injured": false,
+        "name": "Deniz Arslan",
+        "positions": [
+          "GK"
+        ],
+        "potentialAbility": 115,
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "keeper",
+          "roleName": "Kaleci",
+          "score": 80.8,
+          "strengths": [
+            "reflexes",
+            "handling",
+            "oneOnOnes",
+            "aerialReach",
+            "decisions",
+            "kicking"
           ]
         }
       },
       {
         "age": 26,
         "condition": 94,
+        "currentAbility": 126,
         "form": 6.92,
         "id": 19,
         "injured": false,
@@ -3890,6 +6105,7 @@
         "positions": [
           "ST"
         ],
+        "potentialAbility": 145,
         "role": {
           "coverage": 100.0,
           "missing": [],
@@ -3907,8 +6123,281 @@
         }
       },
       {
+        "age": 20,
+        "condition": 100,
+        "currentAbility": 107,
+        "form": null,
+        "id": 2,
+        "injured": false,
+        "name": "Efe Ural",
+        "positions": [
+          "GK"
+        ],
+        "potentialAbility": 125,
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "keeper",
+          "roleName": "Kaleci",
+          "score": 65.0,
+          "strengths": [
+            "aerialReach",
+            "kicking"
+          ]
+        }
+      },
+      {
+        "age": 24,
+        "condition": 93,
+        "currentAbility": 127,
+        "form": 7.51,
+        "id": 12,
+        "injured": false,
+        "name": "Emir Tan",
+        "positions": [
+          "MC"
+        ],
+        "potentialAbility": 150,
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "playmaker",
+          "roleName": "Oyun kurucu",
+          "score": 81.2,
+          "strengths": [
+            "passing",
+            "vision",
+            "decisions",
+            "firstTouch",
+            "technique",
+            "composure"
+          ]
+        }
+      },
+      {
+        "age": 30,
+        "condition": 72,
+        "currentAbility": null,
+        "form": 6.59,
+        "id": 14,
+        "injured": false,
+        "name": "Eren Acar",
+        "positions": [
+          "MC",
+          "DM"
+        ],
+        "potentialAbility": null,
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "runner",
+          "roleName": "İki yönlü orta saha",
+          "score": 79.2,
+          "strengths": [
+            "stamina",
+            "workRate",
+            "teamwork",
+            "offTheBall",
+            "passing",
+            "tackling"
+          ]
+        }
+      },
+      {
+        "age": 20,
+        "condition": 99,
+        "currentAbility": 149,
+        "form": 7.78,
+        "id": 8,
+        "injured": false,
+        "name": "Kaan Ekin",
+        "positions": [
+          "DL",
+          "DR"
+        ],
+        "potentialAbility": 185,
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "leftBack",
+          "roleName": "Sol bek",
+          "score": 64.2,
+          "strengths": [
+            "stamina",
+            "crossing",
+            "passing"
+          ]
+        }
+      },
+      {
+        "age": 25,
+        "condition": 94,
+        "currentAbility": 120,
+        "form": 6.96,
+        "id": 11,
+        "injured": false,
+        "name": "Kerem Akın",
+        "positions": [
+          "MC",
+          "AMC"
+        ],
+        "potentialAbility": 140,
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "creator",
+          "roleName": "Hücum oyun kurucu",
+          "score": 83.1,
+          "strengths": [
+            "vision",
+            "passing",
+            "firstTouch",
+            "technique",
+            "decisions",
+            "offTheBall"
+          ]
+        }
+      },
+      {
+        "age": 26,
+        "condition": 94,
+        "currentAbility": 114,
+        "form": 6.5,
+        "id": 3,
+        "injured": false,
+        "name": "Mert Aydın",
+        "positions": [
+          "DC"
+        ],
+        "potentialAbility": 135,
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "centreBack",
+          "roleName": "Stoper",
+          "score": 75.6,
+          "strengths": [
+            "marking",
+            "tackling",
+            "positioning",
+            "heading",
+            "jumpingReach",
+            "strength"
+          ]
+        }
+      },
+      {
+        "age": 21,
+        "condition": 98,
+        "currentAbility": 112,
+        "form": 7.43,
+        "id": 17,
+        "injured": false,
+        "name": "Onur Kaya",
+        "positions": [
+          "AML"
+        ],
+        "potentialAbility": 150,
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "leftWing",
+          "roleName": "Sol kanat",
+          "score": 75.0,
+          "strengths": [
+            "dribbling",
+            "acceleration",
+            "pace",
+            "crossing",
+            "offTheBall"
+          ]
+        }
+      },
+      {
+        "age": 28,
+        "condition": 91,
+        "currentAbility": 106,
+        "form": 7.46,
+        "id": 9,
+        "injured": false,
+        "name": "Ozan Demir",
+        "positions": [
+          "DM",
+          "MC"
+        ],
+        "potentialAbility": 145,
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "runner",
+          "roleName": "İki yönlü orta saha",
+          "score": 80.8,
+          "strengths": [
+            "stamina",
+            "workRate",
+            "teamwork",
+            "offTheBall",
+            "passing",
+            "tackling"
+          ]
+        }
+      },
+      {
+        "age": 24,
+        "condition": 92,
+        "currentAbility": 105,
+        "form": 7.03,
+        "id": 16,
+        "injured": false,
+        "name": "Sarp Deniz",
+        "positions": [
+          "AMR"
+        ],
+        "potentialAbility": 140,
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "rightWing",
+          "roleName": "Sağ kanat",
+          "score": 78.5,
+          "strengths": [
+            "dribbling",
+            "acceleration",
+            "pace",
+            "crossing",
+            "offTheBall",
+            "technique"
+          ]
+        }
+      },
+      {
+        "age": 19,
+        "condition": 100,
+        "currentAbility": null,
+        "form": null,
+        "id": 21,
+        "injured": false,
+        "name": "Tuna Ekin",
+        "positions": [
+          "ST"
+        ],
+        "potentialAbility": null,
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "striker",
+          "roleName": "Bitirici forvet",
+          "score": 63.1,
+          "strengths": [
+            "anticipation",
+            "firstTouch"
+          ]
+        }
+      },
+      {
         "age": 22,
         "condition": 96,
+        "currentAbility": 133,
         "form": 7.38,
         "id": 20,
         "injured": false,
@@ -3916,6 +6405,7 @@
         "positions": [
           "ST"
         ],
+        "potentialAbility": 155,
         "role": {
           "coverage": 100.0,
           "missing": [],
@@ -3932,30 +6422,9 @@
         }
       },
       {
-        "age": 19,
-        "condition": 100,
-        "form": null,
-        "id": 21,
-        "injured": false,
-        "name": "Tuna Ekin",
-        "positions": [
-          "ST"
-        ],
-        "role": {
-          "coverage": 100.0,
-          "missing": [],
-          "roleId": "striker",
-          "roleName": "Bitirici forvet",
-          "score": 63.1,
-          "strengths": [
-            "anticipation",
-            "firstTouch"
-          ]
-        }
-      },
-      {
         "age": 25,
         "condition": 88,
+        "currentAbility": 147,
         "form": 6.95,
         "id": 22,
         "injured": false,
@@ -3964,6 +6433,7 @@
           "AMC",
           "MC"
         ],
+        "potentialAbility": 175,
         "role": {
           "coverage": 100.0,
           "missing": [],
@@ -3981,33 +6451,9 @@
         }
       },
       {
-        "age": 28,
-        "condition": 79,
-        "form": 6.99,
-        "id": 23,
-        "injured": true,
-        "name": "Can Efe",
-        "positions": [
-          "DC",
-          "DR"
-        ],
-        "role": {
-          "coverage": 100.0,
-          "missing": [],
-          "roleId": "rightBack",
-          "roleName": "Sağ bek",
-          "score": 69.2,
-          "strengths": [
-            "stamina",
-            "crossing",
-            "workRate",
-            "passing"
-          ]
-        }
-      },
-      {
         "age": 31,
         "condition": 84,
+        "currentAbility": 111,
         "form": 7.56,
         "id": 24,
         "injured": true,
@@ -4015,6 +6461,7 @@
         "positions": [
           "DL"
         ],
+        "potentialAbility": 145,
         "role": {
           "coverage": 100.0,
           "missing": [],
@@ -4032,5 +6479,18 @@
       }
     ],
     "total": 24
-  }
+  },
+  "shortlists": [
+    {
+      "entries": [
+        {
+          "available": true,
+          "name": "Ali Sarp",
+          "playerId": 10
+        }
+      ],
+      "id": 1,
+      "name": "Takip listem"
+    }
+  ]
 }

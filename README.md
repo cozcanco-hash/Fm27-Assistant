@@ -29,6 +29,10 @@ This is an ad-hoc signed developer preview, without notarization. macOS may requ
 | --- | --- |
 | **Start before owning the game** | Explore a complete fictional squad with clearly marked demo data. |
 | **Understand your players** | Search the squad, filter by position and inspect attributes, recent form, condition, morale and minutes played. |
+| **Scout with more detail** | Combine age, ability, potential, condition, form, foot, role and attribute filters; reveal imported CA/PA and hidden attributes when available. |
+| **Compare your options** | Put up to three players side by side for one chosen role, reusing the existing role scores. |
+| **Keep watchlists** | Create named local lists and add players from the roster or their profile. |
+| **Track development** | Compare known attributes and ability across the last 24 game dates in one identified career. |
 | **Compare three formations** | Switch between 4–3–3 DM, 4–2–3–1 and 4–4–2 on an interactive tactic board. |
 | **Build a balanced starting XI** | Assign eligible players across all eleven positions without duplicates; injured players are excluded and condition affects selection. |
 | **See why a role fits** | Inspect weighted attribute scores and missing-data coverage. A score is shown only when at least 70% of the role's attribute weight is known. |
@@ -49,6 +53,8 @@ Squad analysis runs locally; AI chat uses the connected service. Real ChatGPT si
 This is an early companion app. The current Rust version supports demo data and the app's **custom JSON schema**, not automatic imports from every FM export. Live game reading, save-file parsing, `.fmf` decoding, automatic in-game control and the Java reference's recruitment/staff features have not been implemented in the Rust app. FM27 compatibility remains to be verified with actual game data.
 
 The screenshot above is the browser preview. It uses Rust-generated analysis; imports, persistence and real AI require the native desktop app.
+
+Version 0.2.0 adds scouting to the existing JSON workflow. CA/PA and hidden fields are optional; old files still work. Development requires `careerId` and `gameDate`. See [the feature audit and data contract](desktop/SCOUTING.md). Direct FM save parsing and live game access remain unimplemented.
 
 ## Built for macOS
 

@@ -2,15 +2,21 @@ export type Position = 'GK' | 'DC' | 'DL' | 'DR' | 'DM' | 'MC' | 'AML' | 'AMR' |
 export type Formation = '433dm' | '4231' | '442';
 export type Source = 'demo' | 'manual';
 export interface RoleFit { roleId: string; roleName: string; score: number | null; coverage: number; missing: string[]; strengths: string[] }
-export interface PlayerRow { id: number; name: string; age: number; positions: Position[]; condition: number; form: number | null; injured: boolean; role: RoleFit | null }
-export interface Player extends Omit<PlayerRow, 'role'> { foot: 'left' | 'right' | 'both'; morale: number; minutes: number; attributes: Record<string, number> }
+export interface PlayerRow { id: number; name: string; age: number; positions: Position[]; condition: number; form: number | null; injured: boolean; role: RoleFit | null; currentAbility?: number | null; potentialAbility?: number | null }
+export interface Player extends Omit<PlayerRow, 'role'> { foot: 'left' | 'right' | 'both'; morale: number; minutes: number; attributes: Record<string, number>; hiddenAttributes?: Record<string, number> }
 export interface PlayerDetail { player: Player; roles: RoleFit[] }
 export interface Slot { key: string; label: string; x: number; y: number; roleId: string; player: PlayerRow | null; fit: RoleFit | null }
 export interface Insight { kind: 'info' | 'positive' | 'warning'; title: string; detail: string }
 export interface Analysis { formation: Formation; slots: Slot[]; score: number | null; filled: number; available: number; insights: Insight[] }
-export interface Dashboard { club: string; season: string; source: Source; capturedAt: string; playerCount: number; analysis: Analysis }
+export interface RoleOption { id: string; name: string; position: Position }
+export interface Dashboard { club: string; season: string; source: Source; capturedAt: string; playerCount: number; analysis: Analysis; gameDate: string | null; roles: RoleOption[] }
 export interface PlayerPage { players: PlayerRow[]; total: number; offset: number }
-export interface PlayerQuery { search?: string; position?: Position | null; offset?: number; limit?: number }
+export interface AttributeFilter { key: string; min?: number; max?: number; hidden: boolean }
+export interface PlayerQuery { search?: string; position?: Position | null; offset?: number; limit?: number; minAge?: number; maxAge?: number; minCondition?: number; minForm?: number; minCa?: number; minPa?: number; foot?: Player['foot']; availableOnly?: boolean; roleId?: string; minRoleScore?: number; attributes?: AttributeFilter[]; sort?: 'name' | 'age' | 'ability' | 'potential' | 'condition' | 'form' | 'role'; descending?: boolean; listId?: number }
+export interface ShortlistEntry { playerId: number; name: string; available: boolean }
+export interface Shortlist { id: number; name: string; entries: ShortlistEntry[] }
+export interface HistoryPoint { gameDate: string; capturedAt: string; currentAbility: number | null; potentialAbility: number | null; attributes: Record<string, number> }
+export interface PlayerHistory { points: HistoryPoint[]; message: string }
 export interface ModelChoice { id: string; name: string; isDefault: boolean }
 export interface CodexStatus { state: string; message: string; plan: string | null; models: ModelChoice[] }
 export interface ChatMessage { role: 'user' | 'assistant'; text: string }
@@ -31,3 +37,5 @@ export const ATTRIBUTE_LABELS: Record<string, string> = {
 };
 export const initials = (name: string) => name.split(' ').map(v => v[0]).slice(0, 2).join('');
 export const scoreText = (score: number | null | undefined) => score == null ? '—' : Math.round(score).toString();
+export const HIDDEN_LABELS: Record<string, string> = { consistency: 'İstikrar', importantMatches: 'Önemli maçlar', injuryProneness: 'Sakatlık yatkınlığı', versatility: 'Çok yönlülük', professionalism: 'Profesyonellik', ambition: 'Hırs', pressure: 'Baskıyla başa çıkma', temperament: 'Mizaç', loyalty: 'Sadakat', adaptability: 'Uyum sağlama', sportsmanship: 'Sportmenlik', controversy: 'Tartışma eğilimi', dirtiness: 'Sertlik' };
+export const gameDateText = (date: string) => new Intl.DateTimeFormat('tr-TR', { timeZone: 'UTC' }).format(new Date(`${date}T00:00:00Z`));

@@ -1,6 +1,7 @@
 pub mod analysis;
 pub mod codex;
 pub mod model;
+pub mod scouting;
 pub mod store;
 
 pub use analysis::{analyze, player_detail, Analysis, Formation, PlayerDetail};

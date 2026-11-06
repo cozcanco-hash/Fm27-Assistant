@@ -128,18 +128,22 @@ fn oversized_import_and_unknown_attributes_are_rejected() {
 #[test]
 fn pagination_is_bounded_and_search_and_position_are_combined() {
     let store = Store::memory().unwrap();
-    let page = store.players(fm27_core::store::PlayerQuery {
-        search: Some("deniz".into()),
-        position: Some(fm27_core::model::Position::GK),
-        ..Default::default()
-    });
+    let page = store
+        .players(fm27_core::store::PlayerQuery {
+            search: Some("deniz".into()),
+            position: Some(fm27_core::model::Position::GK),
+            ..Default::default()
+        })
+        .unwrap();
     assert_eq!(page.total, 1);
     assert_eq!(page.players[0].name, "Deniz Arslan");
-    let page = store.players(fm27_core::store::PlayerQuery {
-        offset: Some(5),
-        limit: Some(3),
-        ..Default::default()
-    });
+    let page = store
+        .players(fm27_core::store::PlayerQuery {
+            offset: Some(5),
+            limit: Some(3),
+            ..Default::default()
+        })
+        .unwrap();
     assert_eq!(page.players.len(), 3);
     assert_eq!(page.total, 24);
 }

@@ -48,6 +48,15 @@
         "aerialReach": 16,
         "oneOnOnes": 16,
         "kicking": 18
+      },
+      "currentAbility": 100,
+      "potentialAbility": 115,
+      "hiddenAttributes": {
+        "professionalism": 11,
+        "consistency": 10,
+        "importantMatches": 9,
+        "injuryProneness": 5,
+        "ambition": 12
       }
     },
     {
@@ -93,6 +102,15 @@
         "aerialReach": 15,
         "oneOnOnes": 12,
         "kicking": 14
+      },
+      "currentAbility": 107,
+      "potentialAbility": 125,
+      "hiddenAttributes": {
+        "professionalism": 12,
+        "consistency": 11,
+        "importantMatches": 10,
+        "injuryProneness": 6,
+        "ambition": 13
       }
     },
     {
@@ -138,6 +156,15 @@
         "aerialReach": 3,
         "oneOnOnes": 3,
         "kicking": 4
+      },
+      "currentAbility": 114,
+      "potentialAbility": 135,
+      "hiddenAttributes": {
+        "professionalism": 13,
+        "consistency": 12,
+        "importantMatches": 11,
+        "injuryProneness": 7,
+        "ambition": 14
       }
     },
     {
@@ -183,6 +210,15 @@
         "aerialReach": 2,
         "oneOnOnes": 1,
         "kicking": 1
+      },
+      "currentAbility": 121,
+      "potentialAbility": 145,
+      "hiddenAttributes": {
+        "professionalism": 14,
+        "consistency": 13,
+        "importantMatches": 12,
+        "injuryProneness": 8,
+        "ambition": 15
       }
     },
     {
@@ -229,6 +265,15 @@
         "aerialReach": 1,
         "oneOnOnes": 2,
         "kicking": 3
+      },
+      "currentAbility": 128,
+      "potentialAbility": 155,
+      "hiddenAttributes": {
+        "professionalism": 15,
+        "consistency": 14,
+        "importantMatches": 13,
+        "injuryProneness": 9,
+        "ambition": 16
       }
     },
     {
@@ -274,6 +319,15 @@
         "aerialReach": 1,
         "oneOnOnes": 2,
         "kicking": 1
+      },
+      "currentAbility": 135,
+      "potentialAbility": 165,
+      "hiddenAttributes": {
+        "professionalism": 16,
+        "consistency": 15,
+        "importantMatches": 14,
+        "injuryProneness": 10,
+        "ambition": 17
       }
     },
     {
@@ -365,6 +419,15 @@
         "aerialReach": 2,
         "oneOnOnes": 1,
         "kicking": 2
+      },
+      "currentAbility": 149,
+      "potentialAbility": 185,
+      "hiddenAttributes": {
+        "professionalism": 18,
+        "consistency": 10,
+        "importantMatches": 16,
+        "injuryProneness": 12,
+        "ambition": 12
       }
     },
     {
@@ -411,6 +474,15 @@
         "aerialReach": 3,
         "oneOnOnes": 2,
         "kicking": 3
+      },
+      "currentAbility": 106,
+      "potentialAbility": 145,
+      "hiddenAttributes": {
+        "professionalism": 11,
+        "consistency": 11,
+        "importantMatches": 9,
+        "injuryProneness": 13,
+        "ambition": 13
       }
     },
     {
@@ -456,6 +528,15 @@
         "aerialReach": 1,
         "oneOnOnes": 3,
         "kicking": 2
+      },
+      "currentAbility": 113,
+      "potentialAbility": 130,
+      "hiddenAttributes": {
+        "professionalism": 12,
+        "consistency": 12,
+        "importantMatches": 10,
+        "injuryProneness": 5,
+        "ambition": 14
       }
     },
     {
@@ -502,6 +583,15 @@
         "aerialReach": 2,
         "oneOnOnes": 4,
         "kicking": 4
+      },
+      "currentAbility": 120,
+      "potentialAbility": 140,
+      "hiddenAttributes": {
+        "professionalism": 13,
+        "consistency": 13,
+        "importantMatches": 11,
+        "injuryProneness": 6,
+        "ambition": 15
       }
     },
     {
@@ -547,6 +637,15 @@
         "aerialReach": 1,
         "oneOnOnes": 4,
         "kicking": 1
+      },
+      "currentAbility": 127,
+      "potentialAbility": 150,
+      "hiddenAttributes": {
+        "professionalism": 14,
+        "consistency": 14,
+        "importantMatches": 12,
+        "injuryProneness": 7,
+        "ambition": 16
       }
     },
     {
@@ -592,6 +691,15 @@
         "aerialReach": 2,
         "oneOnOnes": 2,
         "kicking": 4
+      },
+      "currentAbility": 134,
+      "potentialAbility": 160,
+      "hiddenAttributes": {
+        "professionalism": 15,
+        "consistency": 15,
+        "importantMatches": 13,
+        "injuryProneness": 8,
+        "ambition": 17
       }
     },
     {
@@ -684,6 +792,15 @@
         "aerialReach": 4,
         "oneOnOnes": 3,
         "kicking": 4
+      },
+      "currentAbility": 148,
+      "potentialAbility": 180,
+      "hiddenAttributes": {
+        "professionalism": 17,
+        "consistency": 10,
+        "importantMatches": 15,
+        "injuryProneness": 10,
+        "ambition": 12
       }
     },
     {
@@ -729,6 +846,15 @@
         "aerialReach": 3,
         "oneOnOnes": 1,
         "kicking": 1
+      },
+      "currentAbility": 105,
+      "potentialAbility": 140,
+      "hiddenAttributes": {
+        "professionalism": 18,
+        "consistency": 11,
+        "importantMatches": 16,
+        "injuryProneness": 11,
+        "ambition": 13
       }
     },
     {
@@ -774,6 +900,15 @@
         "aerialReach": 2,
         "oneOnOnes": 2,
         "kicking": 1
+      },
+      "currentAbility": 112,
+      "potentialAbility": 150,
+      "hiddenAttributes": {
+        "professionalism": 11,
+        "consistency": 12,
+        "importantMatches": 9,
+        "injuryProneness": 12,
+        "ambition": 14
       }
     },
     {
@@ -820,6 +955,15 @@
         "aerialReach": 4,
         "oneOnOnes": 2,
         "kicking": 4
+      },
+      "currentAbility": 119,
+      "potentialAbility": 135,
+      "hiddenAttributes": {
+        "professionalism": 12,
+        "consistency": 13,
+        "importantMatches": 10,
+        "injuryProneness": 13,
+        "ambition": 15
       }
     },
     {
@@ -865,6 +1009,15 @@
         "aerialReach": 1,
         "oneOnOnes": 4,
         "kicking": 4
+      },
+      "currentAbility": 126,
+      "potentialAbility": 145,
+      "hiddenAttributes": {
+        "professionalism": 13,
+        "consistency": 14,
+        "importantMatches": 11,
+        "injuryProneness": 5,
+        "ambition": 16
       }
     },
     {
@@ -910,6 +1063,15 @@
         "aerialReach": 1,
         "oneOnOnes": 4,
         "kicking": 3
+      },
+      "currentAbility": 133,
+      "potentialAbility": 155,
+      "hiddenAttributes": {
+        "professionalism": 14,
+        "consistency": 15,
+        "importantMatches": 12,
+        "injuryProneness": 6,
+        "ambition": 17
       }
     },
     {
@@ -1001,6 +1163,15 @@
         "aerialReach": 1,
         "oneOnOnes": 3,
         "kicking": 4
+      },
+      "currentAbility": 147,
+      "potentialAbility": 175,
+      "hiddenAttributes": {
+        "professionalism": 16,
+        "consistency": 10,
+        "importantMatches": 14,
+        "injuryProneness": 8,
+        "ambition": 12
       }
     },
     {
@@ -1047,6 +1218,15 @@
         "aerialReach": 3,
         "oneOnOnes": 3,
         "kicking": 3
+      },
+      "currentAbility": 104,
+      "potentialAbility": 135,
+      "hiddenAttributes": {
+        "professionalism": 17,
+        "consistency": 11,
+        "importantMatches": 15,
+        "injuryProneness": 9,
+        "ambition": 13
       }
     },
     {
@@ -1092,7 +1272,18 @@
         "aerialReach": 4,
         "oneOnOnes": 1,
         "kicking": 2
+      },
+      "currentAbility": 111,
+      "potentialAbility": 145,
+      "hiddenAttributes": {
+        "professionalism": 18,
+        "consistency": 12,
+        "importantMatches": 16,
+        "injuryProneness": 10,
+        "ambition": 14
       }
     }
-  ]
+  ],
+  "careerId": "kutra-fictional-demo",
+  "gameDate": "2026-08-01"
 }

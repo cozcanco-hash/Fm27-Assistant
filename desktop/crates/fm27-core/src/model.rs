@@ -4,6 +4,21 @@ use std::collections::{BTreeMap, HashSet};
 
 pub const MAX_IMPORT_BYTES: usize = 4 * 1024 * 1024;
 pub const MAX_PLAYERS: usize = 5_000;
+pub const HIDDEN_ATTRIBUTES: &[&str] = &[
+    "consistency",
+    "importantMatches",
+    "injuryProneness",
+    "versatility",
+    "professionalism",
+    "ambition",
+    "pressure",
+    "temperament",
+    "loyalty",
+    "adaptability",
+    "sportsmanship",
+    "controversy",
+    "dirtiness",
+];
 pub const ATTRIBUTES: &[&str] = &[
     "acceleration",
     "pace",
@@ -57,7 +72,7 @@ pub enum Position {
     ST,
 }
 
-#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum Foot {
     Left,
@@ -79,6 +94,12 @@ pub struct Player {
     pub minutes: u32,
     pub injured: bool,
     pub attributes: BTreeMap<String, u8>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub current_ability: Option<u16>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub potential_ability: Option<u16>,
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub hidden_attributes: BTreeMap<String, u8>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -90,6 +111,10 @@ pub struct Snapshot {
     pub captured_at: String,
     pub source: Source,
     pub players: Vec<Player>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub career_id: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub game_date: Option<String>,
 }
 
 pub fn parse_snapshot(bytes: &[u8]) -> Result<Snapshot> {
@@ -116,6 +141,18 @@ impl Snapshot {
         if !valid_label(&self.club, 100) || !valid_label(&self.season, 30) {
             return Err(invalid("Kulüp ve sezon alanlarını kontrol edin."));
         }
+        if self
+            .career_id
+            .as_ref()
+            .is_some_and(|id| !valid_label(id, 100))
+        {
+            return Err(invalid("Kariyer kimliği 1–100 karakter olmalı."));
+        }
+        if self.game_date.as_ref().is_some_and(|date| {
+            date.len() != 10 || chrono::NaiveDate::parse_from_str(date, "%Y-%m-%d").is_err()
+        }) {
+            return Err(invalid("Oyun tarihi YYYY-AA-GG biçiminde olmalı."));
+        }
         if self.captured_at.len() > 64
             || chrono::DateTime::parse_from_rfc3339(&self.captured_at).is_err()
         {
@@ -128,6 +165,22 @@ impl Snapshot {
         }
         let mut ids = HashSet::new();
         for player in &self.players {
+            if player
+                .current_ability
+                .is_some_and(|v| !(1..=200).contains(&v))
+                || player
+                    .potential_ability
+                    .is_some_and(|v| !(1..=200).contains(&v))
+            {
+                return Err(invalid("Mevcut ve potansiyel yetenek 1–200 aralığında olmalı. Bilinmeyen değerleri boş bırak."));
+            }
+            for (key, value) in &player.hidden_attributes {
+                if !HIDDEN_ATTRIBUTES.contains(&key.as_str()) || !(1..=20).contains(value) {
+                    return Err(invalid(
+                        "Gizli özellikler tanımlı anahtarlarla ve 1–20 aralığında olmalı.",
+                    ));
+                }
+            }
             if player.id == 0 || !ids.insert(player.id) {
                 return Err(invalid("Oyuncu kimlikleri pozitif ve benzersiz olmalı."));
             }
