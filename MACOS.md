@@ -48,6 +48,10 @@ The JDK and build machine determine the output architecture. CI targets ARM64;
 Intel packaging has not been validated. Stop the application using **Exit** in
 its desktop control window. Closing a browser tab alone does not stop the server.
 
+The macOS Maven profile selects application runtime modules explicitly. It
+excludes the JDK packaging tools so Temurin's runtime linking can build the image
+without JMOD archives ([Temurin explanation](https://adoptium.net/en-GB/news/2025/03/eclipse-temurin-jdk24-JEP493-enabled)).
+
 For a headless application health check after building:
 
 ```bash

@@ -39,6 +39,7 @@
         <desktop.input.directory>${project.build.directory}/desktop-input</desktop.input.directory>
         <desktop.output.directory>${project.build.directory}/dist</desktop.output.directory>
         <desktop.package.type>app-image</desktop.package.type>
+        <desktop.runtime.modules>ALL-MODULE-PATH</desktop.runtime.modules>
     </properties>
 
     <dependencyManagement>
@@ -401,7 +402,7 @@
                                         <argument>--description</argument>
                                         <argument>${project.description}</argument>
                                         <argument>--add-modules</argument>
-                                        <argument>ALL-MODULE-PATH</argument>
+                                        <argument>${desktop.runtime.modules}</argument>
                                         <argument>--java-options</argument>
                                         <argument>-Dfile.encoding=UTF-8</argument>
                                         <argument>--java-options</argument>
@@ -450,6 +451,9 @@
             </activation>
             <properties>
                 <desktop.jpackage.executable>${java.home}/bin/jpackage</desktop.jpackage.executable>
+                <!-- Temurin 25 links from its runtime image (JEP 493). Do not
+                     include jdk.jlink/jdk.jpackage in the shipped runtime. -->
+                <desktop.runtime.modules>java.se,jdk.unsupported,jdk.charsets,jdk.localedata,jdk.zipfs,jdk.crypto.cryptoki,jdk.management,jdk.management.jfr,jdk.net,jdk.security.auth,jdk.naming.dns</desktop.runtime.modules>
             </properties>
         </profile>
 
