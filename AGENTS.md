@@ -1,5 +1,25 @@
 # AGENTS.md — fm-ai-assistent
 
+## Active Rust macOS workspace
+
+Active development is in `desktop/`: Rust + Tauri 2 + React + SQLite.
+The owner does not yet own FM27; demo data must stay clearly fictional.
+Read `desktop/README.md` for the data contract and implemented feature scope.
+For Rust-only changes, run checks from `desktop/`:
+
+- `cargo fmt --all --check`
+- `cargo clippy --locked -p fm27-core --all-targets -- -D warnings`
+- `cargo test --locked -p fm27-core`
+- `npm ci`, `npm run build`, and `npm test` (Playwright browser required)
+- On macOS, also check/test the whole Cargo workspace and build the native app.
+
+Keep scoring, validation and persistence in Rust. Browser previews consume
+Rust-generated fixtures; never duplicate scoring logic or fake AI responses
+in the frontend. Actual ChatGPT sign-in and live game behavior must not be
+claimed from offline protocol tests. Java checks below apply to Java changes.
+
+## Java reference application
+
 Local companion app for Football Manager 2027 (Windows 11 and Linux).
 Reads the loaded FM27 save from RAM, stores a local snapshot, and offers
 browsing plus AI-assisted recruitment/tactics advice.

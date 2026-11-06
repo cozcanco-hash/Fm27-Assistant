@@ -150,6 +150,9 @@ fn demo_provenance_and_unknown_form_are_preserved_in_ai_context() {
     let context = fm27_core::analysis::prompt_context(&snapshot, Formation::FourThreeThree);
     assert!(context.contains("Demo"));
     assert!(context.contains("Canlı bağlantı YOK"));
+    assert!(context.contains("\"passing\":"));
+    assert!(context.contains("\"pace\":"));
+    assert!(context.len() < 64 * 1024);
     assert!(snapshot.players.iter().any(|p| p.form.is_none()));
     assert!(!context.contains("/Users/"));
 }

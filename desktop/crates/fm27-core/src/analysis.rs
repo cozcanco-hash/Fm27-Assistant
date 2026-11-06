@@ -520,6 +520,14 @@ pub fn prompt_context(snapshot: &Snapshot, formation: Formation) -> String {
                 player.condition,
                 player.form
             ));
+            if let Some(original) = snapshot.players.iter().find(|p| p.id == player.id) {
+                // Include the actual known attributes, not only the derived fit,
+                // so tactical questions can be grounded in the source values.
+                context.push_str(&format!(
+                    "Oyuncu verisi: {}\n",
+                    serde_json::to_string(original).expect("validated player")
+                ));
+            }
         } else {
             context.push_str(&format!(
                 "{}: uygun ve yeterli verili oyuncu yok.\n",
@@ -542,6 +550,10 @@ pub fn prompt_context(snapshot: &Snapshot, formation: Formation) -> String {
         context.push_str(&format!(
             "Alternatif: {} (#{}), {:?}, sakat {}, kondisyon {}%, en iyi rol {:?}.\n",
             player.name, player.id, player.positions, player.injured, player.condition, role
+        ));
+        context.push_str(&format!(
+            "Oyuncu verisi: {}\n",
+            serde_json::to_string(player).expect("validated player")
         ));
     }
     context
