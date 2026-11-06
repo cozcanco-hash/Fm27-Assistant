@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Activity, ArrowRight, ArrowUpRight, CalendarDays, CheckCircle2, ChevronDown, CircleHelp, Database, FlaskConical, FolderInput, LayoutDashboard, LoaderCircle, Shield, Sparkles, Target, Users, Waypoints, X } from 'lucide-react';
 import { api, native } from './api';
+import appIcon from './assets/fm27-icon.png';
 import { FORMATIONS, scoreText } from './types';
 import type { Dashboard, Formation, PlayerDetail, PlayerPage, Position } from './types';
 import Pitch from './components/Pitch';
@@ -96,11 +97,11 @@ export default function App() {
   const table = <PlayerTable page={page} search={search} position={position} onSearch={s => { setSearch(s); setOffset(0); }} onPosition={p => { setPosition(p); setOffset(0); }} onPlayer={id => { void openPlayer(id); }} onPage={setOffset} loading={loading} compact={view === 'overview'} />;
   return <div className="app-shell">
     <div className="window-drag" data-tauri-drag-region><span>FM27 ASSISTANT</span><span>{native ? 'Kişisel çalışma alanı' : 'Tarayıcı önizlemesi'}</span></div>
-    <aside className="sidebar"><button className="brand" onClick={() => setView('overview')} aria-label="Genel bakışa dön"><span className="brand-mark">F<span>27</span></span><span className="brand-word">FM27<span>ASSISTANT</span></span></button>
+    <aside className="sidebar"><button className="brand" onClick={() => setView('overview')} aria-label="Genel bakışa dön"><img className="brand-symbol" src={appIcon} alt="" width={42} height={42} /><span className="brand-word">FM27<span>ASSISTANT</span></span></button>
       <button className="club-switch" onClick={() => setView('data')}><span className="club-crest"><Shield size={23} strokeWidth={1.4} /><b>K</b></span><span><strong>{dashboard.club}</strong><small>{dashboard.season} sezonu</small></span><ChevronDown size={14} /></button>
       <span className="nav-heading">ÇALIŞMA ALANI</span><nav aria-label="Ana menü">{navigation.map(item => <button key={item.id} aria-label={item.label} className={view === item.id ? 'active' : ''} onClick={() => setView(item.id)} aria-current={view === item.id ? 'page' : undefined}><item.icon size={18} /><span>{item.label}</span>{item.id === 'assistant' ? <span className="nav-ai">AI</span> : null}</button>)}</nav>
       <div className="sidebar-note"><span className="note-orbit"><FlaskConical size={19} /></span><strong>Oyun öncesi, bir adım önde.</strong><p>Kurgusal kadroyla fikirlerini şimdiden dene.</p><button onClick={() => setView('tactics')}>Taktiğini keşfet <ArrowUpRight size={14} /></button></div>
-      <div className="sidebar-bottom"><button className={view === 'data' ? 'active' : ''} onClick={() => setView('data')}><Database size={17} />Veri & bağlantı</button><button onClick={() => { setView('data'); }}><CircleHelp size={17} />Nasıl çalışır?</button><div className="local-status"><span className="status-dot" /><span>Yerel çalışma alanı<small>Geliştirme önizlemesi · 0.1.0</small></span></div></div>
+      <div className="sidebar-bottom"><button className={view === 'data' ? 'active' : ''} onClick={() => setView('data')}><Database size={17} />Veri & bağlantı</button><button onClick={() => { setView('data'); }}><CircleHelp size={17} />Nasıl çalışır?</button><div className="local-status"><span className="status-dot" /><span>Yerel çalışma alanı<small>Geliştirme önizlemesi · 0.1.1</small></span></div></div>
     </aside>
     <main className="main-area"><header className="topbar"><div className="breadcrumb">Çalışma alanı<span>/</span><strong>{view === 'data' ? 'Veri & bağlantı' : navigation.find(n => n.id === view)?.label}</strong></div><div className="topbar-right"><span className="season-label"><CalendarDays size={14} />{dashboard.season}</span><span className="user-avatar">C</span></div></header>
       <div className="page-content"><div className="page-heading"><div><span className="eyebrow">{dashboard.club} <span className="eyebrow-slash">/</span> TEKNİK EKİP</span><h1>{headings[view].title}</h1><p>{headings[view].subtitle}</p></div><button className="button primary" onClick={() => fileInput.current?.click()} disabled={busy || chatBusy || !native}><FolderInput size={16} />Kadro içe aktar</button></div>

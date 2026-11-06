@@ -1,9 +1,16 @@
 # FM27 Assistant — Rust desktop
 
-Personal, local macOS tactical workspace for Can. **Rust + Tauri 2 + React +
+A personal, local macOS tactical workspace. **Rust + Tauri 2 + React +
 SQLite.** Designed to be useful before owning the game. Starts with 24 fictional
 players and calculates its analysis in Rust. No JVM or Spring server is needed
 to render the desktop interface.
+
+## Branding
+
+The shared app icon is `src/assets/fm27-icon.png`. It is used in the interface,
+the repository README and the generated macOS icon set. Regenerate platform icons
+with `npm run icons`. The mark combines a tactics board, passing route and
+conversation bubble in the app’s charcoal/lime palette.
 
 ## Implemented in this first Rust version
 

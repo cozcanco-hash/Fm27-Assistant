@@ -369,7 +369,7 @@ impl Session {
             next_id: 1,
             partial: Vec::new(),
         };
-        session.rpc("initialize", json!({"clientInfo":{"name":"fm27_assistant","title":"FM27 Assistant","version":"0.1.0"}}), &mut |_| Ok(())).await?;
+        session.rpc("initialize", json!({"clientInfo":{"name":"fm27_assistant","title":"FM27 Assistant","version":env!("CARGO_PKG_VERSION")}}), &mut |_| Ok(())).await?;
         session.send(json!({"method":"initialized"})).await?;
         Ok(session)
     }
