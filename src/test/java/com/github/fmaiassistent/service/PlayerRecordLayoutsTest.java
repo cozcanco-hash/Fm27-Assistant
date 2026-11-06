@@ -4,6 +4,7 @@ import com.github.fmaiassistent.memory.ClubRecordLayout;
 import com.github.fmaiassistent.memory.CompetitionRecordLayout;
 import com.github.fmaiassistent.memory.PlayerRecordLayout;
 import com.github.fmaiassistent.memory.StaffRecordLayout;
+import com.github.fmaiassistent.platform.OperatingSystem;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -51,7 +52,9 @@ class PlayerRecordLayoutsTest {
 
     private static void writeManifest(Path home, String manifest) throws Exception {
         Path customLib = home.resolve("mnt/bcache/Steam");
-        Path steamApps = home.resolve(".local/share/Steam/steamapps");
+        Path steamApps = home.resolve(OperatingSystem.current() == OperatingSystem.MACOS
+                ? "Library/Application Support/Steam/steamapps"
+                : ".local/share/Steam/steamapps");
         Files.createDirectories(steamApps);
         Files.createDirectories(customLib.resolve("steamapps"));
         Files.writeString(steamApps.resolve("libraryfolders.vdf"),
