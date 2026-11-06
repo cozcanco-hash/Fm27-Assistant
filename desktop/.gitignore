@@ -1,0 +1,10 @@
+node_modules/
+dist/
+target/
+src-tauri/gen/
+src-tauri/icons/*
+!src-tauri/icons/source.svg
+*.tsbuildinfo
+playwright-report/
+test-results/
+.DS_Store

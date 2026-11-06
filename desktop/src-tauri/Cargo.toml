@@ -1,0 +1,24 @@
+[package]
+name = "fm27-desktop"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[lib]
+name = "fm27_desktop"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[[bin]]
+name = "fm27-assistant"
+path = "src/main.rs"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+fm27-core = { path = "../crates/fm27-core" }
+serde.workspace = true
+serde_json.workspace = true
+tokio.workspace = true

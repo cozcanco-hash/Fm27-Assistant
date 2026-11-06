@@ -1,0 +1,4036 @@
+{
+  "dashboards": [
+    {
+      "analysis": {
+        "available": 21,
+        "filled": 11,
+        "formation": "433dm",
+        "insights": [
+          {
+            "detail": "Bu kadro tamamen kurgusal. Puanlar örnek özelliklerden hesaplanır; gerçek FM27 verisi içermez.",
+            "kind": "info",
+            "title": "Oyun olmadan keşfet"
+          },
+          {
+            "detail": "Sol kanat rolünde 86/100 uyum. Özellik ağırlıklarını oyuncu kartından inceleyebilirsin.",
+            "kind": "positive",
+            "title": "Baran Yıldız güçlü bir eşleşme"
+          },
+          {
+            "detail": "Eksik form verileri sıfır puan olarak değerlendirilmez.",
+            "kind": "info",
+            "title": "3 oyuncunun formu bilinmiyor"
+          }
+        ],
+        "score": 79.7,
+        "slots": [
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "keeper",
+              "roleName": "Kaleci",
+              "score": 80.8,
+              "strengths": [
+                "reflexes",
+                "handling",
+                "oneOnOnes",
+                "aerialReach",
+                "decisions",
+                "kicking"
+              ]
+            },
+            "key": "gk",
+            "label": "KL",
+            "player": {
+              "age": 27,
+              "condition": 96,
+              "form": 6.83,
+              "id": 1,
+              "injured": false,
+              "name": "Deniz Arslan",
+              "positions": [
+                "GK"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "keeper",
+                "roleName": "Kaleci",
+                "score": 80.8,
+                "strengths": [
+                  "reflexes",
+                  "handling",
+                  "oneOnOnes",
+                  "aerialReach",
+                  "decisions",
+                  "kicking"
+                ]
+              }
+            },
+            "roleId": "keeper",
+            "x": 50.0,
+            "y": 89.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "leftBack",
+              "roleName": "Sol bek",
+              "score": 80.0,
+              "strengths": [
+                "tackling",
+                "positioning",
+                "pace",
+                "stamina",
+                "crossing",
+                "workRate",
+                "passing"
+              ]
+            },
+            "key": "lb",
+            "label": "SLB",
+            "player": {
+              "age": 24,
+              "condition": 92,
+              "form": 7.25,
+              "id": 6,
+              "injured": false,
+              "name": "Arda Eren",
+              "positions": [
+                "DL"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "leftBack",
+                "roleName": "Sol bek",
+                "score": 80.0,
+                "strengths": [
+                  "tackling",
+                  "positioning",
+                  "pace",
+                  "stamina",
+                  "crossing",
+                  "workRate",
+                  "passing"
+                ]
+              }
+            },
+            "roleId": "leftBack",
+            "x": 14.0,
+            "y": 71.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "centreBack",
+              "roleName": "Stoper",
+              "score": 75.6,
+              "strengths": [
+                "marking",
+                "tackling",
+                "positioning",
+                "heading",
+                "jumpingReach",
+                "strength"
+              ]
+            },
+            "key": "lcb",
+            "label": "STP",
+            "player": {
+              "age": 26,
+              "condition": 94,
+              "form": 6.5,
+              "id": 3,
+              "injured": false,
+              "name": "Mert Aydın",
+              "positions": [
+                "DC"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "centreBack",
+                "roleName": "Stoper",
+                "score": 75.6,
+                "strengths": [
+                  "marking",
+                  "tackling",
+                  "positioning",
+                  "heading",
+                  "jumpingReach",
+                  "strength"
+                ]
+              }
+            },
+            "roleId": "centreBack",
+            "x": 37.0,
+            "y": 74.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "centreBack",
+              "roleName": "Stoper",
+              "score": 75.0,
+              "strengths": [
+                "marking",
+                "tackling",
+                "positioning",
+                "heading",
+                "jumpingReach",
+                "strength"
+              ]
+            },
+            "key": "rcb",
+            "label": "STP",
+            "player": {
+              "age": 29,
+              "condition": 89,
+              "form": 7.75,
+              "id": 4,
+              "injured": false,
+              "name": "Bora Erden",
+              "positions": [
+                "DC"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "centreBack",
+                "roleName": "Stoper",
+                "score": 75.0,
+                "strengths": [
+                  "marking",
+                  "tackling",
+                  "positioning",
+                  "heading",
+                  "jumpingReach",
+                  "strength"
+                ]
+              }
+            },
+            "roleId": "centreBack",
+            "x": 63.0,
+            "y": 74.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "rightBack",
+              "roleName": "Sağ bek",
+              "score": 78.1,
+              "strengths": [
+                "tackling",
+                "positioning",
+                "pace",
+                "stamina",
+                "workRate",
+                "passing"
+              ]
+            },
+            "key": "rb",
+            "label": "SĞB",
+            "player": {
+              "age": 23,
+              "condition": 93,
+              "form": 7.88,
+              "id": 7,
+              "injured": false,
+              "name": "Cem Koral",
+              "positions": [
+                "DR"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "rightBack",
+                "roleName": "Sağ bek",
+                "score": 78.1,
+                "strengths": [
+                  "tackling",
+                  "positioning",
+                  "pace",
+                  "stamina",
+                  "workRate",
+                  "passing"
+                ]
+              }
+            },
+            "roleId": "rightBack",
+            "x": 86.0,
+            "y": 71.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "anchor",
+              "roleName": "Savunma önü",
+              "score": 76.9,
+              "strengths": [
+                "positioning",
+                "tackling",
+                "anticipation",
+                "decisions",
+                "teamwork",
+                "passing"
+              ]
+            },
+            "key": "dm",
+            "label": "DM",
+            "player": {
+              "age": 28,
+              "condition": 91,
+              "form": 7.46,
+              "id": 9,
+              "injured": false,
+              "name": "Ozan Demir",
+              "positions": [
+                "DM",
+                "MC"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "runner",
+                "roleName": "İki yönlü orta saha",
+                "score": 80.8,
+                "strengths": [
+                  "stamina",
+                  "workRate",
+                  "teamwork",
+                  "offTheBall",
+                  "passing",
+                  "tackling"
+                ]
+              }
+            },
+            "roleId": "anchor",
+            "x": 50.0,
+            "y": 56.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "playmaker",
+              "roleName": "Oyun kurucu",
+              "score": 82.7,
+              "strengths": [
+                "passing",
+                "vision",
+                "decisions",
+                "firstTouch",
+                "technique",
+                "composure"
+              ]
+            },
+            "key": "lcm",
+            "label": "MO",
+            "player": {
+              "age": 25,
+              "condition": 94,
+              "form": 6.96,
+              "id": 11,
+              "injured": false,
+              "name": "Kerem Akın",
+              "positions": [
+                "MC",
+                "AMC"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "creator",
+                "roleName": "Hücum oyun kurucu",
+                "score": 83.1,
+                "strengths": [
+                  "vision",
+                  "passing",
+                  "firstTouch",
+                  "technique",
+                  "decisions",
+                  "offTheBall"
+                ]
+              }
+            },
+            "roleId": "playmaker",
+            "x": 32.0,
+            "y": 39.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "runner",
+              "roleName": "İki yönlü orta saha",
+              "score": 77.1,
+              "strengths": [
+                "stamina",
+                "workRate",
+                "teamwork",
+                "offTheBall",
+                "passing"
+              ]
+            },
+            "key": "rcm",
+            "label": "MO",
+            "player": {
+              "age": 24,
+              "condition": 93,
+              "form": 7.51,
+              "id": 12,
+              "injured": false,
+              "name": "Emir Tan",
+              "positions": [
+                "MC"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "playmaker",
+                "roleName": "Oyun kurucu",
+                "score": 81.2,
+                "strengths": [
+                  "passing",
+                  "vision",
+                  "decisions",
+                  "firstTouch",
+                  "technique",
+                  "composure"
+                ]
+              }
+            },
+            "roleId": "runner",
+            "x": 68.0,
+            "y": 39.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "leftWing",
+              "roleName": "Sol kanat",
+              "score": 86.2,
+              "strengths": [
+                "dribbling",
+                "acceleration",
+                "pace",
+                "crossing",
+                "offTheBall",
+                "technique"
+              ]
+            },
+            "key": "lw",
+            "label": "SLK",
+            "player": {
+              "age": 23,
+              "condition": 95,
+              "form": 7.84,
+              "id": 15,
+              "injured": false,
+              "name": "Baran Yıldız",
+              "positions": [
+                "AML",
+                "AMR"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "leftWing",
+                "roleName": "Sol kanat",
+                "score": 86.2,
+                "strengths": [
+                  "dribbling",
+                  "acceleration",
+                  "pace",
+                  "crossing",
+                  "offTheBall",
+                  "technique"
+                ]
+              }
+            },
+            "roleId": "leftWing",
+            "x": 16.0,
+            "y": 21.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "rightWing",
+              "roleName": "Sağ kanat",
+              "score": 78.5,
+              "strengths": [
+                "dribbling",
+                "acceleration",
+                "pace",
+                "crossing",
+                "offTheBall",
+                "technique"
+              ]
+            },
+            "key": "rw",
+            "label": "SĞK",
+            "player": {
+              "age": 24,
+              "condition": 92,
+              "form": 7.03,
+              "id": 16,
+              "injured": false,
+              "name": "Sarp Deniz",
+              "positions": [
+                "AMR"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "rightWing",
+                "roleName": "Sağ kanat",
+                "score": 78.5,
+                "strengths": [
+                  "dribbling",
+                  "acceleration",
+                  "pace",
+                  "crossing",
+                  "offTheBall",
+                  "technique"
+                ]
+              }
+            },
+            "roleId": "rightWing",
+            "x": 84.0,
+            "y": 21.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "striker",
+              "roleName": "Bitirici forvet",
+              "score": 85.8,
+              "strengths": [
+                "finishing",
+                "offTheBall",
+                "composure",
+                "anticipation",
+                "acceleration",
+                "firstTouch"
+              ]
+            },
+            "key": "st",
+            "label": "FV",
+            "player": {
+              "age": 26,
+              "condition": 94,
+              "form": 6.92,
+              "id": 19,
+              "injured": false,
+              "name": "Doruk Can",
+              "positions": [
+                "ST"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "striker",
+                "roleName": "Bitirici forvet",
+                "score": 85.8,
+                "strengths": [
+                  "finishing",
+                  "offTheBall",
+                  "composure",
+                  "anticipation",
+                  "acceleration",
+                  "firstTouch"
+                ]
+              }
+            },
+            "roleId": "striker",
+            "x": 50.0,
+            "y": 12.0
+          }
+        ]
+      },
+      "capturedAt": "2026-11-06T09:00:00+03:00",
+      "club": "KUTRA FC",
+      "playerCount": 24,
+      "season": "2026/27",
+      "source": "demo"
+    },
+    {
+      "analysis": {
+        "available": 21,
+        "filled": 11,
+        "formation": "4231",
+        "insights": [
+          {
+            "detail": "Bu kadro tamamen kurgusal. Puanlar örnek özelliklerden hesaplanır; gerçek FM27 verisi içermez.",
+            "kind": "info",
+            "title": "Oyun olmadan keşfet"
+          },
+          {
+            "detail": "Sol kanat rolünde 86/100 uyum. Özellik ağırlıklarını oyuncu kartından inceleyebilirsin.",
+            "kind": "positive",
+            "title": "Baran Yıldız güçlü bir eşleşme"
+          },
+          {
+            "detail": "Eksik form verileri sıfır puan olarak değerlendirilmez.",
+            "kind": "info",
+            "title": "3 oyuncunun formu bilinmiyor"
+          }
+        ],
+        "score": 80.5,
+        "slots": [
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "keeper",
+              "roleName": "Kaleci",
+              "score": 80.8,
+              "strengths": [
+                "reflexes",
+                "handling",
+                "oneOnOnes",
+                "aerialReach",
+                "decisions",
+                "kicking"
+              ]
+            },
+            "key": "gk",
+            "label": "KL",
+            "player": {
+              "age": 27,
+              "condition": 96,
+              "form": 6.83,
+              "id": 1,
+              "injured": false,
+              "name": "Deniz Arslan",
+              "positions": [
+                "GK"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "keeper",
+                "roleName": "Kaleci",
+                "score": 80.8,
+                "strengths": [
+                  "reflexes",
+                  "handling",
+                  "oneOnOnes",
+                  "aerialReach",
+                  "decisions",
+                  "kicking"
+                ]
+              }
+            },
+            "roleId": "keeper",
+            "x": 50.0,
+            "y": 89.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "leftBack",
+              "roleName": "Sol bek",
+              "score": 80.0,
+              "strengths": [
+                "tackling",
+                "positioning",
+                "pace",
+                "stamina",
+                "crossing",
+                "workRate",
+                "passing"
+              ]
+            },
+            "key": "lb",
+            "label": "SLB",
+            "player": {
+              "age": 24,
+              "condition": 92,
+              "form": 7.25,
+              "id": 6,
+              "injured": false,
+              "name": "Arda Eren",
+              "positions": [
+                "DL"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "leftBack",
+                "roleName": "Sol bek",
+                "score": 80.0,
+                "strengths": [
+                  "tackling",
+                  "positioning",
+                  "pace",
+                  "stamina",
+                  "crossing",
+                  "workRate",
+                  "passing"
+                ]
+              }
+            },
+            "roleId": "leftBack",
+            "x": 14.0,
+            "y": 71.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "centreBack",
+              "roleName": "Stoper",
+              "score": 75.6,
+              "strengths": [
+                "marking",
+                "tackling",
+                "positioning",
+                "heading",
+                "jumpingReach",
+                "strength"
+              ]
+            },
+            "key": "lcb",
+            "label": "STP",
+            "player": {
+              "age": 26,
+              "condition": 94,
+              "form": 6.5,
+              "id": 3,
+              "injured": false,
+              "name": "Mert Aydın",
+              "positions": [
+                "DC"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "centreBack",
+                "roleName": "Stoper",
+                "score": 75.6,
+                "strengths": [
+                  "marking",
+                  "tackling",
+                  "positioning",
+                  "heading",
+                  "jumpingReach",
+                  "strength"
+                ]
+              }
+            },
+            "roleId": "centreBack",
+            "x": 37.0,
+            "y": 74.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "centreBack",
+              "roleName": "Stoper",
+              "score": 75.0,
+              "strengths": [
+                "marking",
+                "tackling",
+                "positioning",
+                "heading",
+                "jumpingReach",
+                "strength"
+              ]
+            },
+            "key": "rcb",
+            "label": "STP",
+            "player": {
+              "age": 29,
+              "condition": 89,
+              "form": 7.75,
+              "id": 4,
+              "injured": false,
+              "name": "Bora Erden",
+              "positions": [
+                "DC"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "centreBack",
+                "roleName": "Stoper",
+                "score": 75.0,
+                "strengths": [
+                  "marking",
+                  "tackling",
+                  "positioning",
+                  "heading",
+                  "jumpingReach",
+                  "strength"
+                ]
+              }
+            },
+            "roleId": "centreBack",
+            "x": 63.0,
+            "y": 74.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "rightBack",
+              "roleName": "Sağ bek",
+              "score": 78.1,
+              "strengths": [
+                "tackling",
+                "positioning",
+                "pace",
+                "stamina",
+                "workRate",
+                "passing"
+              ]
+            },
+            "key": "rb",
+            "label": "SĞB",
+            "player": {
+              "age": 23,
+              "condition": 93,
+              "form": 7.88,
+              "id": 7,
+              "injured": false,
+              "name": "Cem Koral",
+              "positions": [
+                "DR"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "rightBack",
+                "roleName": "Sağ bek",
+                "score": 78.1,
+                "strengths": [
+                  "tackling",
+                  "positioning",
+                  "pace",
+                  "stamina",
+                  "workRate",
+                  "passing"
+                ]
+              }
+            },
+            "roleId": "rightBack",
+            "x": 86.0,
+            "y": 71.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "playmaker",
+              "roleName": "Oyun kurucu",
+              "score": 81.2,
+              "strengths": [
+                "passing",
+                "vision",
+                "decisions",
+                "firstTouch",
+                "technique",
+                "composure"
+              ]
+            },
+            "key": "lcm",
+            "label": "MO",
+            "player": {
+              "age": 24,
+              "condition": 93,
+              "form": 7.51,
+              "id": 12,
+              "injured": false,
+              "name": "Emir Tan",
+              "positions": [
+                "MC"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "playmaker",
+                "roleName": "Oyun kurucu",
+                "score": 81.2,
+                "strengths": [
+                  "passing",
+                  "vision",
+                  "decisions",
+                  "firstTouch",
+                  "technique",
+                  "composure"
+                ]
+              }
+            },
+            "roleId": "playmaker",
+            "x": 33.0,
+            "y": 52.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "runner",
+              "roleName": "İki yönlü orta saha",
+              "score": 80.8,
+              "strengths": [
+                "stamina",
+                "workRate",
+                "teamwork",
+                "offTheBall",
+                "passing",
+                "tackling"
+              ]
+            },
+            "key": "rcm",
+            "label": "MO",
+            "player": {
+              "age": 28,
+              "condition": 91,
+              "form": 7.46,
+              "id": 9,
+              "injured": false,
+              "name": "Ozan Demir",
+              "positions": [
+                "DM",
+                "MC"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "runner",
+                "roleName": "İki yönlü orta saha",
+                "score": 80.8,
+                "strengths": [
+                  "stamina",
+                  "workRate",
+                  "teamwork",
+                  "offTheBall",
+                  "passing",
+                  "tackling"
+                ]
+              }
+            },
+            "roleId": "runner",
+            "x": 67.0,
+            "y": 52.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "creator",
+              "roleName": "Hücum oyun kurucu",
+              "score": 83.1,
+              "strengths": [
+                "vision",
+                "passing",
+                "firstTouch",
+                "technique",
+                "decisions",
+                "offTheBall"
+              ]
+            },
+            "key": "am",
+            "label": "OMO",
+            "player": {
+              "age": 25,
+              "condition": 94,
+              "form": 6.96,
+              "id": 11,
+              "injured": false,
+              "name": "Kerem Akın",
+              "positions": [
+                "MC",
+                "AMC"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "creator",
+                "roleName": "Hücum oyun kurucu",
+                "score": 83.1,
+                "strengths": [
+                  "vision",
+                  "passing",
+                  "firstTouch",
+                  "technique",
+                  "decisions",
+                  "offTheBall"
+                ]
+              }
+            },
+            "roleId": "creator",
+            "x": 50.0,
+            "y": 31.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "leftWing",
+              "roleName": "Sol kanat",
+              "score": 86.2,
+              "strengths": [
+                "dribbling",
+                "acceleration",
+                "pace",
+                "crossing",
+                "offTheBall",
+                "technique"
+              ]
+            },
+            "key": "lw",
+            "label": "SLK",
+            "player": {
+              "age": 23,
+              "condition": 95,
+              "form": 7.84,
+              "id": 15,
+              "injured": false,
+              "name": "Baran Yıldız",
+              "positions": [
+                "AML",
+                "AMR"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "leftWing",
+                "roleName": "Sol kanat",
+                "score": 86.2,
+                "strengths": [
+                  "dribbling",
+                  "acceleration",
+                  "pace",
+                  "crossing",
+                  "offTheBall",
+                  "technique"
+                ]
+              }
+            },
+            "roleId": "leftWing",
+            "x": 15.0,
+            "y": 30.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "rightWing",
+              "roleName": "Sağ kanat",
+              "score": 78.5,
+              "strengths": [
+                "dribbling",
+                "acceleration",
+                "pace",
+                "crossing",
+                "offTheBall",
+                "technique"
+              ]
+            },
+            "key": "rw",
+            "label": "SĞK",
+            "player": {
+              "age": 24,
+              "condition": 92,
+              "form": 7.03,
+              "id": 16,
+              "injured": false,
+              "name": "Sarp Deniz",
+              "positions": [
+                "AMR"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "rightWing",
+                "roleName": "Sağ kanat",
+                "score": 78.5,
+                "strengths": [
+                  "dribbling",
+                  "acceleration",
+                  "pace",
+                  "crossing",
+                  "offTheBall",
+                  "technique"
+                ]
+              }
+            },
+            "roleId": "rightWing",
+            "x": 85.0,
+            "y": 30.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "striker",
+              "roleName": "Bitirici forvet",
+              "score": 85.8,
+              "strengths": [
+                "finishing",
+                "offTheBall",
+                "composure",
+                "anticipation",
+                "acceleration",
+                "firstTouch"
+              ]
+            },
+            "key": "st",
+            "label": "FV",
+            "player": {
+              "age": 26,
+              "condition": 94,
+              "form": 6.92,
+              "id": 19,
+              "injured": false,
+              "name": "Doruk Can",
+              "positions": [
+                "ST"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "striker",
+                "roleName": "Bitirici forvet",
+                "score": 85.8,
+                "strengths": [
+                  "finishing",
+                  "offTheBall",
+                  "composure",
+                  "anticipation",
+                  "acceleration",
+                  "firstTouch"
+                ]
+              }
+            },
+            "roleId": "striker",
+            "x": 50.0,
+            "y": 12.0
+          }
+        ]
+      },
+      "capturedAt": "2026-11-06T09:00:00+03:00",
+      "club": "KUTRA FC",
+      "playerCount": 24,
+      "season": "2026/27",
+      "source": "demo"
+    },
+    {
+      "analysis": {
+        "available": 21,
+        "filled": 11,
+        "formation": "442",
+        "insights": [
+          {
+            "detail": "Bu kadro tamamen kurgusal. Puanlar örnek özelliklerden hesaplanır; gerçek FM27 verisi içermez.",
+            "kind": "info",
+            "title": "Oyun olmadan keşfet"
+          },
+          {
+            "detail": "Sol kanat rolünde 86/100 uyum. Özellik ağırlıklarını oyuncu kartından inceleyebilirsin.",
+            "kind": "positive",
+            "title": "Baran Yıldız güçlü bir eşleşme"
+          },
+          {
+            "detail": "Eksik form verileri sıfır puan olarak değerlendirilmez.",
+            "kind": "info",
+            "title": "3 oyuncunun formu bilinmiyor"
+          }
+        ],
+        "score": 80.0,
+        "slots": [
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "keeper",
+              "roleName": "Kaleci",
+              "score": 80.8,
+              "strengths": [
+                "reflexes",
+                "handling",
+                "oneOnOnes",
+                "aerialReach",
+                "decisions",
+                "kicking"
+              ]
+            },
+            "key": "gk",
+            "label": "KL",
+            "player": {
+              "age": 27,
+              "condition": 96,
+              "form": 6.83,
+              "id": 1,
+              "injured": false,
+              "name": "Deniz Arslan",
+              "positions": [
+                "GK"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "keeper",
+                "roleName": "Kaleci",
+                "score": 80.8,
+                "strengths": [
+                  "reflexes",
+                  "handling",
+                  "oneOnOnes",
+                  "aerialReach",
+                  "decisions",
+                  "kicking"
+                ]
+              }
+            },
+            "roleId": "keeper",
+            "x": 50.0,
+            "y": 89.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "leftBack",
+              "roleName": "Sol bek",
+              "score": 80.0,
+              "strengths": [
+                "tackling",
+                "positioning",
+                "pace",
+                "stamina",
+                "crossing",
+                "workRate",
+                "passing"
+              ]
+            },
+            "key": "lb",
+            "label": "SLB",
+            "player": {
+              "age": 24,
+              "condition": 92,
+              "form": 7.25,
+              "id": 6,
+              "injured": false,
+              "name": "Arda Eren",
+              "positions": [
+                "DL"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "leftBack",
+                "roleName": "Sol bek",
+                "score": 80.0,
+                "strengths": [
+                  "tackling",
+                  "positioning",
+                  "pace",
+                  "stamina",
+                  "crossing",
+                  "workRate",
+                  "passing"
+                ]
+              }
+            },
+            "roleId": "leftBack",
+            "x": 14.0,
+            "y": 71.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "centreBack",
+              "roleName": "Stoper",
+              "score": 75.6,
+              "strengths": [
+                "marking",
+                "tackling",
+                "positioning",
+                "heading",
+                "jumpingReach",
+                "strength"
+              ]
+            },
+            "key": "lcb",
+            "label": "STP",
+            "player": {
+              "age": 26,
+              "condition": 94,
+              "form": 6.5,
+              "id": 3,
+              "injured": false,
+              "name": "Mert Aydın",
+              "positions": [
+                "DC"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "centreBack",
+                "roleName": "Stoper",
+                "score": 75.6,
+                "strengths": [
+                  "marking",
+                  "tackling",
+                  "positioning",
+                  "heading",
+                  "jumpingReach",
+                  "strength"
+                ]
+              }
+            },
+            "roleId": "centreBack",
+            "x": 37.0,
+            "y": 74.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "centreBack",
+              "roleName": "Stoper",
+              "score": 75.0,
+              "strengths": [
+                "marking",
+                "tackling",
+                "positioning",
+                "heading",
+                "jumpingReach",
+                "strength"
+              ]
+            },
+            "key": "rcb",
+            "label": "STP",
+            "player": {
+              "age": 29,
+              "condition": 89,
+              "form": 7.75,
+              "id": 4,
+              "injured": false,
+              "name": "Bora Erden",
+              "positions": [
+                "DC"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "centreBack",
+                "roleName": "Stoper",
+                "score": 75.0,
+                "strengths": [
+                  "marking",
+                  "tackling",
+                  "positioning",
+                  "heading",
+                  "jumpingReach",
+                  "strength"
+                ]
+              }
+            },
+            "roleId": "centreBack",
+            "x": 63.0,
+            "y": 74.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "rightBack",
+              "roleName": "Sağ bek",
+              "score": 78.1,
+              "strengths": [
+                "tackling",
+                "positioning",
+                "pace",
+                "stamina",
+                "workRate",
+                "passing"
+              ]
+            },
+            "key": "rb",
+            "label": "SĞB",
+            "player": {
+              "age": 23,
+              "condition": 93,
+              "form": 7.88,
+              "id": 7,
+              "injured": false,
+              "name": "Cem Koral",
+              "positions": [
+                "DR"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "rightBack",
+                "roleName": "Sağ bek",
+                "score": 78.1,
+                "strengths": [
+                  "tackling",
+                  "positioning",
+                  "pace",
+                  "stamina",
+                  "workRate",
+                  "passing"
+                ]
+              }
+            },
+            "roleId": "rightBack",
+            "x": 86.0,
+            "y": 71.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "playmaker",
+              "roleName": "Oyun kurucu",
+              "score": 82.7,
+              "strengths": [
+                "passing",
+                "vision",
+                "decisions",
+                "firstTouch",
+                "technique",
+                "composure"
+              ]
+            },
+            "key": "lcm",
+            "label": "MO",
+            "player": {
+              "age": 25,
+              "condition": 94,
+              "form": 6.96,
+              "id": 11,
+              "injured": false,
+              "name": "Kerem Akın",
+              "positions": [
+                "MC",
+                "AMC"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "creator",
+                "roleName": "Hücum oyun kurucu",
+                "score": 83.1,
+                "strengths": [
+                  "vision",
+                  "passing",
+                  "firstTouch",
+                  "technique",
+                  "decisions",
+                  "offTheBall"
+                ]
+              }
+            },
+            "roleId": "playmaker",
+            "x": 37.0,
+            "y": 46.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "runner",
+              "roleName": "İki yönlü orta saha",
+              "score": 80.8,
+              "strengths": [
+                "stamina",
+                "workRate",
+                "teamwork",
+                "offTheBall",
+                "passing",
+                "tackling"
+              ]
+            },
+            "key": "rcm",
+            "label": "MO",
+            "player": {
+              "age": 28,
+              "condition": 91,
+              "form": 7.46,
+              "id": 9,
+              "injured": false,
+              "name": "Ozan Demir",
+              "positions": [
+                "DM",
+                "MC"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "runner",
+                "roleName": "İki yönlü orta saha",
+                "score": 80.8,
+                "strengths": [
+                  "stamina",
+                  "workRate",
+                  "teamwork",
+                  "offTheBall",
+                  "passing",
+                  "tackling"
+                ]
+              }
+            },
+            "roleId": "runner",
+            "x": 63.0,
+            "y": 46.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "leftWing",
+              "roleName": "Sol kanat",
+              "score": 86.2,
+              "strengths": [
+                "dribbling",
+                "acceleration",
+                "pace",
+                "crossing",
+                "offTheBall",
+                "technique"
+              ]
+            },
+            "key": "lw",
+            "label": "SLK",
+            "player": {
+              "age": 23,
+              "condition": 95,
+              "form": 7.84,
+              "id": 15,
+              "injured": false,
+              "name": "Baran Yıldız",
+              "positions": [
+                "AML",
+                "AMR"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "leftWing",
+                "roleName": "Sol kanat",
+                "score": 86.2,
+                "strengths": [
+                  "dribbling",
+                  "acceleration",
+                  "pace",
+                  "crossing",
+                  "offTheBall",
+                  "technique"
+                ]
+              }
+            },
+            "roleId": "leftWing",
+            "x": 13.0,
+            "y": 44.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "rightWing",
+              "roleName": "Sağ kanat",
+              "score": 78.5,
+              "strengths": [
+                "dribbling",
+                "acceleration",
+                "pace",
+                "crossing",
+                "offTheBall",
+                "technique"
+              ]
+            },
+            "key": "rw",
+            "label": "SĞK",
+            "player": {
+              "age": 24,
+              "condition": 92,
+              "form": 7.03,
+              "id": 16,
+              "injured": false,
+              "name": "Sarp Deniz",
+              "positions": [
+                "AMR"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "rightWing",
+                "roleName": "Sağ kanat",
+                "score": 78.5,
+                "strengths": [
+                  "dribbling",
+                  "acceleration",
+                  "pace",
+                  "crossing",
+                  "offTheBall",
+                  "technique"
+                ]
+              }
+            },
+            "roleId": "rightWing",
+            "x": 87.0,
+            "y": 44.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "striker",
+              "roleName": "Bitirici forvet",
+              "score": 85.8,
+              "strengths": [
+                "finishing",
+                "offTheBall",
+                "composure",
+                "anticipation",
+                "acceleration",
+                "firstTouch"
+              ]
+            },
+            "key": "lst",
+            "label": "FV",
+            "player": {
+              "age": 26,
+              "condition": 94,
+              "form": 6.92,
+              "id": 19,
+              "injured": false,
+              "name": "Doruk Can",
+              "positions": [
+                "ST"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "striker",
+                "roleName": "Bitirici forvet",
+                "score": 85.8,
+                "strengths": [
+                  "finishing",
+                  "offTheBall",
+                  "composure",
+                  "anticipation",
+                  "acceleration",
+                  "firstTouch"
+                ]
+              }
+            },
+            "roleId": "striker",
+            "x": 35.0,
+            "y": 17.0
+          },
+          {
+            "fit": {
+              "coverage": 100.0,
+              "missing": [],
+              "roleId": "striker",
+              "roleName": "Bitirici forvet",
+              "score": 76.5,
+              "strengths": [
+                "finishing",
+                "offTheBall",
+                "composure",
+                "anticipation",
+                "firstTouch"
+              ]
+            },
+            "key": "rst",
+            "label": "FV",
+            "player": {
+              "age": 22,
+              "condition": 96,
+              "form": 7.38,
+              "id": 20,
+              "injured": false,
+              "name": "Umut Aral",
+              "positions": [
+                "ST"
+              ],
+              "role": {
+                "coverage": 100.0,
+                "missing": [],
+                "roleId": "striker",
+                "roleName": "Bitirici forvet",
+                "score": 76.5,
+                "strengths": [
+                  "finishing",
+                  "offTheBall",
+                  "composure",
+                  "anticipation",
+                  "firstTouch"
+                ]
+              }
+            },
+            "roleId": "striker",
+            "x": 65.0,
+            "y": 17.0
+          }
+        ]
+      },
+      "capturedAt": "2026-11-06T09:00:00+03:00",
+      "club": "KUTRA FC",
+      "playerCount": 24,
+      "season": "2026/27",
+      "source": "demo"
+    }
+  ],
+  "details": [
+    {
+      "player": {
+        "age": 27,
+        "attributes": {
+          "acceleration": 10,
+          "aerialReach": 16,
+          "agility": 15,
+          "anticipation": 8,
+          "composure": 12,
+          "concentration": 14,
+          "crossing": 10,
+          "decisions": 16,
+          "dribbling": 7,
+          "finishing": 12,
+          "firstTouch": 8,
+          "handling": 16,
+          "heading": 7,
+          "jumpingReach": 12,
+          "kicking": 18,
+          "marking": 12,
+          "offTheBall": 10,
+          "oneOnOnes": 16,
+          "pace": 8,
+          "passing": 8,
+          "positioning": 8,
+          "reflexes": 16,
+          "stamina": 12,
+          "strength": 12,
+          "tackling": 11,
+          "teamwork": 7,
+          "technique": 10,
+          "vision": 12,
+          "workRate": 8
+        },
+        "condition": 96,
+        "foot": "right",
+        "form": 6.83,
+        "id": 1,
+        "injured": false,
+        "minutes": 1052,
+        "morale": 13,
+        "name": "Deniz Arslan",
+        "positions": [
+          "GK"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "keeper",
+          "roleName": "Kaleci",
+          "score": 80.8,
+          "strengths": [
+            "reflexes",
+            "handling",
+            "oneOnOnes",
+            "aerialReach",
+            "decisions",
+            "kicking"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 20,
+        "attributes": {
+          "acceleration": 12,
+          "aerialReach": 15,
+          "agility": 14,
+          "anticipation": 10,
+          "composure": 12,
+          "concentration": 13,
+          "crossing": 9,
+          "decisions": 13,
+          "dribbling": 9,
+          "finishing": 9,
+          "firstTouch": 9,
+          "handling": 13,
+          "heading": 8,
+          "jumpingReach": 9,
+          "kicking": 14,
+          "marking": 8,
+          "offTheBall": 11,
+          "oneOnOnes": 12,
+          "pace": 7,
+          "passing": 10,
+          "positioning": 12,
+          "reflexes": 12,
+          "stamina": 9,
+          "strength": 9,
+          "tackling": 10,
+          "teamwork": 8,
+          "technique": 9,
+          "vision": 8,
+          "workRate": 12
+        },
+        "condition": 100,
+        "foot": "right",
+        "form": null,
+        "id": 2,
+        "injured": false,
+        "minutes": 0,
+        "morale": 18,
+        "name": "Efe Ural",
+        "positions": [
+          "GK"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "keeper",
+          "roleName": "Kaleci",
+          "score": 65.0,
+          "strengths": [
+            "aerialReach",
+            "kicking"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 26,
+        "attributes": {
+          "acceleration": 10,
+          "aerialReach": 3,
+          "agility": 12,
+          "anticipation": 15,
+          "composure": 11,
+          "concentration": 14,
+          "crossing": 9,
+          "decisions": 12,
+          "dribbling": 7,
+          "finishing": 12,
+          "firstTouch": 9,
+          "handling": 1,
+          "heading": 14,
+          "jumpingReach": 18,
+          "kicking": 4,
+          "marking": 16,
+          "offTheBall": 11,
+          "oneOnOnes": 3,
+          "pace": 8,
+          "passing": 8,
+          "positioning": 15,
+          "reflexes": 2,
+          "stamina": 12,
+          "strength": 16,
+          "tackling": 15,
+          "teamwork": 12,
+          "technique": 11,
+          "vision": 7,
+          "workRate": 9
+        },
+        "condition": 94,
+        "foot": "right",
+        "form": 6.5,
+        "id": 3,
+        "injured": false,
+        "minutes": 1131,
+        "morale": 14,
+        "name": "Mert Aydın",
+        "positions": [
+          "DC"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "centreBack",
+          "roleName": "Stoper",
+          "score": 75.6,
+          "strengths": [
+            "marking",
+            "tackling",
+            "positioning",
+            "heading",
+            "jumpingReach",
+            "strength"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 29,
+        "attributes": {
+          "acceleration": 7,
+          "aerialReach": 2,
+          "agility": 8,
+          "anticipation": 15,
+          "composure": 10,
+          "concentration": 17,
+          "crossing": 12,
+          "decisions": 10,
+          "dribbling": 10,
+          "finishing": 8,
+          "firstTouch": 8,
+          "handling": 2,
+          "heading": 15,
+          "jumpingReach": 14,
+          "kicking": 1,
+          "marking": 16,
+          "offTheBall": 8,
+          "oneOnOnes": 1,
+          "pace": 7,
+          "passing": 7,
+          "positioning": 16,
+          "reflexes": 1,
+          "stamina": 11,
+          "strength": 14,
+          "tackling": 17,
+          "teamwork": 8,
+          "technique": 11,
+          "vision": 9,
+          "workRate": 11
+        },
+        "condition": 89,
+        "foot": "right",
+        "form": 7.75,
+        "id": 4,
+        "injured": false,
+        "minutes": 1467,
+        "morale": 13,
+        "name": "Bora Erden",
+        "positions": [
+          "DC"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "centreBack",
+          "roleName": "Stoper",
+          "score": 75.0,
+          "strengths": [
+            "marking",
+            "tackling",
+            "positioning",
+            "heading",
+            "jumpingReach",
+            "strength"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 21,
+        "attributes": {
+          "acceleration": 12,
+          "aerialReach": 1,
+          "agility": 11,
+          "anticipation": 12,
+          "composure": 9,
+          "concentration": 15,
+          "crossing": 9,
+          "decisions": 16,
+          "dribbling": 9,
+          "finishing": 9,
+          "firstTouch": 7,
+          "handling": 4,
+          "heading": 14,
+          "jumpingReach": 14,
+          "kicking": 3,
+          "marking": 13,
+          "offTheBall": 9,
+          "oneOnOnes": 2,
+          "pace": 8,
+          "passing": 14,
+          "positioning": 14,
+          "reflexes": 2,
+          "stamina": 8,
+          "strength": 15,
+          "tackling": 13,
+          "teamwork": 14,
+          "technique": 8,
+          "vision": 11,
+          "workRate": 10
+        },
+        "condition": 98,
+        "foot": "right",
+        "form": 6.66,
+        "id": 5,
+        "injured": false,
+        "minutes": 1550,
+        "morale": 14,
+        "name": "Atlas Yaman",
+        "positions": [
+          "DC",
+          "DM"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "anchor",
+          "roleName": "Savunma önü",
+          "score": 68.8,
+          "strengths": [
+            "positioning",
+            "decisions",
+            "teamwork",
+            "passing"
+          ]
+        },
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "centreBack",
+          "roleName": "Stoper",
+          "score": 66.9,
+          "strengths": [
+            "positioning",
+            "heading",
+            "jumpingReach",
+            "strength"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 24,
+        "attributes": {
+          "acceleration": 16,
+          "aerialReach": 1,
+          "agility": 10,
+          "anticipation": 7,
+          "composure": 8,
+          "concentration": 10,
+          "crossing": 14,
+          "decisions": 11,
+          "dribbling": 8,
+          "finishing": 8,
+          "firstTouch": 11,
+          "handling": 3,
+          "heading": 8,
+          "jumpingReach": 7,
+          "kicking": 1,
+          "marking": 9,
+          "offTheBall": 12,
+          "oneOnOnes": 2,
+          "pace": 17,
+          "passing": 14,
+          "positioning": 18,
+          "reflexes": 4,
+          "stamina": 16,
+          "strength": 8,
+          "tackling": 18,
+          "teamwork": 10,
+          "technique": 8,
+          "vision": 8,
+          "workRate": 14
+        },
+        "condition": 92,
+        "foot": "left",
+        "form": 7.25,
+        "id": 6,
+        "injured": false,
+        "minutes": 351,
+        "morale": 15,
+        "name": "Arda Eren",
+        "positions": [
+          "DL"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "leftBack",
+          "roleName": "Sol bek",
+          "score": 80.0,
+          "strengths": [
+            "tackling",
+            "positioning",
+            "pace",
+            "stamina",
+            "crossing",
+            "workRate",
+            "passing"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 23,
+        "attributes": {
+          "acceleration": 15,
+          "aerialReach": 4,
+          "agility": 7,
+          "anticipation": 8,
+          "composure": 7,
+          "concentration": 12,
+          "crossing": 13,
+          "decisions": 10,
+          "dribbling": 7,
+          "finishing": 8,
+          "firstTouch": 10,
+          "handling": 4,
+          "heading": 12,
+          "jumpingReach": 12,
+          "kicking": 4,
+          "marking": 11,
+          "offTheBall": 12,
+          "oneOnOnes": 1,
+          "pace": 16,
+          "passing": 15,
+          "positioning": 15,
+          "reflexes": 4,
+          "stamina": 16,
+          "strength": 7,
+          "tackling": 17,
+          "teamwork": 10,
+          "technique": 7,
+          "vision": 7,
+          "workRate": 17
+        },
+        "condition": 93,
+        "foot": "right",
+        "form": 7.88,
+        "id": 7,
+        "injured": false,
+        "minutes": 1748,
+        "morale": 14,
+        "name": "Cem Koral",
+        "positions": [
+          "DR"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "rightBack",
+          "roleName": "Sağ bek",
+          "score": 78.1,
+          "strengths": [
+            "tackling",
+            "positioning",
+            "pace",
+            "stamina",
+            "workRate",
+            "passing"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 20,
+        "attributes": {
+          "acceleration": 11,
+          "aerialReach": 2,
+          "agility": 10,
+          "anticipation": 12,
+          "composure": 10,
+          "concentration": 7,
+          "crossing": 15,
+          "decisions": 9,
+          "dribbling": 11,
+          "finishing": 8,
+          "firstTouch": 12,
+          "handling": 3,
+          "heading": 12,
+          "jumpingReach": 11,
+          "kicking": 2,
+          "marking": 8,
+          "offTheBall": 7,
+          "oneOnOnes": 1,
+          "pace": 11,
+          "passing": 15,
+          "positioning": 12,
+          "reflexes": 2,
+          "stamina": 14,
+          "strength": 9,
+          "tackling": 11,
+          "teamwork": 10,
+          "technique": 9,
+          "vision": 8,
+          "workRate": 13
+        },
+        "condition": 99,
+        "foot": "left",
+        "form": 7.78,
+        "id": 8,
+        "injured": false,
+        "minutes": 344,
+        "morale": 17,
+        "name": "Kaan Ekin",
+        "positions": [
+          "DL",
+          "DR"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "leftBack",
+          "roleName": "Sol bek",
+          "score": 64.2,
+          "strengths": [
+            "stamina",
+            "crossing",
+            "passing"
+          ]
+        },
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "rightBack",
+          "roleName": "Sağ bek",
+          "score": 64.2,
+          "strengths": [
+            "stamina",
+            "crossing",
+            "passing"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 28,
+        "attributes": {
+          "acceleration": 9,
+          "aerialReach": 3,
+          "agility": 9,
+          "anticipation": 16,
+          "composure": 16,
+          "concentration": 16,
+          "crossing": 8,
+          "decisions": 16,
+          "dribbling": 11,
+          "finishing": 12,
+          "firstTouch": 14,
+          "handling": 3,
+          "heading": 11,
+          "jumpingReach": 10,
+          "kicking": 3,
+          "marking": 8,
+          "offTheBall": 18,
+          "oneOnOnes": 2,
+          "pace": 10,
+          "passing": 18,
+          "positioning": 14,
+          "reflexes": 1,
+          "stamina": 16,
+          "strength": 18,
+          "tackling": 16,
+          "teamwork": 14,
+          "technique": 16,
+          "vision": 14,
+          "workRate": 16
+        },
+        "condition": 91,
+        "foot": "right",
+        "form": 7.46,
+        "id": 9,
+        "injured": false,
+        "minutes": 765,
+        "morale": 12,
+        "name": "Ozan Demir",
+        "positions": [
+          "DM",
+          "MC"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "runner",
+          "roleName": "İki yönlü orta saha",
+          "score": 80.8,
+          "strengths": [
+            "stamina",
+            "workRate",
+            "teamwork",
+            "offTheBall",
+            "passing",
+            "tackling"
+          ]
+        },
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "playmaker",
+          "roleName": "Oyun kurucu",
+          "score": 78.5,
+          "strengths": [
+            "passing",
+            "vision",
+            "decisions",
+            "firstTouch",
+            "technique",
+            "composure"
+          ]
+        },
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "anchor",
+          "roleName": "Savunma önü",
+          "score": 76.9,
+          "strengths": [
+            "positioning",
+            "tackling",
+            "anticipation",
+            "decisions",
+            "teamwork",
+            "passing"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 22,
+        "attributes": {
+          "acceleration": 7,
+          "aerialReach": 1,
+          "agility": 10,
+          "anticipation": 14,
+          "composure": 10,
+          "concentration": 14,
+          "crossing": 8,
+          "decisions": 16,
+          "dribbling": 8,
+          "finishing": 9,
+          "firstTouch": 9,
+          "handling": 4,
+          "heading": 8,
+          "jumpingReach": 7,
+          "kicking": 2,
+          "marking": 7,
+          "offTheBall": 10,
+          "oneOnOnes": 3,
+          "pace": 9,
+          "passing": 14,
+          "positioning": 12,
+          "reflexes": 2,
+          "stamina": 10,
+          "strength": 13,
+          "tackling": 15,
+          "teamwork": 14,
+          "technique": 7,
+          "vision": 10,
+          "workRate": 9
+        },
+        "condition": 97,
+        "foot": "right",
+        "form": 7.35,
+        "id": 10,
+        "injured": false,
+        "minutes": 1813,
+        "morale": 18,
+        "name": "Ali Sarp",
+        "positions": [
+          "DM"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "anchor",
+          "roleName": "Savunma önü",
+          "score": 70.4,
+          "strengths": [
+            "tackling",
+            "anticipation",
+            "decisions",
+            "teamwork",
+            "passing"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 25,
+        "attributes": {
+          "acceleration": 12,
+          "aerialReach": 2,
+          "agility": 9,
+          "anticipation": 12,
+          "composure": 17,
+          "concentration": 9,
+          "crossing": 8,
+          "decisions": 17,
+          "dribbling": 16,
+          "finishing": 10,
+          "firstTouch": 16,
+          "handling": 1,
+          "heading": 9,
+          "jumpingReach": 9,
+          "kicking": 4,
+          "marking": 7,
+          "offTheBall": 18,
+          "oneOnOnes": 4,
+          "pace": 9,
+          "passing": 17,
+          "positioning": 11,
+          "reflexes": 2,
+          "stamina": 15,
+          "strength": 10,
+          "tackling": 7,
+          "teamwork": 17,
+          "technique": 18,
+          "vision": 15,
+          "workRate": 15
+        },
+        "condition": 94,
+        "foot": "right",
+        "form": 6.96,
+        "id": 11,
+        "injured": false,
+        "minutes": 726,
+        "morale": 16,
+        "name": "Kerem Akın",
+        "positions": [
+          "MC",
+          "AMC"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "creator",
+          "roleName": "Hücum oyun kurucu",
+          "score": 83.1,
+          "strengths": [
+            "vision",
+            "passing",
+            "firstTouch",
+            "technique",
+            "decisions",
+            "offTheBall"
+          ]
+        },
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "playmaker",
+          "roleName": "Oyun kurucu",
+          "score": 82.7,
+          "strengths": [
+            "passing",
+            "vision",
+            "decisions",
+            "firstTouch",
+            "technique",
+            "composure"
+          ]
+        },
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "runner",
+          "roleName": "İki yönlü orta saha",
+          "score": 76.7,
+          "strengths": [
+            "stamina",
+            "workRate",
+            "teamwork",
+            "offTheBall",
+            "passing"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 24,
+        "attributes": {
+          "acceleration": 9,
+          "aerialReach": 1,
+          "agility": 9,
+          "anticipation": 12,
+          "composure": 17,
+          "concentration": 7,
+          "crossing": 11,
+          "decisions": 14,
+          "dribbling": 10,
+          "finishing": 7,
+          "firstTouch": 15,
+          "handling": 4,
+          "heading": 12,
+          "jumpingReach": 10,
+          "kicking": 1,
+          "marking": 11,
+          "offTheBall": 16,
+          "oneOnOnes": 4,
+          "pace": 12,
+          "passing": 16,
+          "positioning": 10,
+          "reflexes": 3,
+          "stamina": 15,
+          "strength": 8,
+          "tackling": 10,
+          "teamwork": 17,
+          "technique": 17,
+          "vision": 18,
+          "workRate": 16
+        },
+        "condition": 93,
+        "foot": "right",
+        "form": 7.51,
+        "id": 12,
+        "injured": false,
+        "minutes": 1576,
+        "morale": 12,
+        "name": "Emir Tan",
+        "positions": [
+          "MC"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "playmaker",
+          "roleName": "Oyun kurucu",
+          "score": 81.2,
+          "strengths": [
+            "passing",
+            "vision",
+            "decisions",
+            "firstTouch",
+            "technique",
+            "composure"
+          ]
+        },
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "runner",
+          "roleName": "İki yönlü orta saha",
+          "score": 77.1,
+          "strengths": [
+            "stamina",
+            "workRate",
+            "teamwork",
+            "offTheBall",
+            "passing"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 19,
+        "attributes": {
+          "acceleration": 10,
+          "aerialReach": 2,
+          "agility": 8,
+          "anticipation": 11,
+          "composure": 13,
+          "concentration": 10,
+          "crossing": 11,
+          "decisions": 13,
+          "dribbling": 11,
+          "finishing": 11,
+          "firstTouch": 14,
+          "handling": 1,
+          "heading": 12,
+          "jumpingReach": 10,
+          "kicking": 4,
+          "marking": 8,
+          "offTheBall": 14,
+          "oneOnOnes": 2,
+          "pace": 8,
+          "passing": 13,
+          "positioning": 10,
+          "reflexes": 2,
+          "stamina": 11,
+          "strength": 10,
+          "tackling": 7,
+          "teamwork": 14,
+          "technique": 14,
+          "vision": 12,
+          "workRate": 15
+        },
+        "condition": 100,
+        "foot": "right",
+        "form": null,
+        "id": 13,
+        "injured": false,
+        "minutes": 0,
+        "morale": 15,
+        "name": "Berk Önal",
+        "positions": [
+          "MC"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "playmaker",
+          "roleName": "Oyun kurucu",
+          "score": 65.4,
+          "strengths": [
+            "firstTouch",
+            "technique"
+          ]
+        },
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "runner",
+          "roleName": "İki yönlü orta saha",
+          "score": 64.2,
+          "strengths": [
+            "workRate",
+            "teamwork",
+            "offTheBall"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 30,
+        "attributes": {
+          "acceleration": 12,
+          "aerialReach": 1,
+          "agility": 11,
+          "anticipation": 15,
+          "composure": 17,
+          "concentration": 17,
+          "crossing": 7,
+          "decisions": 14,
+          "dribbling": 11,
+          "finishing": 9,
+          "firstTouch": 17,
+          "handling": 3,
+          "heading": 12,
+          "jumpingReach": 7,
+          "kicking": 3,
+          "marking": 12,
+          "offTheBall": 17,
+          "oneOnOnes": 3,
+          "pace": 10,
+          "passing": 14,
+          "positioning": 16,
+          "reflexes": 3,
+          "stamina": 15,
+          "strength": 17,
+          "tackling": 17,
+          "teamwork": 16,
+          "technique": 15,
+          "vision": 15,
+          "workRate": 16
+        },
+        "condition": 72,
+        "foot": "right",
+        "form": 6.59,
+        "id": 14,
+        "injured": false,
+        "minutes": 582,
+        "morale": 13,
+        "name": "Eren Acar",
+        "positions": [
+          "MC",
+          "DM"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "runner",
+          "roleName": "İki yönlü orta saha",
+          "score": 79.2,
+          "strengths": [
+            "stamina",
+            "workRate",
+            "teamwork",
+            "offTheBall",
+            "passing",
+            "tackling"
+          ]
+        },
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "anchor",
+          "roleName": "Savunma önü",
+          "score": 78.1,
+          "strengths": [
+            "positioning",
+            "tackling",
+            "anticipation",
+            "decisions",
+            "teamwork",
+            "passing"
+          ]
+        },
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "playmaker",
+          "roleName": "Oyun kurucu",
+          "score": 75.4,
+          "strengths": [
+            "passing",
+            "vision",
+            "decisions",
+            "firstTouch",
+            "technique",
+            "composure"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 23,
+        "attributes": {
+          "acceleration": 19,
+          "aerialReach": 4,
+          "agility": 11,
+          "anticipation": 7,
+          "composure": 8,
+          "concentration": 8,
+          "crossing": 18,
+          "decisions": 7,
+          "dribbling": 16,
+          "finishing": 10,
+          "firstTouch": 17,
+          "handling": 3,
+          "heading": 11,
+          "jumpingReach": 12,
+          "kicking": 4,
+          "marking": 10,
+          "offTheBall": 17,
+          "oneOnOnes": 3,
+          "pace": 16,
+          "passing": 9,
+          "positioning": 8,
+          "reflexes": 1,
+          "stamina": 11,
+          "strength": 9,
+          "tackling": 8,
+          "teamwork": 7,
+          "technique": 17,
+          "vision": 11,
+          "workRate": 12
+        },
+        "condition": 95,
+        "foot": "left",
+        "form": 7.84,
+        "id": 15,
+        "injured": false,
+        "minutes": 795,
+        "morale": 16,
+        "name": "Baran Yıldız",
+        "positions": [
+          "AML",
+          "AMR"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "leftWing",
+          "roleName": "Sol kanat",
+          "score": 86.2,
+          "strengths": [
+            "dribbling",
+            "acceleration",
+            "pace",
+            "crossing",
+            "offTheBall",
+            "technique"
+          ]
+        },
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "rightWing",
+          "roleName": "Sağ kanat",
+          "score": 86.2,
+          "strengths": [
+            "dribbling",
+            "acceleration",
+            "pace",
+            "crossing",
+            "offTheBall",
+            "technique"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 24,
+        "attributes": {
+          "acceleration": 15,
+          "aerialReach": 3,
+          "agility": 10,
+          "anticipation": 9,
+          "composure": 11,
+          "concentration": 8,
+          "crossing": 15,
+          "decisions": 9,
+          "dribbling": 15,
+          "finishing": 10,
+          "firstTouch": 15,
+          "handling": 1,
+          "heading": 8,
+          "jumpingReach": 11,
+          "kicking": 1,
+          "marking": 8,
+          "offTheBall": 16,
+          "oneOnOnes": 1,
+          "pace": 18,
+          "passing": 11,
+          "positioning": 11,
+          "reflexes": 3,
+          "stamina": 10,
+          "strength": 8,
+          "tackling": 10,
+          "teamwork": 7,
+          "technique": 16,
+          "vision": 7,
+          "workRate": 10
+        },
+        "condition": 92,
+        "foot": "right",
+        "form": 7.03,
+        "id": 16,
+        "injured": false,
+        "minutes": 764,
+        "morale": 16,
+        "name": "Sarp Deniz",
+        "positions": [
+          "AMR"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "rightWing",
+          "roleName": "Sağ kanat",
+          "score": 78.5,
+          "strengths": [
+            "dribbling",
+            "acceleration",
+            "pace",
+            "crossing",
+            "offTheBall",
+            "technique"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 21,
+        "attributes": {
+          "acceleration": 16,
+          "aerialReach": 2,
+          "agility": 8,
+          "anticipation": 12,
+          "composure": 11,
+          "concentration": 11,
+          "crossing": 15,
+          "decisions": 7,
+          "dribbling": 14,
+          "finishing": 11,
+          "firstTouch": 14,
+          "handling": 1,
+          "heading": 8,
+          "jumpingReach": 12,
+          "kicking": 1,
+          "marking": 12,
+          "offTheBall": 15,
+          "oneOnOnes": 2,
+          "pace": 16,
+          "passing": 8,
+          "positioning": 9,
+          "reflexes": 3,
+          "stamina": 8,
+          "strength": 7,
+          "tackling": 9,
+          "teamwork": 10,
+          "technique": 13,
+          "vision": 8,
+          "workRate": 7
+        },
+        "condition": 98,
+        "foot": "left",
+        "form": 7.43,
+        "id": 17,
+        "injured": false,
+        "minutes": 1550,
+        "morale": 18,
+        "name": "Onur Kaya",
+        "positions": [
+          "AML"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "leftWing",
+          "roleName": "Sol kanat",
+          "score": 75.0,
+          "strengths": [
+            "dribbling",
+            "acceleration",
+            "pace",
+            "crossing",
+            "offTheBall"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 20,
+        "attributes": {
+          "acceleration": 14,
+          "aerialReach": 4,
+          "agility": 12,
+          "anticipation": 11,
+          "composure": 16,
+          "concentration": 9,
+          "crossing": 14,
+          "decisions": 14,
+          "dribbling": 16,
+          "finishing": 11,
+          "firstTouch": 14,
+          "handling": 4,
+          "heading": 11,
+          "jumpingReach": 12,
+          "kicking": 4,
+          "marking": 7,
+          "offTheBall": 13,
+          "oneOnOnes": 2,
+          "pace": 12,
+          "passing": 15,
+          "positioning": 9,
+          "reflexes": 1,
+          "stamina": 9,
+          "strength": 12,
+          "tackling": 7,
+          "teamwork": 9,
+          "technique": 13,
+          "vision": 12,
+          "workRate": 7
+        },
+        "condition": 96,
+        "foot": "right",
+        "form": 6.47,
+        "id": 18,
+        "injured": false,
+        "minutes": 842,
+        "morale": 18,
+        "name": "Alp Tunç",
+        "positions": [
+          "AMR",
+          "AMC"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "rightWing",
+          "roleName": "Sağ kanat",
+          "score": 69.6,
+          "strengths": [
+            "dribbling",
+            "acceleration",
+            "crossing"
+          ]
+        },
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "creator",
+          "roleName": "Hücum oyun kurucu",
+          "score": 67.7,
+          "strengths": [
+            "passing",
+            "firstTouch",
+            "decisions"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 26,
+        "attributes": {
+          "acceleration": 17,
+          "aerialReach": 1,
+          "agility": 9,
+          "anticipation": 19,
+          "composure": 15,
+          "concentration": 10,
+          "crossing": 7,
+          "decisions": 10,
+          "dribbling": 9,
+          "finishing": 17,
+          "firstTouch": 19,
+          "handling": 1,
+          "heading": 17,
+          "jumpingReach": 8,
+          "kicking": 4,
+          "marking": 11,
+          "offTheBall": 17,
+          "oneOnOnes": 4,
+          "pace": 16,
+          "passing": 9,
+          "positioning": 9,
+          "reflexes": 4,
+          "stamina": 11,
+          "strength": 10,
+          "tackling": 8,
+          "teamwork": 10,
+          "technique": 11,
+          "vision": 12,
+          "workRate": 10
+        },
+        "condition": 94,
+        "foot": "right",
+        "form": 6.92,
+        "id": 19,
+        "injured": false,
+        "minutes": 1067,
+        "morale": 14,
+        "name": "Doruk Can",
+        "positions": [
+          "ST"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "striker",
+          "roleName": "Bitirici forvet",
+          "score": 85.8,
+          "strengths": [
+            "finishing",
+            "offTheBall",
+            "composure",
+            "anticipation",
+            "acceleration",
+            "firstTouch"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 22,
+        "attributes": {
+          "acceleration": 13,
+          "aerialReach": 1,
+          "agility": 7,
+          "anticipation": 15,
+          "composure": 16,
+          "concentration": 9,
+          "crossing": 9,
+          "decisions": 11,
+          "dribbling": 11,
+          "finishing": 15,
+          "firstTouch": 15,
+          "handling": 3,
+          "heading": 13,
+          "jumpingReach": 9,
+          "kicking": 3,
+          "marking": 7,
+          "offTheBall": 17,
+          "oneOnOnes": 4,
+          "pace": 17,
+          "passing": 9,
+          "positioning": 10,
+          "reflexes": 3,
+          "stamina": 7,
+          "strength": 11,
+          "tackling": 10,
+          "teamwork": 9,
+          "technique": 9,
+          "vision": 9,
+          "workRate": 11
+        },
+        "condition": 96,
+        "foot": "right",
+        "form": 7.38,
+        "id": 20,
+        "injured": false,
+        "minutes": 1198,
+        "morale": 13,
+        "name": "Umut Aral",
+        "positions": [
+          "ST"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "striker",
+          "roleName": "Bitirici forvet",
+          "score": 76.5,
+          "strengths": [
+            "finishing",
+            "offTheBall",
+            "composure",
+            "anticipation",
+            "firstTouch"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 19,
+        "attributes": {
+          "acceleration": 12,
+          "aerialReach": 4,
+          "agility": 9,
+          "anticipation": 14,
+          "composure": 13,
+          "concentration": 10,
+          "crossing": 10,
+          "decisions": 7,
+          "dribbling": 7,
+          "finishing": 13,
+          "firstTouch": 14,
+          "handling": 1,
+          "heading": 12,
+          "jumpingReach": 9,
+          "kicking": 3,
+          "marking": 10,
+          "offTheBall": 11,
+          "oneOnOnes": 2,
+          "pace": 13,
+          "passing": 7,
+          "positioning": 12,
+          "reflexes": 2,
+          "stamina": 7,
+          "strength": 8,
+          "tackling": 8,
+          "teamwork": 8,
+          "technique": 8,
+          "vision": 11,
+          "workRate": 10
+        },
+        "condition": 100,
+        "foot": "right",
+        "form": null,
+        "id": 21,
+        "injured": false,
+        "minutes": 0,
+        "morale": 18,
+        "name": "Tuna Ekin",
+        "positions": [
+          "ST"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "striker",
+          "roleName": "Bitirici forvet",
+          "score": 63.1,
+          "strengths": [
+            "anticipation",
+            "firstTouch"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 25,
+        "attributes": {
+          "acceleration": 11,
+          "aerialReach": 1,
+          "agility": 12,
+          "anticipation": 12,
+          "composure": 18,
+          "concentration": 10,
+          "crossing": 11,
+          "decisions": 16,
+          "dribbling": 16,
+          "finishing": 10,
+          "firstTouch": 14,
+          "handling": 4,
+          "heading": 7,
+          "jumpingReach": 12,
+          "kicking": 4,
+          "marking": 10,
+          "offTheBall": 14,
+          "oneOnOnes": 3,
+          "pace": 7,
+          "passing": 16,
+          "positioning": 9,
+          "reflexes": 4,
+          "stamina": 17,
+          "strength": 8,
+          "tackling": 10,
+          "teamwork": 16,
+          "technique": 16,
+          "vision": 18,
+          "workRate": 16
+        },
+        "condition": 88,
+        "foot": "right",
+        "form": 6.95,
+        "id": 22,
+        "injured": false,
+        "minutes": 495,
+        "morale": 12,
+        "name": "Yiğit Aslan",
+        "positions": [
+          "AMC",
+          "MC"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "playmaker",
+          "roleName": "Oyun kurucu",
+          "score": 81.5,
+          "strengths": [
+            "passing",
+            "vision",
+            "decisions",
+            "firstTouch",
+            "technique",
+            "composure"
+          ]
+        },
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "creator",
+          "roleName": "Hücum oyun kurucu",
+          "score": 80.0,
+          "strengths": [
+            "vision",
+            "passing",
+            "firstTouch",
+            "technique",
+            "decisions",
+            "offTheBall"
+          ]
+        },
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "runner",
+          "roleName": "İki yönlü orta saha",
+          "score": 77.1,
+          "strengths": [
+            "stamina",
+            "workRate",
+            "teamwork",
+            "offTheBall",
+            "passing"
+          ]
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 28,
+        "attributes": {
+          "acceleration": 16,
+          "aerialReach": 3,
+          "agility": 7,
+          "anticipation": 12,
+          "composure": 9,
+          "concentration": 13,
+          "crossing": 16,
+          "decisions": 7,
+          "dribbling": 10,
+          "finishing": 12,
+          "firstTouch": 10,
+          "handling": 4,
+          "heading": 13,
+          "jumpingReach": 13,
+          "kicking": 3,
+          "marking": 13,
+          "offTheBall": 10,
+          "oneOnOnes": 3,
+          "pace": 13,
+          "passing": 14,
+          "positioning": 12,
+          "reflexes": 2,
+          "stamina": 16,
+          "strength": 13,
+          "tackling": 12,
+          "teamwork": 11,
+          "technique": 8,
+          "vision": 10,
+          "workRate": 14
+        },
+        "condition": 79,
+        "foot": "right",
+        "form": 6.99,
+        "id": 23,
+        "injured": true,
+        "minutes": 1588,
+        "morale": 12,
+        "name": "Can Efe",
+        "positions": [
+          "DC",
+          "DR"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "rightBack",
+          "roleName": "Sağ bek",
+          "score": 69.2,
+          "strengths": [
+            "stamina",
+            "crossing",
+            "workRate",
+            "passing"
+          ]
+        },
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "centreBack",
+          "roleName": "Stoper",
+          "score": 63.1,
+          "strengths": []
+        }
+      ]
+    },
+    {
+      "player": {
+        "age": 31,
+        "attributes": {
+          "acceleration": 16,
+          "aerialReach": 4,
+          "agility": 12,
+          "anticipation": 12,
+          "composure": 12,
+          "concentration": 8,
+          "crossing": 15,
+          "decisions": 8,
+          "dribbling": 11,
+          "finishing": 11,
+          "firstTouch": 11,
+          "handling": 2,
+          "heading": 8,
+          "jumpingReach": 10,
+          "kicking": 2,
+          "marking": 12,
+          "offTheBall": 8,
+          "oneOnOnes": 1,
+          "pace": 16,
+          "passing": 14,
+          "positioning": 15,
+          "reflexes": 4,
+          "stamina": 12,
+          "strength": 11,
+          "tackling": 13,
+          "teamwork": 12,
+          "technique": 12,
+          "vision": 9,
+          "workRate": 14
+        },
+        "condition": 84,
+        "foot": "left",
+        "form": 7.56,
+        "id": 24,
+        "injured": true,
+        "minutes": 1162,
+        "morale": 15,
+        "name": "Özgür Yalın",
+        "positions": [
+          "DL"
+        ]
+      },
+      "roles": [
+        {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "leftBack",
+          "roleName": "Sol bek",
+          "score": 70.8,
+          "strengths": [
+            "positioning",
+            "pace",
+            "crossing",
+            "workRate",
+            "passing"
+          ]
+        }
+      ]
+    }
+  ],
+  "page": {
+    "offset": 0,
+    "players": [
+      {
+        "age": 27,
+        "condition": 96,
+        "form": 6.83,
+        "id": 1,
+        "injured": false,
+        "name": "Deniz Arslan",
+        "positions": [
+          "GK"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "keeper",
+          "roleName": "Kaleci",
+          "score": 80.8,
+          "strengths": [
+            "reflexes",
+            "handling",
+            "oneOnOnes",
+            "aerialReach",
+            "decisions",
+            "kicking"
+          ]
+        }
+      },
+      {
+        "age": 20,
+        "condition": 100,
+        "form": null,
+        "id": 2,
+        "injured": false,
+        "name": "Efe Ural",
+        "positions": [
+          "GK"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "keeper",
+          "roleName": "Kaleci",
+          "score": 65.0,
+          "strengths": [
+            "aerialReach",
+            "kicking"
+          ]
+        }
+      },
+      {
+        "age": 26,
+        "condition": 94,
+        "form": 6.5,
+        "id": 3,
+        "injured": false,
+        "name": "Mert Aydın",
+        "positions": [
+          "DC"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "centreBack",
+          "roleName": "Stoper",
+          "score": 75.6,
+          "strengths": [
+            "marking",
+            "tackling",
+            "positioning",
+            "heading",
+            "jumpingReach",
+            "strength"
+          ]
+        }
+      },
+      {
+        "age": 29,
+        "condition": 89,
+        "form": 7.75,
+        "id": 4,
+        "injured": false,
+        "name": "Bora Erden",
+        "positions": [
+          "DC"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "centreBack",
+          "roleName": "Stoper",
+          "score": 75.0,
+          "strengths": [
+            "marking",
+            "tackling",
+            "positioning",
+            "heading",
+            "jumpingReach",
+            "strength"
+          ]
+        }
+      },
+      {
+        "age": 21,
+        "condition": 98,
+        "form": 6.66,
+        "id": 5,
+        "injured": false,
+        "name": "Atlas Yaman",
+        "positions": [
+          "DC",
+          "DM"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "anchor",
+          "roleName": "Savunma önü",
+          "score": 68.8,
+          "strengths": [
+            "positioning",
+            "decisions",
+            "teamwork",
+            "passing"
+          ]
+        }
+      },
+      {
+        "age": 24,
+        "condition": 92,
+        "form": 7.25,
+        "id": 6,
+        "injured": false,
+        "name": "Arda Eren",
+        "positions": [
+          "DL"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "leftBack",
+          "roleName": "Sol bek",
+          "score": 80.0,
+          "strengths": [
+            "tackling",
+            "positioning",
+            "pace",
+            "stamina",
+            "crossing",
+            "workRate",
+            "passing"
+          ]
+        }
+      },
+      {
+        "age": 23,
+        "condition": 93,
+        "form": 7.88,
+        "id": 7,
+        "injured": false,
+        "name": "Cem Koral",
+        "positions": [
+          "DR"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "rightBack",
+          "roleName": "Sağ bek",
+          "score": 78.1,
+          "strengths": [
+            "tackling",
+            "positioning",
+            "pace",
+            "stamina",
+            "workRate",
+            "passing"
+          ]
+        }
+      },
+      {
+        "age": 20,
+        "condition": 99,
+        "form": 7.78,
+        "id": 8,
+        "injured": false,
+        "name": "Kaan Ekin",
+        "positions": [
+          "DL",
+          "DR"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "leftBack",
+          "roleName": "Sol bek",
+          "score": 64.2,
+          "strengths": [
+            "stamina",
+            "crossing",
+            "passing"
+          ]
+        }
+      },
+      {
+        "age": 28,
+        "condition": 91,
+        "form": 7.46,
+        "id": 9,
+        "injured": false,
+        "name": "Ozan Demir",
+        "positions": [
+          "DM",
+          "MC"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "runner",
+          "roleName": "İki yönlü orta saha",
+          "score": 80.8,
+          "strengths": [
+            "stamina",
+            "workRate",
+            "teamwork",
+            "offTheBall",
+            "passing",
+            "tackling"
+          ]
+        }
+      },
+      {
+        "age": 22,
+        "condition": 97,
+        "form": 7.35,
+        "id": 10,
+        "injured": false,
+        "name": "Ali Sarp",
+        "positions": [
+          "DM"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "anchor",
+          "roleName": "Savunma önü",
+          "score": 70.4,
+          "strengths": [
+            "tackling",
+            "anticipation",
+            "decisions",
+            "teamwork",
+            "passing"
+          ]
+        }
+      },
+      {
+        "age": 25,
+        "condition": 94,
+        "form": 6.96,
+        "id": 11,
+        "injured": false,
+        "name": "Kerem Akın",
+        "positions": [
+          "MC",
+          "AMC"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "creator",
+          "roleName": "Hücum oyun kurucu",
+          "score": 83.1,
+          "strengths": [
+            "vision",
+            "passing",
+            "firstTouch",
+            "technique",
+            "decisions",
+            "offTheBall"
+          ]
+        }
+      },
+      {
+        "age": 24,
+        "condition": 93,
+        "form": 7.51,
+        "id": 12,
+        "injured": false,
+        "name": "Emir Tan",
+        "positions": [
+          "MC"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "playmaker",
+          "roleName": "Oyun kurucu",
+          "score": 81.2,
+          "strengths": [
+            "passing",
+            "vision",
+            "decisions",
+            "firstTouch",
+            "technique",
+            "composure"
+          ]
+        }
+      },
+      {
+        "age": 19,
+        "condition": 100,
+        "form": null,
+        "id": 13,
+        "injured": false,
+        "name": "Berk Önal",
+        "positions": [
+          "MC"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "playmaker",
+          "roleName": "Oyun kurucu",
+          "score": 65.4,
+          "strengths": [
+            "firstTouch",
+            "technique"
+          ]
+        }
+      },
+      {
+        "age": 30,
+        "condition": 72,
+        "form": 6.59,
+        "id": 14,
+        "injured": false,
+        "name": "Eren Acar",
+        "positions": [
+          "MC",
+          "DM"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "runner",
+          "roleName": "İki yönlü orta saha",
+          "score": 79.2,
+          "strengths": [
+            "stamina",
+            "workRate",
+            "teamwork",
+            "offTheBall",
+            "passing",
+            "tackling"
+          ]
+        }
+      },
+      {
+        "age": 23,
+        "condition": 95,
+        "form": 7.84,
+        "id": 15,
+        "injured": false,
+        "name": "Baran Yıldız",
+        "positions": [
+          "AML",
+          "AMR"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "leftWing",
+          "roleName": "Sol kanat",
+          "score": 86.2,
+          "strengths": [
+            "dribbling",
+            "acceleration",
+            "pace",
+            "crossing",
+            "offTheBall",
+            "technique"
+          ]
+        }
+      },
+      {
+        "age": 24,
+        "condition": 92,
+        "form": 7.03,
+        "id": 16,
+        "injured": false,
+        "name": "Sarp Deniz",
+        "positions": [
+          "AMR"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "rightWing",
+          "roleName": "Sağ kanat",
+          "score": 78.5,
+          "strengths": [
+            "dribbling",
+            "acceleration",
+            "pace",
+            "crossing",
+            "offTheBall",
+            "technique"
+          ]
+        }
+      },
+      {
+        "age": 21,
+        "condition": 98,
+        "form": 7.43,
+        "id": 17,
+        "injured": false,
+        "name": "Onur Kaya",
+        "positions": [
+          "AML"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "leftWing",
+          "roleName": "Sol kanat",
+          "score": 75.0,
+          "strengths": [
+            "dribbling",
+            "acceleration",
+            "pace",
+            "crossing",
+            "offTheBall"
+          ]
+        }
+      },
+      {
+        "age": 20,
+        "condition": 96,
+        "form": 6.47,
+        "id": 18,
+        "injured": false,
+        "name": "Alp Tunç",
+        "positions": [
+          "AMR",
+          "AMC"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "rightWing",
+          "roleName": "Sağ kanat",
+          "score": 69.6,
+          "strengths": [
+            "dribbling",
+            "acceleration",
+            "crossing"
+          ]
+        }
+      },
+      {
+        "age": 26,
+        "condition": 94,
+        "form": 6.92,
+        "id": 19,
+        "injured": false,
+        "name": "Doruk Can",
+        "positions": [
+          "ST"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "striker",
+          "roleName": "Bitirici forvet",
+          "score": 85.8,
+          "strengths": [
+            "finishing",
+            "offTheBall",
+            "composure",
+            "anticipation",
+            "acceleration",
+            "firstTouch"
+          ]
+        }
+      },
+      {
+        "age": 22,
+        "condition": 96,
+        "form": 7.38,
+        "id": 20,
+        "injured": false,
+        "name": "Umut Aral",
+        "positions": [
+          "ST"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "striker",
+          "roleName": "Bitirici forvet",
+          "score": 76.5,
+          "strengths": [
+            "finishing",
+            "offTheBall",
+            "composure",
+            "anticipation",
+            "firstTouch"
+          ]
+        }
+      },
+      {
+        "age": 19,
+        "condition": 100,
+        "form": null,
+        "id": 21,
+        "injured": false,
+        "name": "Tuna Ekin",
+        "positions": [
+          "ST"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "striker",
+          "roleName": "Bitirici forvet",
+          "score": 63.1,
+          "strengths": [
+            "anticipation",
+            "firstTouch"
+          ]
+        }
+      },
+      {
+        "age": 25,
+        "condition": 88,
+        "form": 6.95,
+        "id": 22,
+        "injured": false,
+        "name": "Yiğit Aslan",
+        "positions": [
+          "AMC",
+          "MC"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "playmaker",
+          "roleName": "Oyun kurucu",
+          "score": 81.5,
+          "strengths": [
+            "passing",
+            "vision",
+            "decisions",
+            "firstTouch",
+            "technique",
+            "composure"
+          ]
+        }
+      },
+      {
+        "age": 28,
+        "condition": 79,
+        "form": 6.99,
+        "id": 23,
+        "injured": true,
+        "name": "Can Efe",
+        "positions": [
+          "DC",
+          "DR"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "rightBack",
+          "roleName": "Sağ bek",
+          "score": 69.2,
+          "strengths": [
+            "stamina",
+            "crossing",
+            "workRate",
+            "passing"
+          ]
+        }
+      },
+      {
+        "age": 31,
+        "condition": 84,
+        "form": 7.56,
+        "id": 24,
+        "injured": true,
+        "name": "Özgür Yalın",
+        "positions": [
+          "DL"
+        ],
+        "role": {
+          "coverage": 100.0,
+          "missing": [],
+          "roleId": "leftBack",
+          "roleName": "Sol bek",
+          "score": 70.8,
+          "strengths": [
+            "positioning",
+            "pace",
+            "crossing",
+            "workRate",
+            "passing"
+          ]
+        }
+      }
+    ],
+    "total": 24
+  }
+}

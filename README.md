@@ -1,36 +1,39 @@
-# FM27 Assistant — macOS
+# FM27 Assistant
 
-Can Özcan için özel macOS uyarlaması. Football Manager 27 taktik dosyalarını ve
-ChatGPT hesabıyla çalışan yerel Codex asistanını Mac üzerinde kullanmayı hedefler.
+Can için özel, oyun öncesinde de kullanılabilen bir taktik çalışma alanı.
+Aktif geliştirme **Rust + Tauri 2 + React + SQLite** üzerinde `desktop/` altında sürüyor.
 
-**Durum: geliştirme önizlemesi.** Apple Silicon paketleme, macOS klasörleri ve
-Codex keşfi eklendi. Mac üzerinde canlı kadro/oyuncu verisi okuma henüz uygulanmadı;
-bu nedenle oyuncu formuna ve özelliklerine dayanan tam asistan henüz hazır değil.
+## Rust sürümünde
 
-## Başlangıç
+- 24 kurgusal oyuncuyla hemen başlayan çalışma alanı.
+- Kadro arama, mevki filtresi, oyuncu özellikleri ve açıklanabilir rol puanları.
+- 4–3–3 DM, 4–2–3–1 ve 4–4–2 saha görünümü; aynı oyuncuyu iki kez seçmeyen ilk 11 analizi.
+- Doğrulamalı özel JSON kadro aktarımı ve Mac'te kalıcı SQLite kaydı.
+- Yerel Codex üzerinden ChatGPT girişi, model seçimi ve akış halinde AI sohbeti.
 
-- [Apple Silicon önizleme paketini indir](https://github.com/cozcanco-hash/Fm27-Assistant/actions/runs/42161326949/artifacts/13477226606) — 20 Kasım 2026'ya kadar saklanır.
-- [macOS kurulum, derleme ve mevcut sınırlar](MACOS.md)
-- [Apple Silicon derlemeleri ve test sonuçları](https://github.com/cozcanco-hash/Fm27-Assistant/actions/workflows/macos-preview.yml)
-- [Orijinal proje dokümantasyonu](README_UPSTREAM.md)
+**Oyun sahibi olman gerekmiyor.** Örnek kadro tamamen kurgusal; gerçek FM27
+verisi veya oyuna canlı bağlantı içermiyor. Bu ilk Rust sürümü, Java projesindeki
+tüm özelliklerin taşındığı bir sürüm değildir. Gerçek hesap ve oyun testi ayrıca yapılacak.
 
-Uygulama yerel bir `.app` başlatıcısı ve tarayıcı arayüzü kullanır. Java çalışma
-ortamı pakete dahildir. Codex CLI ve ChatGPT hesabıyla giriş kullanıcının Mac'inde
-kurulur; abonelik sınırları geçerlidir.
+- [Kurulum, geliştirme ve veri şeması](desktop/README.md)
+- [Rust testleri ve Apple Silicon paketleri](https://github.com/cozcanco-hash/Fm27-Assistant/actions/workflows/rust-desktop.yml)
+- [Kurgusal örnek kadro](desktop/fixtures/demo-squad.json)
+- [Önceki Java önizlemesi ve doğrulaması](JAVA_PREVIEW.md)
 
-## Doğrulama — 6 Kasım 2026
+```bash
+cd desktop
+npm ci
+npm run desktop:dev
+```
 
-Apple Silicon üzerinde tam derleme ve paket açılış kontrolü başarılı:
-**403 test geçti**, yerel oyun/hesap/örnek dosya gerektiren **9 test atlandı**.
-Test kapsamı eşikleri sağlandı; paketlenmiş uygulama kendi Java ortamıyla başladı,
-sağlık kontrolü `UP`, ana sayfa yanıtı `HTTP 200` oldu.
-[Başarılı çalıştırma ve raporlar](https://github.com/cozcanco-hash/Fm27-Assistant/actions/runs/42161326949).
+Geliştirme için Rust, Node.js 24 ve Xcode komut satırı araçları gerekir.
+Derlenmiş Mac uygulamasında Rust, Node veya Java kurulumu gerekmez.
+ChatGPT özellikleri için resmi Codex CLI ve kullanıcının kendi hesabıyla giriş gerekir.
 
-Bu doğrulama, senin Mac'inde Finder'dan açılış, ChatGPT girişi veya gerçek FM27
-kadrosuyla yapılmış bir test değildir. Paket imzasız bir geliştirici önizlemesidir.
+## Kaynak geçmişi
 
-## Kaynak
-
-Temel proje: [JelmerBouma1985/fm-ai-assistent](https://github.com/JelmerBouma1985/fm-ai-assistent),
-commit `a06ac845acfd6c0eccbd61e3a633b3518584e457`.
-Bu depo özel tutulur; upstream kod için yeni bir lisans beyan edilmez.
+Java referansı [JelmerBouma1985/fm-ai-assistent](https://github.com/JelmerBouma1985/fm-ai-assistent)
+projesinin `a06ac845acfd6c0eccbd61e3a633b3518584e457` commitinden aktarılmıştır.
+Orijinal dokümantasyon [README_UPSTREAM.md](README_UPSTREAM.md) dosyasında korunur.
+Rust çalışma alanı bu depoda yeni uygulanmıştır. Depo özel tutulur; upstream kod
+üzerinde yeni bir lisans hakkı beyan edilmez.

@@ -3,11 +3,9 @@ name: macOS Apple Silicon preview
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - '**.md'
+    paths: ['pom.xml', 'src/**', '.mvn/**', 'mvnw*', 'scripts/macos-smoke.sh', '.github/workflows/macos-preview.yml']
   pull_request:
-    paths-ignore:
-      - '**.md'
+    paths: ['pom.xml', 'src/**', '.mvn/**', 'mvnw*', 'scripts/macos-smoke.sh', '.github/workflows/macos-preview.yml']
   workflow_dispatch:
 
 permissions:

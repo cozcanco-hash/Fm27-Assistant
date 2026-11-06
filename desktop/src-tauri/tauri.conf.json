@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "FM27 Assistant",
+  "version": "0.1.0",
+  "identifier": "studio.kutra.fm27assistant",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [{
+      "label": "main", "title": "FM27 Assistant", "width": 1440, "height": 940,
+      "minWidth": 1080, "minHeight": 720, "resizable": true,
+      "backgroundColor": "#0d1015", "titleBarStyle": "Overlay", "hiddenTitle": true
+    }],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src ipc: http://ipc.localhost; object-src 'none'; base-uri 'none'; frame-src 'none'"
+    }
+  },
+  "bundle": {
+    "active": true, "targets": ["app", "dmg"], "category": "Sports",
+    "shortDescription": "Football Manager için kişisel taktik çalışma alanı",
+    "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
+    "macOS": { "minimumSystemVersion": "12.0", "signingIdentity": "-" }
+  }
+}

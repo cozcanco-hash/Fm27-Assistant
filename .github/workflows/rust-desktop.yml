@@ -1,0 +1,119 @@
+name: Rust desktop
+
+on:
+  push:
+    branches: [main]
+    paths: ['desktop/**', '.github/workflows/rust-desktop.yml']
+  pull_request:
+    paths: ['desktop/**', '.github/workflows/rust-desktop.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rust-desktop-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: desktop
+
+jobs:
+  core:
+    name: Rust core and frontend checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: '1.99.1'
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: desktop -> target
+          cache-on-failure: true
+      - run: npm ci --no-audit --no-fund
+      - run: cargo fmt --all --check
+      - run: cargo clippy --locked -p fm27-core --all-targets -- -D warnings
+      - run: cargo test --locked -p fm27-core
+      - name: Check browser fixtures against Rust calculations
+        run: |
+          cargo run --locked --quiet -p fm27-core --example preview > /tmp/preview-state.json
+          cmp fixtures/preview-state.json /tmp/preview-state.json
+      - run: npm run build
+      - name: Install browser for interface checks
+        run: npx playwright install --with-deps chromium --only-shell
+      - run: npm test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Rust-interface-checks
+          path: |
+            desktop/test-results/
+            desktop/playwright-report/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  macos:
+    name: Apple Silicon application
+    runs-on: macos-15
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: '1.99.1'
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: desktop -> target
+          cache-on-failure: true
+      - name: Check architecture
+        run: test "$(uname -m)" = arm64
+      - run: npm ci --no-audit --no-fund
+      - run: npm run icons
+      - run: npm run build
+      - run: cargo clippy --locked --workspace --all-targets -- -D warnings
+      - run: cargo test --locked --workspace
+      - run: npm run desktop:build
+      - name: Verify native WebView and Rust data path
+        run: bash scripts/macos-smoke.sh
+      - name: Measure a synthetic 5,000-player core workload
+        run: cargo run --locked --release --quiet -p fm27-core --example benchmark > target/core-benchmark.json
+      - name: Package and measure
+        run: |
+          mkdir -p target/distribution
+          ditto -c -k --sequesterRsrc --keepParent "target/release/bundle/macos/FM27 Assistant.app" target/distribution/FM27-Assistant-rust-arm64.zip
+          cp target/release/bundle/dmg/*.dmg target/distribution/
+          cd target/distribution
+          shasum -a 256 *.zip *.dmg > SHA256SUMS.txt
+          du -sh ../release/bundle/macos/*.app *.zip *.dmg
+          cat ../native-smoke.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FM27-Assistant-rust-macos-arm64
+          path: desktop/target/distribution/
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: Rust-desktop-verification
+          path: |
+            desktop/target/native-smoke.json
+            desktop/target/native-smoke.log
+            desktop/target/core-benchmark.json
+          if-no-files-found: ignore
+          retention-days: 14
