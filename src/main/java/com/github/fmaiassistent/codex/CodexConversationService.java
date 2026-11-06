@@ -1,0 +1,739 @@
+package com.github.fmaiassistent.codex;
+
+import com.github.fmaiassistent.ai.AiPromptContext;
+import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+@Service
+public class CodexConversationService {
+    private static final Logger log = LoggerFactory.getLogger(CodexConversationService.class);
+
+    private final CodexAppServerClient client;
+    private final CodexProperties properties;
+    private final ObjectMapper mapper;
+    private final AiPromptContext promptContext;
+    private final Map<String, CopyOnWriteArrayList<Consumer<CodexEvent>>> listeners = new ConcurrentHashMap<>();
+    private final CopyOnWriteArrayList<Consumer<CodexAvailability>> availabilityListeners = new CopyOnWriteArrayList<>();
+    private final Map<String, String> activeTurns = new ConcurrentHashMap<>();
+    private final Map<String, String> selectedModels = new ConcurrentHashMap<>();
+    private final Set<String> completedTurns = ConcurrentHashMap.newKeySet();
+    private final Map<String, PendingApproval> approvals = new ConcurrentHashMap<>();
+
+    private volatile CodexAvailability availability;
+    private volatile String activeLoginId;
+
+    CodexConversationService(
+            CodexAppServerClient client,
+            CodexProperties properties,
+            ObjectMapper mapper,
+            AiPromptContext promptContext) {
+        this.client = client;
+        this.properties = properties;
+        this.mapper = mapper;
+        this.promptContext = promptContext;
+        availability = properties.enabled()
+                ? new CodexAvailability(CodexAvailability.State.STARTING, "Codex is starting")
+                : new CodexAvailability(CodexAvailability.State.DISABLED, "Codex integration is disabled");
+        client.onNotification(this::handleNotification);
+        client.onServerRequest(this::handleServerRequest);
+        client.onFailure(this::handleTransportFailure);
+    }
+
+    @PostConstruct
+    void start() {
+        if (!properties.enabled()) {
+            return;
+        }
+        Thread.ofVirtual().name("codex-app-server-startup").start(() -> beginStartup(client::start));
+    }
+
+    public CodexAvailability availability() {
+        return availability;
+    }
+
+    public CodexSubscription subscribeAvailability(Consumer<CodexAvailability> listener) {
+        availabilityListeners.add(listener);
+        return () -> availabilityListeners.remove(listener);
+    }
+
+    public CodexSubscription subscribe(String threadId, Consumer<CodexEvent> listener) {
+        listeners.computeIfAbsent(threadId, ignored -> new CopyOnWriteArrayList<>()).add(listener);
+        return () -> {
+            CopyOnWriteArrayList<Consumer<CodexEvent>> threadListeners = listeners.get(threadId);
+            if (threadListeners != null) {
+                threadListeners.remove(listener);
+                if (threadListeners.isEmpty()) {
+                    listeners.remove(threadId, threadListeners);
+                }
+            }
+        };
+    }
+
+    public CompletableFuture<CodexConversationSnapshot> newConversation() {
+        return newConversation(null);
+    }
+
+    public CompletableFuture<CodexConversationSnapshot> newConversation(String model) {
+        String selected = model == null || model.isBlank() ? null : model;
+        return readyThen(() -> selected == null ? client.startThread() : client.startThread(selected))
+                .thenApply(result -> {
+                    JsonNode thread = result.path("thread");
+                    if (selected != null) {
+                        selectedModels.put(thread.path("id").asString(), selected);
+                    }
+                    return snapshot(thread);
+                });
+    }
+
+    public CompletableFuture<List<CodexModel>> models() {
+        return readyThen(client::listModels).thenApply(result -> {
+            List<CodexModel> models = new ArrayList<>();
+            result.path("data").forEach(value -> {
+                String id = value.path("model").asString(value.path("id").asString());
+                if (!id.isBlank()) {
+                    models.add(new CodexModel(id, value.path("displayName").asString(id)));
+                }
+            });
+            return List.copyOf(models);
+        });
+    }
+
+    public void selectModel(String threadId, String model) {
+        if (activeTurns.containsKey(threadId)) {
+            throw new CodexException("Cannot change model during an active turn");
+        }
+        selectedModels.put(threadId, model == null ? "" : model);
+    }
+
+    public CompletableFuture<List<CodexConversation>> listConversations() {
+        return readyThen(client::listThreads).thenApply(result -> {
+            List<CodexConversation> conversations = new ArrayList<>();
+            result.path("data").forEach(thread -> conversations.add(conversation(thread)));
+            return List.copyOf(conversations);
+        });
+    }
+
+    public CompletableFuture<CodexConversationSnapshot> openConversation(String threadId) {
+        return readyThen(() -> client.resumeThread(threadId))
+                .thenCompose(ignored -> client.readThread(threadId))
+                .thenApply(result -> snapshot(result.path("thread")));
+    }
+
+    public CompletableFuture<String> sendMessage(String threadId, String text) {
+        if (text == null || text.isBlank()) {
+            return CompletableFuture.failedFuture(new IllegalArgumentException("Message cannot be empty"));
+        }
+        String messageId = UUID.randomUUID().toString();
+        String reservation = "starting:" + messageId;
+        if (activeTurns.putIfAbsent(threadId, reservation) != null) {
+            return CompletableFuture.failedFuture(new CodexException("A turn is already active in this conversation"));
+        }
+        String enrichedPrompt = promptContext.enrich("codex:" + threadId, text);
+        CompletableFuture<String> turn = readyThen(() -> {
+            String model = selectedModels.get(threadId);
+            return model == null || model.isBlank()
+                    ? client.startTurn(threadId, enrichedPrompt, messageId)
+                    : client.startTurn(threadId, enrichedPrompt, messageId, model);
+        }).thenApply(result -> {
+            String turnId = result.path("turn").path("id").asString();
+            if (completedTurns.remove(turnId)) {
+                activeTurns.remove(threadId, reservation);
+            } else {
+                activeTurns.compute(threadId, (ignored, current) -> reservation.equals(current) ? turnId : current);
+            }
+            log.info("Started Codex turn threadId={} turnId={}", threadId, turnId);
+            return turnId;
+        });
+        turn.whenComplete((ignored, error) -> {
+            if (error != null) {
+                activeTurns.remove(threadId, reservation);
+            }
+        });
+        return turn;
+    }
+
+    public CompletableFuture<Void> interrupt(String threadId) {
+        String turnId = activeTurns.get(threadId);
+        if (turnId == null) {
+            return CompletableFuture.completedFuture(null);
+        }
+        if (turnId.startsWith("starting:")) {
+            return CompletableFuture.failedFuture(new CodexException("The Codex turn is still starting"));
+        }
+        return client.interruptTurn(threadId, turnId).thenApply(ignored -> {
+            log.info("Interrupted Codex turn threadId={} turnId={}", threadId, turnId);
+            return null;
+        });
+    }
+
+    public void decideApproval(String requestKey, ApprovalDecision decision) {
+        PendingApproval pending = approvals.get(requestKey);
+        if (pending == null) {
+            throw new CodexException("This approval request is no longer active");
+        }
+        if (decision == ApprovalDecision.ALLOW_ALWAYS && !canAllowAlways(pending)) {
+            throw new CodexException("Codex did not provide a persistent rule for this approval request");
+        }
+        if (!approvals.remove(requestKey, pending)) {
+            throw new CodexException("This approval request is no longer active");
+        }
+        ObjectNode result;
+        if ("mcpServer/elicitation/request".equals(pending.method())) {
+            result = mapper.createObjectNode().put("action", switch (decision) {
+                case ALLOW_ONCE, ALLOW_SESSION -> "accept";
+                case DENY -> "decline";
+                case ALLOW_ALWAYS -> throw new IllegalStateException("Persistent MCP approval is not supported");
+            });
+            if (decision == ApprovalDecision.ALLOW_ONCE || decision == ApprovalDecision.ALLOW_SESSION) {
+                result.set("content", mapper.createObjectNode());
+            }
+            if (decision == ApprovalDecision.ALLOW_SESSION) {
+                result.set("_meta", mapper.createObjectNode().put("persist", "session"));
+            }
+        } else if ("item/permissions/requestApproval".equals(pending.method())) {
+            JsonNode granted = decision == ApprovalDecision.ALLOW_ONCE
+                    || decision == ApprovalDecision.ALLOW_SESSION
+                    ? pending.params().path("permissions")
+                    : mapper.createObjectNode();
+            result = mapper.createObjectNode()
+                    .put("scope", decision == ApprovalDecision.ALLOW_SESSION ? "session" : "turn")
+                    .set("permissions", granted);
+        } else if (decision == ApprovalDecision.ALLOW_ALWAYS) {
+            result = persistentApprovalResult(pending.params());
+        } else {
+            result = mapper.createObjectNode().put("decision", switch (decision) {
+                case ALLOW_ONCE -> "accept";
+                case ALLOW_SESSION -> "acceptForSession";
+                case DENY -> "decline";
+                case ALLOW_ALWAYS -> throw new IllegalStateException("Persistent approval was not handled");
+            });
+        }
+        client.respond(pending.id(), result);
+        log.info("Resolved Codex approval method={} decision={} threadId={}",
+                pending.method(), decision, pending.threadId());
+    }
+
+    private ObjectNode persistentApprovalResult(JsonNode params) {
+        JsonNode execPolicy = params.path("proposedExecpolicyAmendment");
+        if (hasValues(execPolicy) && decisionAvailable(params, "acceptWithExecpolicyAmendment")) {
+            ObjectNode amendment = mapper.createObjectNode().set("execpolicy_amendment", execPolicy);
+            return mapper.createObjectNode().set("decision",
+                    mapper.createObjectNode().set("acceptWithExecpolicyAmendment", amendment));
+        }
+        JsonNode networkPolicy = allowNetworkPolicy(params);
+        ObjectNode amendment = mapper.createObjectNode().set("network_policy_amendment", networkPolicy);
+        return mapper.createObjectNode().set("decision",
+                mapper.createObjectNode().set("applyNetworkPolicyAmendment", amendment));
+    }
+
+    private static boolean canAllowAlways(PendingApproval pending) {
+        if (!"item/commandExecution/requestApproval".equals(pending.method())) {
+            return false;
+        }
+        JsonNode params = pending.params();
+        return (hasValues(params.path("proposedExecpolicyAmendment"))
+                && decisionAvailable(params, "acceptWithExecpolicyAmendment"))
+                || (allowNetworkPolicy(params) != null
+                && decisionAvailable(params, "applyNetworkPolicyAmendment"));
+    }
+
+    private static boolean hasValues(JsonNode value) {
+        return value.isArray() && !value.isEmpty();
+    }
+
+    private static JsonNode allowNetworkPolicy(JsonNode params) {
+        for (JsonNode amendment : params.path("proposedNetworkPolicyAmendments")) {
+            if ("allow".equals(amendment.path("action").asString())) {
+                return amendment;
+            }
+        }
+        return null;
+    }
+
+    private static boolean decisionAvailable(JsonNode params, String decision) {
+        JsonNode available = params.path("availableDecisions");
+        if (!available.isArray()) {
+            return true;
+        }
+        for (JsonNode value : available) {
+            if (value.has(decision)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public CompletableFuture<Void> restart() {
+        setAvailability(new CodexAvailability(CodexAvailability.State.STARTING, "Codex is restarting"));
+        CompletableFuture<Void> restart = invoke(client::restart)
+                .thenCompose(ignored -> client.account())
+                .thenAccept(this::accountReady);
+        restart.whenComplete((ignored, error) -> {
+            if (error != null) {
+                handleStartupFailure(unwrap(error));
+            }
+        });
+        return restart;
+    }
+
+    public CompletableFuture<CodexLogin> startChatGptLogin() {
+        setAvailability(new CodexAvailability(
+                CodexAvailability.State.AUTHENTICATING,
+                "Waiting for ChatGPT sign-in"));
+        CompletableFuture<CodexLogin> login = invoke(client::startChatGptLogin).thenApply(response -> {
+            String loginId = response.path("loginId").asString();
+            String authUrl = response.path("authUrl").asString();
+            if (loginId.isBlank() || authUrl.isBlank()) {
+                throw new CodexException("Codex did not return a ChatGPT sign-in URL");
+            }
+            activeLoginId = loginId;
+            return new CodexLogin(loginId, authUrl);
+        });
+        login.whenComplete((ignored, error) -> {
+            if (error != null) {
+                setAuthenticationRequired("Could not start ChatGPT sign-in: " + safeMessage(unwrap(error)));
+            }
+        });
+        return login;
+    }
+
+    public CompletableFuture<Void> cancelLogin(String loginId) {
+        if (loginId == null || loginId.isBlank()) {
+            return CompletableFuture.completedFuture(null);
+        }
+        return invoke(() -> client.cancelLogin(loginId)).thenAccept(ignored -> {
+            activeLoginId = null;
+            setAuthenticationRequired("Sign in with ChatGPT to use Codex.");
+        });
+    }
+
+    public CompletableFuture<Void> refreshAccount() {
+        return invoke(client::account).thenAccept(this::accountReady);
+    }
+
+    public enum ApprovalDecision {
+        ALLOW_ONCE,
+        ALLOW_SESSION,
+        ALLOW_ALWAYS,
+        DENY
+    }
+
+    private <T> CompletableFuture<T> readyThen(Supplier<CompletableFuture<T>> operation) {
+        if (!availability.ready()) {
+            return CompletableFuture.failedFuture(new CodexException(availability.message()));
+        }
+        return invoke(operation);
+    }
+
+    private void beginStartup(Supplier<CompletableFuture<JsonNode>> startup) {
+        invoke(startup)
+                .thenCompose(ignored -> client.account())
+                .thenAccept(this::accountReady)
+                .exceptionally(error -> {
+                    handleStartupFailure(unwrap(error));
+                    return null;
+                });
+    }
+
+    private static <T> CompletableFuture<T> invoke(Supplier<CompletableFuture<T>> operation) {
+        try {
+            return operation.get();
+        } catch (Throwable error) {
+            return CompletableFuture.failedFuture(error);
+        }
+    }
+
+    private void accountReady(JsonNode response) {
+        JsonNode account = response.path("account");
+        if (account.isMissingNode() || account.isNull()) {
+            setAuthenticationRequired("Codex is not authenticated. Sign in with ChatGPT to continue.");
+            return;
+        }
+        String type = account.path("type").asString();
+        if (!"chatgpt".equals(type)) {
+            setAuthenticationRequired("Codex is not signed in with ChatGPT. Sign in to continue.");
+            return;
+        }
+        activeLoginId = null;
+        String plan = account.path("planType").asString("");
+        setAvailability(new CodexAvailability(CodexAvailability.State.READY,
+                plan.isBlank() ? "Codex ready" : "Codex ready · " + plan));
+    }
+
+    private void setAuthenticationRequired(String message) {
+        setAvailability(new CodexAvailability(CodexAvailability.State.AUTHENTICATION_REQUIRED, message));
+    }
+
+    private void handleStartupFailure(Throwable error) {
+        String message = safeMessage(error);
+        CodexAvailability.State state = message.contains("not installed")
+                ? CodexAvailability.State.UNAVAILABLE
+                : CodexAvailability.State.ERROR;
+        setAvailability(new CodexAvailability(state, message));
+    }
+
+    private void handleTransportFailure(Throwable error) {
+        String message = safeMessage(error);
+        setAvailability(new CodexAvailability(CodexAvailability.State.ERROR, message));
+        activeTurns.clear();
+        completedTurns.clear();
+        listeners.forEach((threadId, threadListeners) ->
+                emit(new CodexEvent.Failure(threadId, message)));
+    }
+
+    private void setAvailability(CodexAvailability value) {
+        availability = value;
+        availabilityListeners.forEach(listener -> safelyAccept(listener, value));
+    }
+
+    private void handleNotification(CodexJsonRpcClient.Notification notification) {
+        JsonNode params = notification.params();
+        String threadId = params.path("threadId").asString(null);
+        switch (notification.method()) {
+            case "account/login/completed" -> handleLoginCompleted(params);
+            case "account/updated" -> refreshAccount().exceptionally(error -> {
+                handleStartupFailure(unwrap(error));
+                return null;
+            });
+            case "turn/started" -> {
+                String turnId = params.path("turn").path("id").asString();
+                activeTurns.put(threadId, turnId);
+                emit(new CodexEvent.TurnStarted(threadId, turnId));
+            }
+            case "item/started" -> emitItemStarted(threadId, params.path("turnId").asString(), params.path("item"));
+            case "item/agentMessage/delta" -> emit(new CodexEvent.AssistantTextDelta(
+                    threadId,
+                    params.path("turnId").asString(),
+                    params.path("itemId").asString(),
+                    params.path("delta").asString()));
+            case "item/completed" -> emitItemCompleted(threadId, params.path("turnId").asString(), params.path("item"));
+            case "turn/completed" -> emitTurnCompleted(threadId, params.path("turn"));
+            case "mcpServer/startupStatus/updated" -> emit(new CodexEvent.McpStatusChanged(
+                    threadId,
+                    params.path("name").asString(),
+                    params.path("status").asString(),
+                    params.path("error").asString(null)));
+            case "error" -> {
+                String message = params.path("error").path("message").asString("Codex reported an error");
+                if (threadId != null) {
+                    emit(new CodexEvent.Failure(threadId, message));
+                }
+            }
+            default -> log.trace("Ignoring Codex notification method={}", notification.method());
+        }
+    }
+
+    private void handleLoginCompleted(JsonNode params) {
+        String loginId = params.path("loginId").asString(null);
+        if (activeLoginId != null && loginId != null && !activeLoginId.equals(loginId)) {
+            log.debug("Ignoring completion for an older Codex login loginId={}", loginId);
+            return;
+        }
+        if (!params.path("success").asBoolean(false)) {
+            activeLoginId = null;
+            setAuthenticationRequired(params.path("error").asString("ChatGPT sign-in was not completed."));
+            return;
+        }
+        refreshAccount().exceptionally(error -> {
+            handleStartupFailure(unwrap(error));
+            return null;
+        });
+    }
+
+    private void emitItemStarted(String threadId, String turnId, JsonNode item) {
+        String type = item.path("type").asString();
+        String itemId = item.path("id").asString();
+        if ("agentMessage".equals(type)) {
+            emit(new CodexEvent.AssistantStarted(threadId, turnId, itemId));
+        } else if (isTool(type)) {
+            emit(new CodexEvent.ToolStarted(threadId, turnId, itemId, toolLabel(item), toolDetails(item)));
+        }
+    }
+
+    private void emitItemCompleted(String threadId, String turnId, JsonNode item) {
+        String type = item.path("type").asString();
+        String itemId = item.path("id").asString();
+        if ("agentMessage".equals(type)) {
+            emit(new CodexEvent.AssistantCompleted(
+                    threadId, turnId, itemId, item.path("text").asString()));
+        } else if (isTool(type)) {
+            emit(new CodexEvent.ToolCompleted(
+                    threadId,
+                    turnId,
+                    itemId,
+                    toolLabel(item),
+                    item.path("status").asString("completed"),
+                    toolDetails(item)));
+        }
+    }
+
+    private void emitTurnCompleted(String threadId, JsonNode turn) {
+        String turnId = turn.path("id").asString();
+        activeTurns.computeIfPresent(threadId, (ignored, current) -> {
+            if (current.startsWith("starting:")) {
+                completedTurns.add(turnId);
+                return null;
+            }
+            return current.equals(turnId) ? null : current;
+        });
+        String status = turn.path("status").asString("completed");
+        String error = turn.path("error").path("message").asString(null);
+        emit(new CodexEvent.TurnCompleted(threadId, turnId, status, error));
+        log.info("Completed Codex turn threadId={} turnId={} status={}", threadId, turnId, status);
+    }
+
+    private void handleServerRequest(CodexJsonRpcClient.ServerRequest request) {
+        JsonNode params = request.params();
+        String method = request.method();
+        CodexEvent.ApprovalKind kind;
+        String summary;
+        if ("item/commandExecution/requestApproval".equals(method)) {
+            kind = CodexEvent.ApprovalKind.COMMAND;
+            summary = params.path("command").asString("Codex wants to run a command");
+        } else if ("item/fileChange/requestApproval".equals(method)) {
+            kind = CodexEvent.ApprovalKind.FILE_CHANGE;
+            summary = "Codex wants to modify files";
+        } else if ("item/permissions/requestApproval".equals(method)) {
+            kind = CodexEvent.ApprovalKind.PERMISSIONS;
+            summary = "Codex requests additional permissions";
+        } else if ("mcpServer/elicitation/request".equals(method)
+                && "mcp_tool_call".equals(params.path("_meta").path("codex_approval_kind").asString())) {
+            kind = CodexEvent.ApprovalKind.MCP_TOOL;
+            summary = params.path("message").asString("Codex wants to call an MCP tool");
+        } else {
+            client.respondError(request.id(), -32601,
+                    "This client does not support the app-server request: " + method);
+            log.warn("Safely rejected unsupported Codex server request method={}", method);
+            return;
+        }
+        String threadId = params.path("threadId").asString();
+        String requestKey = request.id().toString();
+        String details = approvalDetails(params);
+        PendingApproval pending = new PendingApproval(request.id(), method, threadId, params);
+        approvals.put(requestKey, pending);
+        emit(new CodexEvent.ApprovalRequested(
+                threadId,
+                params.path("turnId").asString(),
+                requestKey,
+                kind,
+                summary,
+                details,
+                canAllowAlways(pending)));
+    }
+
+    private CodexConversationSnapshot snapshot(JsonNode thread) {
+        List<CodexConversationItem> items = new ArrayList<>();
+        String activeTurnId = null;
+        for (JsonNode turn : thread.path("turns")) {
+            if ("inProgress".equals(turn.path("status").asString())) {
+                activeTurnId = turn.path("id").asString();
+            }
+            for (JsonNode item : turn.path("items")) {
+                CodexConversationItem converted = historyItem(item);
+                if (converted != null) {
+                    items.add(converted);
+                }
+            }
+        }
+        String threadId = thread.path("id").asString();
+        if (activeTurnId != null) {
+            activeTurns.put(threadId, activeTurnId);
+        }
+        String selected = selectedModels.getOrDefault(threadId, thread.path("model").asString(""));
+        return new CodexConversationSnapshot(conversation(thread), List.copyOf(items), activeTurnId,
+                selected.isBlank() ? null : selected);
+    }
+
+    private CodexConversationItem historyItem(JsonNode item) {
+        String type = item.path("type").asString();
+        String id = item.path("id").asString(UUID.randomUUID().toString());
+        return switch (type) {
+            case "userMessage" -> new CodexConversationItem(
+                    id, CodexConversationItem.Kind.USER, userText(item), "completed", null);
+            case "agentMessage" -> new CodexConversationItem(
+                    id, CodexConversationItem.Kind.ASSISTANT, item.path("text").asString(), "completed", null);
+            case "mcpToolCall", "commandExecution", "fileChange", "dynamicToolCall", "webSearch" ->
+                    new CodexConversationItem(
+                            id,
+                            CodexConversationItem.Kind.TOOL,
+                            toolLabel(item),
+                            item.path("status").asString("completed"),
+                            toolDetails(item));
+            default -> null;
+        };
+    }
+
+    private CodexConversation conversation(JsonNode thread) {
+        String preview = thread.path("preview").asString("");
+        String name = thread.path("name").asString("");
+        String title = !name.isBlank() ? name : firstLine(preview);
+        if (title.isBlank()) {
+            title = "New conversation";
+        }
+        return new CodexConversation(
+                thread.path("id").asString(),
+                abbreviate(title, 55),
+                abbreviate(preview, 120),
+                Instant.ofEpochSecond(thread.path("updatedAt").asLong(0)));
+    }
+
+    private static String userText(JsonNode item) {
+        StringBuilder text = new StringBuilder();
+        for (JsonNode content : item.path("content")) {
+            if ("text".equals(content.path("type").asString())) {
+                if (!text.isEmpty()) {
+                    text.append('\n');
+                }
+                text.append(content.path("text").asString());
+            }
+        }
+        return text.toString();
+    }
+
+    private static boolean isTool(String type) {
+        return switch (type) {
+            case "mcpToolCall", "commandExecution", "fileChange", "dynamicToolCall", "webSearch" -> true;
+            default -> false;
+        };
+    }
+
+    private static String toolLabel(JsonNode item) {
+        return switch (item.path("type").asString()) {
+            case "mcpToolCall" -> item.path("server").asString() + " · " + item.path("tool").asString();
+            case "commandExecution" -> "Command · " + abbreviate(item.path("command").asString(), 100);
+            case "fileChange" -> "File changes";
+            case "dynamicToolCall" -> "Tool · " + item.path("tool").asString();
+            case "webSearch" -> "Web search · " + item.path("query").asString();
+            default -> "Tool activity";
+        };
+    }
+
+    private static String toolDetails(JsonNode item) {
+        return switch (item.path("type").asString()) {
+            case "mcpToolCall" -> mcpToolDetails(item);
+            case "dynamicToolCall" -> compactJson(item.path("arguments"));
+            case "commandExecution" -> item.path("cwd").asString();
+            case "fileChange" -> item.path("changes").size() + " file change(s)";
+            default -> "";
+        };
+    }
+
+    private static String approvalDetails(JsonNode params) {
+        List<String> details = new ArrayList<>();
+        if (!params.path("cwd").asString("").isBlank()) {
+            details.add("Working directory: " + params.path("cwd").asString());
+        }
+        if (!params.path("reason").asString("").isBlank()) {
+            details.add("Reason: " + params.path("reason").asString());
+        }
+        if (!params.path("grantRoot").asString("").isBlank()) {
+            details.add("Requested write root: " + params.path("grantRoot").asString());
+        }
+        JsonNode network = params.path("networkApprovalContext");
+        if (!network.isMissingNode()) {
+            String host = network.path("host").asString("");
+            String protocol = network.path("protocol").asString("");
+            String port = network.path("port").asString("");
+            if (!host.isBlank()) {
+                details.add("Network: " + (protocol.isBlank() ? "" : protocol + "://")
+                        + host + (port.isBlank() ? "" : ":" + port));
+            }
+        }
+        if (!params.path("permissions").isMissingNode()) {
+            details.add("Requested permissions: " + compactJson(params.path("permissions")));
+        }
+        JsonNode metadata = params.path("_meta");
+        if ("mcp_tool_call".equals(metadata.path("codex_approval_kind").asString())) {
+            details.add("MCP server: " + params.path("serverName").asString("unknown"));
+            if (!metadata.path("tool_description").asString().isBlank()) {
+                details.add(metadata.path("tool_description").asString());
+            }
+            if (!metadata.path("tool_params").isMissingNode()) {
+                details.add("Arguments: " + compactJson(metadata.path("tool_params")));
+            }
+        }
+        return String.join("\n", details);
+    }
+
+    private static String mcpToolDetails(JsonNode item) {
+        List<String> details = new ArrayList<>();
+        String arguments = compactJson(item.path("arguments"));
+        if (!arguments.isBlank()) {
+            details.add("Arguments: " + arguments);
+        }
+        JsonNode error = item.path("error");
+        if (!error.isMissingNode() && !error.isNull()) {
+            details.add("Error: " + compactJson(error));
+        } else {
+            JsonNode result = item.path("result");
+            if (!result.isMissingNode() && !result.isNull()) {
+                details.add("Result: " + compactJson(result));
+            }
+        }
+        return abbreviate(String.join("\n", details), 600);
+    }
+
+    private void emit(CodexEvent event) {
+        if (event.threadId() == null) {
+            return;
+        }
+        List<Consumer<CodexEvent>> threadListeners = listeners.get(event.threadId());
+        if (threadListeners != null) {
+            threadListeners.forEach(listener -> safelyAccept(listener, event));
+        }
+    }
+
+    private static <T> void safelyAccept(Consumer<T> listener, T value) {
+        try {
+            listener.accept(value);
+        } catch (RuntimeException ex) {
+            log.warn("Codex conversation listener failed", ex);
+        }
+    }
+
+    private static Throwable unwrap(Throwable error) {
+        return error.getCause() == null ? error : error.getCause();
+    }
+
+    private static String safeMessage(Throwable error) {
+        String message = error.getMessage();
+        return message == null || message.isBlank() ? "Codex app-server failed" : message;
+    }
+
+    private static String compactJson(JsonNode node) {
+        String value = node == null || node.isMissingNode() ? "" : node.toString();
+        return abbreviate(value, 600);
+    }
+
+    private static String firstLine(String value) {
+        int newline = value.indexOf('\n');
+        return newline < 0 ? value : value.substring(0, newline);
+    }
+
+    private static String abbreviate(String value, int maxLength) {
+        if (value == null || value.length() <= maxLength) {
+            return value == null ? "" : value;
+        }
+        return value.substring(0, maxLength - 1) + "…";
+    }
+
+    private record PendingApproval(JsonNode id, String method, String threadId, JsonNode params) {
+    }
+}

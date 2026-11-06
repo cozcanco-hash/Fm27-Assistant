@@ -1,0 +1,47 @@
+---
+import { site } from '../config/site';
+const currentPath = Astro.url.pathname;
+const navigationLinks = [
+  { href: '/features/', label: 'Features' },
+  { href: '/how-it-works/', label: 'How it works' },
+  { href: '/getting-started/', label: 'Get started' },
+  { href: '/faq/', label: 'FAQ' }
+];
+---
+<header class="site-header">
+  <div class="nav-shell">
+    <a class="brand" href="/" aria-label="FM AI Assistent home">
+      <span class="brand-mark" aria-hidden="true"><span>FM</span><span>27</span></span>
+      <span><strong>{site.name}</strong><small>Football Manager 27 companion</small></span>
+    </a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">
+      <span class="sr-only">Toggle navigation</span>
+      <span></span><span></span><span></span>
+    </button>
+    <nav id="site-navigation" class="site-nav" aria-label="Primary navigation">
+      {navigationLinks.map(({ href, label }) => <a href={href} aria-current={currentPath === href ? 'page' : currentPath.startsWith(href) ? 'true' : undefined}>{label}</a>)}
+      <a href={site.repository} rel="noopener noreferrer">GitHub</a>
+      <a class="button button-small" href="/download/" aria-current={currentPath === '/download/' ? 'page' : undefined}>Download</a>
+    </nav>
+  </div>
+</header>
+<script is:inline>
+  const button = document.querySelector('.menu-toggle');
+  const navigation = document.querySelector('#site-navigation');
+  const closeMenu = () => {
+    button?.setAttribute('aria-expanded', 'false');
+    navigation?.classList.remove('is-open');
+  };
+  button?.addEventListener('click', () => {
+    const open = button.getAttribute('aria-expanded') === 'true';
+    button.setAttribute('aria-expanded', String(!open));
+    navigation?.classList.toggle('is-open', !open);
+  });
+  navigation?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeMenu();
+      button?.focus();
+    }
+  });
+</script>

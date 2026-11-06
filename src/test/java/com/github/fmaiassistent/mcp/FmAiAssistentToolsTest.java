@@ -1,0 +1,193 @@
+package com.github.fmaiassistent.mcp;
+
+import com.github.fmaiassistent.domain.entity.ClubEntity;
+import com.github.fmaiassistent.domain.entity.PlayerEntity;
+import com.github.fmaiassistent.domain.entity.StaffEntity;
+import com.github.fmaiassistent.exporter.ClubExporter;
+import com.github.fmaiassistent.exporter.PlayerExporter;
+import com.github.fmaiassistent.recruitment.RecruitmentCaseService;
+import com.github.fmaiassistent.service.ClubDatabaseService;
+import com.github.fmaiassistent.service.PlayerDatabaseService;
+import com.github.fmaiassistent.service.StaffDatabaseService;
+import com.github.fmaiassistent.staff.StaffAttributeDefinitions;
+import com.github.fmaiassistent.shortlist.ShortlistFileService;
+import com.github.fmaiassistent.snapshot.SnapshotStatusService;
+import com.github.fmaiassistent.player.PlayerMapper;
+import org.junit.jupiter.api.Test;
+import org.springframework.ai.tool.method.MethodToolCallbackProvider;
+import org.springframework.jdbc.core.JdbcTemplate;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.IntStream;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
+class FmAiAssistentToolsTest {
+    @Test
+    void searchesDefaultToTwentyAndAllowLargerPages() {
+        PlayerDatabaseService players = mock(PlayerDatabaseService.class);
+        ClubDatabaseService clubs = mock(ClubDatabaseService.class);
+        StaffDatabaseService staff = mock(StaffDatabaseService.class);
+        SnapshotStatusService snapshots = mock(SnapshotStatusService.class);
+        when(snapshots.reference()).thenReturn(Map.of("snapshot_id", "test"));
+        when(clubs.findAllClubs()).thenReturn(IntStream.range(0, 30)
+                .mapToObj(i -> club("Club " + i, 6000 - i, 1_000_000L)).toList());
+        when(players.findAllPlayerEntities()).thenReturn(IntStream.range(0, 30)
+                .mapToObj(i -> player("Player " + i, 1000L + i, "Other FC", 22,
+                        120, 150, 1_000_000L, 18)).toList());
+        when(staff.findStaff(any())).thenReturn(IntStream.range(0, 30)
+                .mapToObj(i -> staff("Coach " + i, 2000L + i, Map.of())).toList());
+        FmAiAssistentTools tools = new FmAiAssistentTools(players, clubs, staff,
+                mock(PlayerMapper.class), mock(JdbcTemplate.class), mock(ShortlistFileService.class),
+                mock(RecruitmentCaseService.class), snapshots);
+        var callbacks = MethodToolCallbackProvider.builder().toolObjects(tools).build().getToolCallbacks();
+        JsonMapper json = JsonMapper.builder().build();
+        for (String name : new String[] {"fm27_find_clubs", "fm27_find_players", "fm27_find_staff"}) {
+            var callback = java.util.Arrays.stream(callbacks)
+                    .filter(value -> value.getToolDefinition().name().equals(name)).findFirst().orElseThrow();
+            JsonNode first = json.readTree(callback.call("{}"));
+            assertThat(first.path("count").asInt()).isEqualTo(20);
+            assertThat(first.path("limit").asInt()).isEqualTo(20);
+            assertThat(first.path("total_matches").asInt()).isEqualTo(30);
+            JsonNode larger = json.readTree(callback.call("{\"limit\":30}"));
+            assertThat(larger.path("count").asInt()).isEqualTo(30);
+        }
+        var clubSearch = java.util.Arrays.stream(callbacks)
+                .filter(value -> value.getToolDefinition().name().equals("fm27_find_clubs"))
+                .findFirst().orElseThrow();
+        JsonNode secondPage = json.readTree(clubSearch.call("{\"offset\":20}"));
+        assertThat(secondPage.path("count").asInt()).isEqualTo(10);
+        assertThat(secondPage.path("total_matches").asInt()).isEqualTo(30);
+        assertThat(secondPage.path("offset").asInt()).isEqualTo(20);
+        assertThat(secondPage.path("clubs").get(0).path("NAME").asString()).isEqualTo("Club 20");
+    }
+
+    @Test
+    void explicitPriceCeilingDoesNotSilentlyShrinkToClubBudget() {
+        PlayerDatabaseService players = mock(PlayerDatabaseService.class);
+        ClubDatabaseService clubs = mock(ClubDatabaseService.class);
+        RecruitmentCaseService cases = mock(RecruitmentCaseService.class);
+        SnapshotStatusService snapshots = mock(SnapshotStatusService.class);
+        ClubEntity managingClub = club("Test FC", 5_000, 5_000_000L);
+        PlayerEntity candidate = player("Candidate", 2002000001L, "Other FC", 22, 135, 165, 8_000_000L, 18);
+        when(players.findAllPlayerEntities()).thenReturn(List.of(candidate));
+        when(clubs.findAllClubs()).thenReturn(List.of(managingClub));
+        when(cases.byPlayerUniqueId()).thenReturn(Map.of());
+        when(snapshots.reference()).thenReturn(Map.of("snapshot_id", "test"));
+        FmAiAssistentTools tools = new FmAiAssistentTools(
+                players,
+                clubs,
+                mock(StaffDatabaseService.class),
+                mock(PlayerMapper.class),
+                mock(JdbcTemplate.class),
+                mock(ShortlistFileService.class),
+                cases,
+                snapshots);
+
+        Map<String, Object> result = tools.transferShortlist(
+                "Test FC", "DC", null, null, 15,
+                24, 120, 150, 10_000_000L, null,
+                null, null, "low", null, null, null, null, 8);
+
+        assertThat(result).containsKey("snapshot");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> criteria = (Map<String, Object>) result.get("criteria");
+        assertThat(criteria)
+                .containsEntry("max_asking_price", 10_000_000L)
+                .containsEntry("club_transfer_budget", 5_000_000L);
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> candidates = (List<Map<String, Object>>) result.get("candidates");
+        assertThat(candidates).hasSize(1);
+        assertThat(candidates.getFirst()).containsEntry("price_fit", "requires_sales")
+                .containsEntry("willingness_source", "heuristic")
+                .containsKey("score_components");
+    }
+
+    @Test
+    void staffSearchCanFilterSortAndExplainASelectedCoachingRole() {
+        StaffDatabaseService staff = mock(StaffDatabaseService.class);
+        SnapshotStatusService snapshots = mock(SnapshotStatusService.class);
+        StaffEntity excellent = staff("Excellent Coach", 101L, Map.of(
+                "attacking", 20, "technical", 19, "authority", 20, "determination", 20, "motivating", 20));
+        StaffEntity average = staff("Average Coach", 102L, Map.of());
+        when(staff.findStaff(any())).thenReturn(List.of(average, excellent));
+        when(snapshots.reference()).thenReturn(Map.of("snapshot_id", "test"));
+        FmAiAssistentTools tools = new FmAiAssistentTools(
+                mock(PlayerDatabaseService.class), mock(ClubDatabaseService.class), staff,
+                mock(PlayerMapper.class), mock(JdbcTemplate.class), mock(ShortlistFileService.class),
+                mock(RecruitmentCaseService.class), snapshots);
+
+        Map<String, Object> result = tools.findStaff(
+                null, null, null, null, null, null,
+                null, null, null, null, null, null, null, null, null,
+                null, null, null, "attacking_technical", 3.0,
+                "attacking_technical", "desc", 0, 10);
+
+        @SuppressWarnings("unchecked")
+        List<Map<String, Object>> rows = (List<Map<String, Object>>) result.get("staff");
+        assertThat(rows).extracting(row -> row.get("name"))
+                .containsExactly("Excellent Coach", "Average Coach");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> role = (Map<String, Object>) rows.getFirst().get("coaching_role_rating");
+        assertThat(role).containsEntry("role", "attacking_technical")
+                .containsEntry("quality", "Outstanding")
+                .containsKey("attributes");
+    }
+
+    private static ClubEntity club(String name, int reputation, long transferBudget) {
+        Map<String, Object> row = new HashMap<>();
+        ClubExporter.FIELD_NAMES.forEach(field -> row.put(field, null));
+        row.put("name", name);
+        row.put("gender", "male");
+        row.put("reputation", reputation);
+        row.put("transferBudget", transferBudget);
+        row.put("payrollBudget", 1_000_000L);
+        return ClubEntity.fromExportRow(row);
+    }
+
+    private static PlayerEntity player(
+            String name,
+            long uniqueId,
+            String club,
+            int age,
+            int ca,
+            int pa,
+            long askingPrice,
+            int defenderCentral) {
+        Map<String, Object> row = new HashMap<>();
+        PlayerExporter.FIELD_NAMES.forEach(field -> row.put(field, null));
+        row.put("unique_id", uniqueId);
+        row.put("name", name);
+        row.put("gender", "male");
+        row.put("club", club);
+        row.put("playing_club", club);
+        row.put("age", String.valueOf(age));
+        row.put("age_as_of", "2029-07-01");
+        row.put("ca", ca);
+        row.put("pa", pa);
+        row.put("asking_price", askingPrice);
+        row.put("current_reputation", 4_000);
+        row.put("world_reputation", 4_000);
+        row.put("DefenderCentral", defenderCentral);
+        return PlayerEntity.fromExportRow(row);
+    }
+
+    private static StaffEntity staff(String name, long uniqueId, Map<String, Integer> overrides) {
+        Map<String, Object> row = new HashMap<>();
+        StaffAttributeDefinitions.ALL.forEach(attribute -> row.put(attribute.key(), 10));
+        row.putAll(overrides);
+        row.put("unique_id", uniqueId);
+        row.put("name", name);
+        row.put("job", "Coach");
+        row.put("ca", 100);
+        row.put("pa", 100);
+        return StaffEntity.fromExportRow(row);
+    }
+}

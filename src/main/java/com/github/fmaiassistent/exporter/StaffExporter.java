@@ -1,0 +1,229 @@
+package com.github.fmaiassistent.exporter;
+
+import com.github.fmaiassistent.linux.FmMemoryStrings;
+import com.github.fmaiassistent.linux.GameDateFinder;
+import com.github.fmaiassistent.memory.ProcessMemoryReader;
+import com.github.fmaiassistent.memory.StaffRecordLayout;
+import com.github.fmaiassistent.memory.ContractRecordLayout;
+import com.github.fmaiassistent.staff.StaffAttributeDefinitions;
+
+import java.io.IOException;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+public class StaffExporter {
+    public static final List<String> FIELD_NAMES = buildFieldNames();
+
+    private StaffRecordLayout recordLayout = StaffRecordLayout.current();
+    private final Long windowsModuleBase;
+
+    public StaffExporter() {
+        this.windowsModuleBase = null;
+    }
+
+    public StaffExporter(StaffRecordLayout recordLayout) {
+        this(recordLayout, null);
+    }
+
+    StaffExporter(StaffRecordLayout recordLayout, Long windowsModuleBase) {
+        this.recordLayout = recordLayout;
+        this.windowsModuleBase = windowsModuleBase;
+    }
+
+    /**
+     * Record layout for the next export. Set once per load; safe because only
+     * one refresh runs at a time.
+     */
+    public void setRecordLayout(StaffRecordLayout recordLayout) {
+        this.recordLayout = recordLayout;
+    }
+
+    public ExportResult exportAllStaff(int pid, int build, Long gamePluginBase) throws IOException {
+        PeopleExporter people = new PeopleExporter();
+        people.setStaffRecordLayout(recordLayout);
+        return people.exportAllStaff(pid, build, gamePluginBase);
+    }
+
+    Map<String, Object> decodeRow(ProcessMemoryReader reader, int index, long person, int dynamicOffset) throws IOException {
+        long staffBase = person - dynamicOffset;
+        byte[] attributes = reader.readBytes(
+                staffBase + recordLayout.attributesRel(),
+                StaffAttributeDefinitions.ALL.stream().mapToInt(StaffAttributeDefinitions.StaffAttribute::offset).max().orElseThrow() + 1);
+        var contract = reader.qwordOrNull(person + recordLayout.contractRefRel());
+        var team = contract.flatMap(value -> reader.qwordOrNull(value + recordLayout.contractTeamRel()));
+        var club = team.flatMap(value -> reader.qwordOrNull(value + recordLayout.contractClubRel()));
+
+        Map<String, Object> row = new LinkedHashMap<>();
+        row.put("staff_index", index);
+        row.put("record_address", "0x" + Long.toHexString(person));
+        row.put("unique_id", reader.readU32(person + recordLayout.uniqueIdRel()));
+        row.put("name", FmMemoryStrings.playerName(reader, person).orElse(""));
+        row.put("gender", (reader.readU8(person + recordLayout.genderRel()) & 0x10) != 0 ? "female" : "male");
+        row.put("nationality", FmMemoryStrings.playerNationality(reader, person).orElse(""));
+        row.put("club", FmMemoryStrings.clubDisplayName(reader, club.orElse(null)).orElse(""));
+        club.ifPresent(address -> row.put("_club_address", address));
+        row.put("division", division(reader, team.orElse(null)));
+        int jobId = contract.map(value -> readU8(reader, value + recordLayout.contractJobIdRel(), 0)).orElse(0);
+        row.put("job_id", jobId);
+        row.put("job", jobName(jobId));
+        row.put("date_of_birth", date(reader, person + recordLayout.dateOfBirthRel()));
+        row.put("age", "");
+        row.put("age_as_of", "");
+        row.put("salary_weekly_raw", contract.map(value -> readU32(reader, value + recordLayout.contractSalaryWeeklyRel(), 0)).orElse(0L));
+        // BASIC has no+0x48: its Ceda property returns a shared placeholder without reading this object.
+        boolean basic = false;
+        if (contract.isPresent() && windowsModuleBase != null) {
+            long vtableRva = reader.readU64(contract.get()) - windowsModuleBase;
+            basic = vtableRva == ContractRecordLayout.current().basic().vtable();
+        }
+        row.put("contract_end_date", basic ? "" : contract.map(value -> date(reader, value + recordLayout.contractDateRel())).orElse(""));
+        row.put("home_reputation", reader.readU16(staffBase + recordLayout.homeReputationRel()));
+        row.put("current_reputation", reader.readU16(staffBase + recordLayout.currentReputationRel()));
+        row.put("world_reputation", reader.readU16(staffBase + recordLayout.worldReputationRel()));
+        row.put("ca", reader.readU16(staffBase + recordLayout.caRel()));
+        row.put("pa", (int) reader.readI16(staffBase + recordLayout.paRel()));
+        for (StaffAttributeDefinitions.StaffAttribute attribute : StaffAttributeDefinitions.ALL) {
+            row.put(attribute.key(), staffAttribute(attribute, attributes[attribute.offset()] & 0xff));
+        }
+        return row;
+    }
+
+    private String division(ProcessMemoryReader reader, Long team) {
+        if (team == null) {
+            return "";
+        }
+        for (long offset : List.of((long) recordLayout.divisionScanRelA(), (long) recordLayout.divisionScanRelB())) {
+            var competition = reader.qwordOrNull(team + offset);
+            if (competition.isPresent()) {
+                var name = FmMemoryStrings.competitionDisplayName(reader, competition.get());
+                if (name.isPresent()) {
+                    return name.get();
+                }
+            }
+        }
+        return "";
+    }
+
+    private static int staffAttribute(StaffAttributeDefinitions.StaffAttribute attribute, int raw) {
+        int value = attribute.storage() == StaffAttributeDefinitions.Storage.DIRECT
+                ? raw : Math.round(raw / 5.0f);
+        // Native15B2350 normalizes positive scaled bytes to1..20. Raw1/2 are valid low attributes,
+        // not missing values (captured Adrian Viveash Fitness2 -> FM1). Preserve raw0's existing behavior pending separate evidence.
+        if (attribute.storage() != StaffAttributeDefinitions.Storage.DIRECT && raw > 0) {
+            value = Math.max(1, value);
+        }
+        return Math.max(0, Math.min(20, value));
+    }
+
+    static boolean validAbility(int value) {
+        return value > 0 && value <= 200;
+    }
+
+    private static int readU8(ProcessMemoryReader reader, long address, int fallback) {
+        try {
+            return reader.readU8(address);
+        } catch (IOException | RuntimeException exception) {
+            return fallback;
+        }
+    }
+
+    private static long readU32(ProcessMemoryReader reader, long address, long fallback) {
+        try {
+            long value = reader.readU32(address);
+            return value == 0xffff_ffffL ? fallback : value;
+        } catch (IOException | RuntimeException exception) {
+            return fallback;
+        }
+    }
+
+    private static String date(ProcessMemoryReader reader, long address) {
+        try {
+            int day = reader.readU16(address);
+            int year = reader.readU16(address + 2);
+            return GameDateFinder.validDayYear(day, year) ? GameDateFinder.dayYearToDate(day, year).toString() : "";
+        } catch (IOException | RuntimeException exception) {
+            return "";
+        }
+    }
+
+    static void applyAges(List<Map<String, Object>> rows, LocalDate gameDate) {
+        for (Map<String, Object> row : rows) {
+            String dob = String.valueOf(row.get("date_of_birth"));
+            if (gameDate == null || dob.isBlank()) {
+                continue;
+            }
+            try {
+                LocalDate birthDate = LocalDate.parse(dob);
+                int age = gameDate.getYear() - birthDate.getYear();
+                if (gameDate.getMonthValue() < birthDate.getMonthValue()
+                        || gameDate.getMonthValue() == birthDate.getMonthValue()
+                        && gameDate.getDayOfMonth() < birthDate.getDayOfMonth()) age--;
+                row.put("age", age);
+                row.put("age_as_of", gameDate.toString());
+            } catch (DateTimeException ignored) {
+            }
+        }
+    }
+
+    public static String jobName(int jobId) {
+        return switch (jobId) {
+            case 1 -> "Player";
+            case 2 -> "Coach";
+            case 3 -> "Player/Coach";
+            case 4 -> "Chairperson";
+            case 6 -> "Director";
+            case 8 -> "Managing Director";
+            case 10 -> "Director of Football";
+            case 12 -> "Physiotherapist";
+            case 14 -> "Scout";
+            case 16 -> "Manager";
+            case 17 -> "Player/Manager";
+            case 20 -> "Assistant Manager";
+            case 21 -> "Player/Assistant Manager";
+            case 22 -> "Performance Analyst";
+            case 24 -> "General Manager";
+            case 26 -> "Fitness Coach";
+            case 27 -> "Player/Fitness Coach";
+            case 34 -> "Goalkeeping Coach";
+            case 35 -> "Player/Goalkeeping Coach";
+            case 36 -> "Head of Performance Analysis";
+            case 38 -> "Club Doctor";
+            case 40 -> "Head of Sports Science";
+            case 42 -> "Data Analyst";
+            case 44 -> "Chief Scout";
+            case 45 -> "Player/Chief Scout";
+            case 46 -> "Doctor";
+            case 48 -> "Sports Scientist";
+            case 49 -> "Player/Youth Coach";
+            case 50 -> "Head Physiotherapist";
+            case 52 -> "Under 19s Manager";
+            case 54 -> "First Team Coach";
+            case 64 -> "Head of Youth Development";
+            case 65 -> "Player/Head of Youth Development";
+            case 66 -> "Owner";
+            case 70 -> "President";
+            case 86 -> "Loan Manager";
+            case 88 -> "Technical Director";
+            case 144 -> "Interim Manager";
+            default -> "Staff Member";
+        };
+    }
+
+    private static List<String> buildFieldNames() {
+        List<String> fields = new ArrayList<>(List.of(
+                "staff_index", "record_address", "unique_id", "name", "gender", "nationality",
+                "club", "division", "job_id", "job", "date_of_birth", "age", "age_as_of",
+                "salary_weekly_raw", "contract_end_date", "home_reputation", "current_reputation",
+                "world_reputation", "ca", "pa"));
+        StaffAttributeDefinitions.ALL.stream().map(StaffAttributeDefinitions.StaffAttribute::key).forEach(fields::add);
+        fields.addAll(List.of("non_playing_profile_hex", "non_playing_profile_sha256"));
+        return List.copyOf(fields);
+    }
+
+    public record ExportResult(String gameDate, List<Map<String, Object>> rows) {
+    }
+}

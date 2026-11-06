@@ -1,0 +1,141 @@
+package com.github.fmaiassistent.shortlist;
+
+import com.github.fmaiassistent.domain.entity.PlayerEntity;
+import com.github.fmaiassistent.exporter.PlayerExporter;
+import com.github.fmaiassistent.service.PlayerDatabaseService;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+class ShortlistFileServiceTest {
+    @TempDir
+    Path outputDirectory;
+
+    @Test
+    void resolvesLoadedPlayersAndCreatesNonOverwritingFmfFiles() throws Exception {
+        FmfShortlistFile fmf = new FmfShortlistFile();
+        PlayerDatabaseService players = mock(PlayerDatabaseService.class);
+        when(players.findAllPlayerEntities()).thenReturn(List.of(
+                player("Brayley Lipman", 2002082558L),
+                player("Sasa Zivadinovic", 2002097318L)));
+        ShortlistFileService service = new ShortlistFileService(fmf, players, outputDirectory);
+
+        ShortlistFileService.CreatedShortlist first = service.create(
+                "AI / targets", List.of(2002097318L, 2002082558L));
+        ShortlistFileService.CreatedShortlist second = service.create(
+                "AI / targets", List.of(2002082558L));
+
+        assertThat(first.path().getFileName().toString()).isEqualTo("AI _ targets.fmf");
+        assertThat(second.path().getFileName().toString()).isEqualTo("AI _ targets-2.fmf");
+        assertThat(first.players()).containsExactly("Sasa Zivadinovic", "Brayley Lipman");
+        assertThat(fmf.read(Files.readAllBytes(first.path())).playerUniqueIds())
+                .containsExactly(2002097318L, 2002082558L);
+    }
+
+    @Test
+    void rejectsIdsThatAreNotInTheLoadedSave() {
+        PlayerDatabaseService players = mock(PlayerDatabaseService.class);
+        when(players.findAllPlayerEntities()).thenReturn(List.of(player("Known", 123L)));
+        ShortlistFileService service = new ShortlistFileService(new FmfShortlistFile(), players, outputDirectory);
+
+        assertThatThrownBy(() -> service.create("targets", List.of(999L)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("999");
+    }
+
+    @Test
+    void explainsThatOldLoadedDataMustBeReloaded() {
+        PlayerDatabaseService players = mock(PlayerDatabaseService.class);
+        when(players.findAllPlayerEntities()).thenReturn(List.of(player("Old row", 0L)));
+        ShortlistFileService service = new ShortlistFileService(new FmfShortlistFile(), players, outputDirectory);
+
+        assertThatThrownBy(() -> service.create("targets", List.of(123L)))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Load data again");
+    }
+
+    @Test
+    void recentListsCreatedShortlistsNewestFirst() {
+        PlayerDatabaseService players = mock(PlayerDatabaseService.class);
+        when(players.findAllPlayerEntities()).thenReturn(List.of(
+                player("Brayley Lipman", 2002082558L),
+                player("Sasa Zivadinovic", 2002097318L)));
+        ShortlistFileService service = new ShortlistFileService(new FmfShortlistFile(), players, outputDirectory);
+
+        assertThat(service.recent()).isEmpty();
+        service.create("first", List.of(2002082558L));
+        service.create("second", List.of(2002097318L));
+
+        assertThat(service.recent())
+                .extracting(ShortlistFileService.CreatedShortlist::name)
+                .containsExactly("second", "first");
+        assertThat(service.recent().getFirst().createdAt()).isNotBlank();
+    }
+
+    @Test
+    void prefersExistingShortlistsFolder(@TempDir Path home) throws Exception {
+        Path existing = home.resolve("Documents/Sports Interactive/Football Manager 27/shortlists");
+        Files.createDirectories(existing);
+
+        assertThat(ShortlistFileService.resolveOutputDirectory(home)).isEqualTo(existing.toAbsolutePath().normalize());
+    }
+
+    @Test
+    void doesNotWriteIntoThePreviousGameShortlistFolder(@TempDir Path home) throws Exception {
+        Path oldFolder = home.resolve("Documents/Sports Interactive/Football Manager 25/shortlists");
+        Files.createDirectories(oldFolder);
+
+        assertThat(ShortlistFileService.resolveOutputDirectory(home)).isEqualTo(home.resolve(
+                "Documents/Sports Interactive/Football Manager 27/shortlists").toAbsolutePath().normalize());
+    }
+
+    @Test
+    void fallsBackToLibraryHoldingTheGame(@TempDir Path home) throws Exception {
+        Path customLib = home.resolve("mnt/bcache/Steam");
+        Path steamApps = home.resolve(".local/share/Steam/steamapps");
+        Files.createDirectories(steamApps);
+        Files.createDirectories(customLib.resolve("steamapps"));
+        Files.writeString(steamApps.resolve("libraryfolders.vdf"),
+                "\"libraryfolders\"\n{\n\t\"1\"\n\t{\n\t\t\"path\"\t\t\"" + customLib + "\"\n\t}\n}");
+        Files.writeString(customLib.resolve("steamapps/appmanifest_4530370.acf"), "\"AppState\"{}");
+
+        Path resolved = ShortlistFileService.resolveOutputDirectory(home);
+
+        assertThat(resolved.toString()).startsWith(customLib.toAbsolutePath().normalize().toString());
+        assertThat(resolved.getFileName().toString()).isEqualTo("shortlists");
+    }
+
+    @Test
+    void prefersManifestLibraryOverStaleExistingFolder(@TempDir Path home) throws Exception {
+        Path staleLib = home.resolve(".local/share/Steam");
+        Files.createDirectories(staleLib.resolve(
+                "steamapps/compatdata/4530370/pfx/drive_c/users/steamuser/Documents/Sports Interactive/Football Manager 27/shortlists"));
+        Path customLib = home.resolve("mnt/bcache/Steam");
+        Files.createDirectories(customLib.resolve("steamapps"));
+        Files.writeString(staleLib.resolve("steamapps/libraryfolders.vdf"),
+                "\"libraryfolders\"\n{\n\t\"0\"\n\t{\n\t\t\"path\"\t\t\"" + staleLib + "\"\n\t}\n"
+                        + "\t\"1\"\n\t{\n\t\t\"path\"\t\t\"" + customLib + "\"\n\t}\n}");
+        Files.writeString(customLib.resolve("steamapps/appmanifest_4530370.acf"), "\"AppState\"{}");
+
+        Path resolved = ShortlistFileService.resolveOutputDirectory(home);
+
+        assertThat(resolved.toString()).startsWith(customLib.toAbsolutePath().normalize().toString());
+    }
+    private static PlayerEntity player(String name, long uniqueId) {
+        Map<String, Object> row = new HashMap<>();
+        PlayerExporter.FIELD_NAMES.forEach(field -> row.put(field, null));
+        row.put("name", name);
+        row.put("unique_id", uniqueId);
+        return PlayerEntity.fromExportRow(row);
+    }
+}

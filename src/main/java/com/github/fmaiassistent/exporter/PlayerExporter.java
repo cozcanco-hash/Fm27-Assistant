@@ -1,0 +1,667 @@
+package com.github.fmaiassistent.exporter;
+
+import com.github.fmaiassistent.linux.FmMemoryStrings;
+import com.github.fmaiassistent.memory.PlayerRecordLayout;
+import com.github.fmaiassistent.memory.ProcessMemoryReader;
+import com.github.fmaiassistent.player.AttributeDefinitions;
+import com.github.fmaiassistent.player.FieldDef;
+import com.github.fmaiassistent.linux.GameDateFinder;
+
+import java.io.IOException;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import static com.github.fmaiassistent.player.AttributeDefinitions.HIDDEN_DIRECT_FIELDS;
+import static com.github.fmaiassistent.player.AttributeDefinitions.POSITION_FIELDS;
+import static com.github.fmaiassistent.player.AttributeDefinitions.SOURCE_OBJECT_BASE_OFFSET;
+import static com.github.fmaiassistent.player.AttributeDefinitions.VISIBLE_FIELDS;
+
+public class PlayerExporter {
+    private static final int DATE_DAY_MASK = 0x01FF;
+    private static final int DUTY_MAX_RECORDS_BYTES = 512;
+
+    private final PlayerRecordLayout recordLayout;
+
+    public PlayerExporter() {
+        this(PlayerRecordLayout.current());
+    }
+
+    public PlayerExporter(PlayerRecordLayout recordLayout) {
+        this.recordLayout = recordLayout;
+    }
+    private static final int MAX_SOURCE_OFFSET = Math.max(
+            POSITION_FIELDS.stream().mapToInt(FieldDef::offset).max().orElseThrow(),
+            VISIBLE_FIELDS.stream().mapToInt(FieldDef::offset).max().orElseThrow())
+            - SOURCE_OBJECT_BASE_OFFSET;
+
+    public static final List<String> FIELD_NAMES = buildFieldNames();
+
+    public ExportResult exportClub(int pid, String club, int build, Long gamePluginBase) throws IOException {
+        ExportResult allPlayers = exportAllPlayers(pid, build, gamePluginBase);
+        String target = club.toLowerCase();
+        List<Map<String, Object>> rows = allPlayers.rows().stream()
+                .filter(row -> String.valueOf(row.get("club")).equalsIgnoreCase(target)
+                        || String.valueOf(row.get("playing_club")).equalsIgnoreCase(target))
+                .sorted(Comparator.comparing(row -> String.valueOf(row.get("name")).toLowerCase()))
+                .toList();
+        return new ExportResult(allPlayers.gameDate(), rows);
+    }
+
+    public ExportResult exportAllPlayers(int pid, int build, Long gamePluginBase) throws IOException {
+        PeopleExporter people = new PeopleExporter();
+        people.setRecordLayout(recordLayout);
+        return people.exportAllPlayers(pid, build, gamePluginBase);
+    }
+
+    Optional<Map<String, Object>> decodeClassifiedRow(
+            ProcessMemoryReader reader,
+            int index,
+            long record,
+            PersonMemoryClassifier.PersonType type) throws IOException {
+        return decodeClassifiedRow(reader, index, record, type, null);
+    }
+
+    Optional<Map<String, Object>> decodeClassifiedRow(
+            ProcessMemoryReader reader,
+            int index,
+            long record,
+            PersonMemoryClassifier.PersonType type,
+            LocalDate gameDate) throws IOException {
+        Optional<PlayerMemoryLayout> layout = playerMemoryLayout(reader, record, type);
+        if (layout.isEmpty()) {
+            return Optional.empty();
+        }
+        var contractedClubAddress = currentClubAddress(reader, record);
+        var playingClubAddress = playingClubAddress(reader, record);
+        if (playingClubAddress.isEmpty()) {
+            playingClubAddress = contractedClubAddress;
+        }
+        String contractedClub = contractedClubAddress
+                .flatMap(value -> FmMemoryStrings.clubDisplayName(reader, value)).orElse("");
+        String playingClub = playingClubAddress
+                .flatMap(value -> FmMemoryStrings.clubDisplayName(reader, value)).orElse(contractedClub);
+        if (contractedClub.isBlank() && !playingClub.isBlank() && playingClubAddress.isPresent()) {
+            contractedClubAddress = playingClubAddress;
+            contractedClub = playingClub;
+        }
+        Map<String, Object> row = decodeRow(
+                reader, index, record, contractedClub, playingClub, gameDate, layout.get());
+        contractedClubAddress.ifPresent(value -> row.put("_club_address", value));
+        playingClubAddress.ifPresent(value -> row.put("_playing_club_address", value));
+        return Optional.of(row);
+    }
+
+    public Map<String, Object> decodeRow(ProcessMemoryReader reader, int index, long record, String club, LocalDate gameDate) throws IOException {
+        String playingClub = FmMemoryStrings.playingClubName(reader, record).orElse(club);
+        return decodeRow(reader, index, record, club, playingClub, gameDate);
+    }
+
+    public Map<String, Object> decodeRow(
+            ProcessMemoryReader reader,
+            int index,
+            long record,
+            String club,
+            String playingClub,
+            LocalDate gameDate) throws IOException {
+        PersonMemoryClassifier.PersonType type = new PersonMemoryClassifier(reader).classify(record).type();
+        PlayerMemoryLayout layout = playerMemoryLayout(reader, record, type)
+                .orElseThrow(() -> new IOException("Person record is not a valid player: " + type));
+        return decodeRow(reader, index, record, club, playingClub, gameDate, layout);
+    }
+
+    private Map<String, Object> decodeRow(
+            ProcessMemoryReader reader,
+            int index,
+            long record,
+            String club,
+            String playingClub,
+            LocalDate gameDate,
+            PlayerMemoryLayout layout) throws IOException {
+        byte[] data = reader.readBytes(record + layout.historyCopySourceRel(), MAX_SOURCE_OFFSET + 1);
+
+        String loanClub = !club.isBlank() && !playingClub.equalsIgnoreCase(club) ? playingClub : "";
+        LocalDate dob = dateOfBirth(reader, record);
+        long displayValue = club.isBlank() ? 0L : reader.readU32(record + recordLayout.direct().displayValueRel());
+        Salary salary = salaryValues(reader, record);
+
+        Map<String, Object> row = new LinkedHashMap<>();
+        row.put("index", index);
+        row.put("record", "0x" + Long.toHexString(record));
+        row.put("unique_id", reader.readU32(record + recordLayout.direct().uniqueIdRel()));
+        row.put("name", FmMemoryStrings.playerName(reader, record).orElse("0x" + Long.toHexString(record)));
+        row.put("gender", playerGender(reader, record));
+        row.put("nationality", FmMemoryStrings.playerNationality(reader, record).orElse(""));
+        row.put("club", club);
+        row.put("playing_club", playingClub);
+        row.put("loan_club", loanClub);
+        row.put("is_loaned_out", loanClub.isBlank() ? "no" : "yes");
+        row.put("current_reputation", reader.readU16(record + layout.relative(recordLayout.direct().currentReputationRel())));
+        row.put("home_reputation", reader.readU16(record + layout.relative(recordLayout.direct().homeReputationRel())));
+        row.put("world_reputation", reader.readU16(record + layout.relative(recordLayout.direct().worldReputationRel())));
+        row.put("ca", layout.ca());
+        row.put("pa", layout.pa());
+        row.put("asking_price", AttributeDefinitions.roundObservedAskingPrice(displayValue));
+        row.put("asking_price_raw", displayValue);
+        row.put("joined_club_date", joinedClubDate(reader, record, club));
+        PlayerStatus status = playerStatus(reader, record, layout, club, playingClub, gameDate);
+        row.put("transfer_listed", status.transferListed());
+        row.put("listed_for_loan", status.listedForLoan());
+        row.put("transfer_agreed", status.transferAgreed());
+        row.put("future_transfer_club", status.futureTransferClub());
+        row.put("future_transfer_date", status.futureTransferDate());
+        row.put("future_transfer_contract_end_date", status.futureTransferContractEndDate());
+        if(reader.platform()==ProcessMemoryReader.Platform.WINDOWS) {
+            row.put("transfer_agreed",null);
+            row.put("_future_transfer_profile","UNVERIFIED");
+        }
+        row.put("injured", status.injured());
+        row.put("injury", status.injury().description());
+        row.put("injury_start_date", status.injury().startDate());
+        row.put("injury_light_training_days_remaining", "");
+        row.put("injury_full_training_days_remaining", "");
+        row.put("injury_min_days_remaining", "");
+        row.put("injury_max_days_remaining", "");
+        row.put("injury_expected_return", "");
+        row.put("_injury_status", status.injury());
+        DutyStatus duty = dutyStatus(reader, record, gameDate);
+        row.put("on_duty", duty.onDuty());
+        row.put("duty_start_date", duty.startDate());
+        row.put("duty_end_date", duty.endDate());
+        row.put("contract_end_date", contractEndDate(reader, record));
+        row.put("salary_pa", salary.annualRounded());
+        row.put("salary_weekly_raw", salary.weeklyRaw());
+        row.put("date_of_birth", dob == null ? "" : dob.toString());
+        row.put("age", dob == null || gameDate == null ? "" : ageOn(dob, gameDate));
+        row.put("age_as_of", gameDate == null ? "" : gameDate.toString());
+        row.put("height_cm", reader.readU8(record + layout.relative(recordLayout.direct().heightCmRel())));
+
+        for (FieldDef field : POSITION_FIELDS) {
+            int raw = data[field.offset() - SOURCE_OBJECT_BASE_OFFSET] & 0xff;
+            row.put(field.name(), AttributeDefinitions.direct20(raw));
+        }
+        for (FieldDef field : VISIBLE_FIELDS) {
+            int raw = data[field.offset() - SOURCE_OBJECT_BASE_OFFSET] & 0xff;
+            row.put(field.name(), AttributeDefinitions.norm20(raw));
+        }
+        for (FieldDef field : HIDDEN_DIRECT_FIELDS) {
+            row.put(field.name(), reader.readU8(record + field.offset()));
+        }
+        return row;
+    }
+
+    Optional<PlayerMemoryLayout> playerMemoryLayout(
+            ProcessMemoryReader reader,
+            long record,
+            PersonMemoryClassifier.PersonType type) throws IOException {
+        if (!type.hasPlayerData()) {
+            return Optional.empty();
+        }
+        int shift = type == PersonMemoryClassifier.PersonType.PLAYER_STAFF
+                ? PersonMemoryClassifier.PLAYER_STAFF_SHIFT
+                : 0;
+        int relativeShift = -shift;
+        int sourceRel = recordLayout.direct().historyCopySourceRel() + relativeShift;
+        int ca = reader.readI16(record + recordLayout.direct().currentAbilityRel() + relativeShift);
+        int pa = reader.readI16(record + recordLayout.direct().potentialAbilityRel() + relativeShift);
+        if (!validAbility(ca)
+                || !validAbility(pa)
+                || !plausiblePlayerBlock(reader, record + sourceRel)) {
+            return Optional.empty();
+        }
+        return Optional.of(new PlayerMemoryLayout(relativeShift, sourceRel, ca, pa));
+    }
+
+    private static boolean validAbility(int value) {
+        return value > 0 && value <= 200;
+    }
+
+    private static boolean plausiblePlayerBlock(ProcessMemoryReader reader, long sourceAddress) {
+        try {
+            byte[] data = reader.readBytes(sourceAddress, MAX_SOURCE_OFFSET + 1);
+            long plausiblePositions = POSITION_FIELDS.stream()
+                    .mapToInt(field -> data[field.offset() - SOURCE_OBJECT_BASE_OFFSET] & 0xff)
+                    .filter(value -> value <= 20)
+                    .count();
+            boolean hasPlayablePosition = POSITION_FIELDS.stream()
+                    .mapToInt(field -> data[field.offset() - SOURCE_OBJECT_BASE_OFFSET] & 0xff)
+                    .anyMatch(value -> value >= 1 && value <= 20);
+            long plausibleAttributes = VISIBLE_FIELDS.stream()
+                    .mapToInt(field -> data[field.offset() - SOURCE_OBJECT_BASE_OFFSET] & 0xff)
+                    .filter(value -> value >= 1 && value <= 100)
+                    .count();
+            return plausiblePositions >= 12 && hasPlayablePosition && plausibleAttributes >= 25;
+        } catch (IOException | RuntimeException ex) {
+            return false;
+        }
+    }
+
+    private LocalDate dateOfBirth(ProcessMemoryReader reader, long record) throws IOException {
+        DatePair pair = readDatePair(reader, record + recordLayout.direct().dateOfBirthRel());
+        return GameDateFinder.validDayYear(pair.day(), pair.year()) ? GameDateFinder.dayYearToDate(pair.day(), pair.year()) : null;
+    }
+
+    private String joinedClubDate(ProcessMemoryReader reader, long record, String club) throws IOException {
+        if (club == null || club.isBlank()) {
+            return "";
+        }
+        var registration = reader.qwordOrNull(record + recordLayout.direct().registrationRefRel());
+        if (registration.isPresent()) {
+            String registrationDate = validDate(reader, registration.get() + recordLayout.registration().joinedDateRel());
+            if (!registrationDate.isBlank()) {
+                return registrationDate;
+            }
+        }
+        return validDate(reader, record + recordLayout.direct().joinedClubDateRel());
+    }
+
+    private static String validDate(ProcessMemoryReader reader, long address) throws IOException {
+        DatePair pair = readDatePair(reader, address);
+        return GameDateFinder.validDayYear(pair.day(), pair.year())
+                ? GameDateFinder.dayYearToDate(pair.day(), pair.year()).toString()
+                : "";
+    }
+
+    private String contractEndDate(ProcessMemoryReader reader, long record) throws IOException {
+        var registration = reader.qwordOrNull(record + recordLayout.direct().registrationRefRel());
+        if (registration.isEmpty()) {
+            return "";
+        }
+        DatePair pair = readDatePair(reader, registration.get() + recordLayout.registration().contractDateRel());
+        return GameDateFinder.validDayYear(pair.day(), pair.year())
+                ? GameDateFinder.dayYearToDate(pair.day(), pair.year()).toString()
+                : "";
+    }
+
+    private PlayerStatus playerStatus(
+            ProcessMemoryReader reader,
+            long record,
+            PlayerMemoryLayout layout,
+            String club,
+            String playingClub,
+            LocalDate gameDate) throws IOException {
+        var registrationOpt = reader.qwordOrNull(record + recordLayout.direct().registrationRefRel());
+        int transferStatus = registrationOpt
+                .map(registration -> {
+                    try {
+                        return reader.readU8(registration + recordLayout.registration().transferStatusRel());
+                    } catch (IOException ex) {
+                        return 0;
+                    }
+                })
+                .orElse(0);
+        FutureTransfer futureTransfer = reader.platform()==ProcessMemoryReader.Platform.WINDOWS
+                ? new FutureTransfer(false,"","","") : registrationOpt
+                .map(registration -> futureTransfer(reader, registration, club, playingClub, gameDate))
+                .orElse(new FutureTransfer(false, "", "", ""));
+        InjuryStatus injury = injuryStatus(reader, record);
+        return new PlayerStatus(
+                transferStatus == 1,
+                transferStatus == 2,
+                futureTransfer.transferAgreed(),
+                futureTransfer.club(),
+                futureTransfer.date(),
+                futureTransfer.contractEndDate(),
+                injury.injured(),
+                injury);
+    }
+
+    /**
+     * International-duty availability from the player's international-career
+     * container ({@code record-0x168}). The container holds a vector of
+     * 0x20-byte callup records. Each record starts with an international-team
+     * reference and stores day-of-year duty windows at offsets 0x10 and 0x14.
+     * The adjacent {@code record-0x160} reference identifies the current
+     * international team, whose {@code +0xBC} date is FM's estimated return.
+     */
+    private DutyStatus dutyStatus(ProcessMemoryReader reader, long record, LocalDate gameDate) {
+        if (gameDate == null) {
+            return new DutyStatus(false, "", "");
+        }
+        try {
+            var currentTeam = reader.qwordOrNull(record + recordLayout.duty().teamReferenceRel());
+            if (currentTeam.isEmpty()) {
+                return new DutyStatus(false, "", "");
+            }
+            LocalDate returnDate = dutyDate(reader, currentTeam.get() + recordLayout.duty().returnDateRel());
+            if (returnDate == null || returnDate.isBefore(gameDate)) {
+                return new DutyStatus(false, "", "");
+            }
+            var container = reader.qwordOrNull(record + recordLayout.direct().dutyReferenceRel());
+            if (container.isEmpty()) {
+                return new DutyStatus(false, "", "");
+            }
+            long begin = reader.readU64(container.get() + recordLayout.duty().vectorRel());
+            long end = reader.readU64(container.get() + recordLayout.duty().vectorRel() + Long.BYTES);
+            if (begin <= 0 || end < begin || end - begin > DUTY_MAX_RECORDS_BYTES
+                    || (end - begin) % Long.BYTES != 0
+                    || end > ProcessMemoryReader.MAX_USER_ADDRESS) {
+                return new DutyStatus(false, "", "");
+            }
+            LocalDate latestStart = null;
+            for (long reference = begin; reference < end; reference += Long.BYTES) {
+                var item = reader.qwordOrNull(reference);
+                if (item.isEmpty()) {
+                    continue;
+                }
+                byte[] itemBytes;
+                try {
+                    itemBytes = reader.readBytes(item.get(), recordLayout.duty().recordSize());
+                } catch (IOException | RuntimeException ignored) {
+                    continue;
+                }
+                if (littleEndianU64(itemBytes, 0) != currentTeam.get()) {
+                    continue;
+                }
+                int startDay = littleEndianU16(itemBytes, recordLayout.duty().startDayRel()) & DATE_DAY_MASK;
+                int startYear = littleEndianU16(itemBytes, recordLayout.duty().startYearRel());
+                int endDay = littleEndianU16(itemBytes, recordLayout.duty().endDayRel()) & DATE_DAY_MASK;
+                int endYear = littleEndianU16(itemBytes, recordLayout.duty().endYearRel());
+                if (!GameDateFinder.validDayYear(startDay, startYear)
+                        || !GameDateFinder.validDayYear(endDay, endYear)) {
+                    continue;
+                }
+                LocalDate start = GameDateFinder.dayYearToDate(startDay, startYear);
+                LocalDate finish = GameDateFinder.dayYearToDate(endDay, endYear);
+                if (finish.isBefore(start) || finish.isAfter(returnDate) || start.isAfter(gameDate)) {
+                    continue;
+                }
+                if (latestStart == null || start.isAfter(latestStart)) {
+                    latestStart = start;
+                }
+            }
+            if (latestStart == null) {
+                return new DutyStatus(false, "", "");
+            }
+            return new DutyStatus(true, latestStart.toString(), returnDate.toString());
+        } catch (IOException | RuntimeException exception) {
+            return new DutyStatus(false, "", "");
+        }
+    }
+
+    private static LocalDate dutyDate(ProcessMemoryReader reader, long address) throws IOException {
+        int day = reader.readU16(address) & DATE_DAY_MASK;
+        int year = reader.readU16(address + Short.BYTES);
+        return GameDateFinder.validDayYear(day, year)
+                ? GameDateFinder.dayYearToDate(day, year)
+                : null;
+    }
+
+    private static int littleEndianU16(byte[] bytes, int offset) {
+        return Byte.toUnsignedInt(bytes[offset]) | Byte.toUnsignedInt(bytes[offset + 1]) << 8;
+    }
+
+    private static long littleEndianU64(byte[] bytes, int offset) {
+        return Integer.toUnsignedLong(littleEndianI32(bytes, offset))
+                | (long) littleEndianI32(bytes, offset + Integer.BYTES) << 32;
+    }
+
+    private static int littleEndianI32(byte[] bytes, int offset) {
+        return Byte.toUnsignedInt(bytes[offset])
+                | Byte.toUnsignedInt(bytes[offset + 1]) << 8
+                | Byte.toUnsignedInt(bytes[offset + 2]) << 16
+                | bytes[offset + 3] << 24;
+    }
+
+    private InjuryStatus injuryStatus(ProcessMemoryReader reader, long record) throws IOException {
+        long injuryReference = reader.readU64(record + recordLayout.direct().injuryReferenceRel());
+        // Note: the four bytes at -0x18C are the high half of this same
+        // 64-bit pointer, not an independent status flag. Past code required
+        // them to equal 1, which only matched references in the 0x1... heap
+        // region and silently dropped every injury allocated in 0x2... (6267
+        // cases in one live save). A readable vector alone decides.
+        var vectorStart = reader.qwordOrNull(injuryReference);
+        boolean injured = injuryReference != 0 && vectorStart.isPresent();
+        if (!injured) {
+            return new InjuryStatus(false, "", "", 0, 0);
+        }
+        try {
+            long item = reader.readU64(vectorStart.get());
+            String description = reader.qwordOrNull(item + recordLayout.injury().typeRel())
+                    .flatMap(type -> FmMemoryStrings.objectStringAt(reader, type, recordLayout.injury().typeNameRel()))
+                    .map(PlayerExporter::capitalizeFirst)
+                    .orElse("");
+            int day = reader.readU16(item + recordLayout.injury().dayRel()) & DATE_DAY_MASK;
+            int year = reader.readU16(item + recordLayout.injury().yearRel());
+            String startDate = GameDateFinder.validDayYear(day, year)
+                    ? GameDateFinder.dayYearToDate(day, year).toString()
+                    : "";
+            int fullTrainingTotalDays = reader.readU16(item + recordLayout.injury().fullTrainingRel());
+            int lightTrainingTotalDays = reader.readU16(item + recordLayout.injury().lightTrainingRel());
+            if (lightTrainingTotalDays > fullTrainingTotalDays) {
+                lightTrainingTotalDays = fullTrainingTotalDays;
+            }
+            return new InjuryStatus(true, description, startDate, lightTrainingTotalDays, fullTrainingTotalDays);
+        } catch (IOException | RuntimeException ex) {
+            return new InjuryStatus(false, "", "", 0, 0);
+        }
+    }
+
+    private FutureTransfer futureTransfer(
+            ProcessMemoryReader reader,
+            long registration,
+            String club,
+            String playingClub,
+            LocalDate gameDate) {
+        try {
+            if (reader.readU8(registration + recordLayout.registration().transferAgreedMarkerRel()) == 0
+                    || reader.readI32(registration + recordLayout.registration().futureTransferActiveRel()) != 0
+                    || reader.readI32(registration + recordLayout.registration().futureTransferSentinelRel()) != -1) {
+                return new FutureTransfer(false, "", "", "");
+            }
+            String futureClub = reader.qwordOrNull(registration + recordLayout.registration().futureTransferTableRel())
+                    .flatMap(table -> reader.qwordOrNull(table + recordLayout.registration().futureTransferClubRel()))
+                    .flatMap(futureClubAddress -> FmMemoryStrings.clubDisplayName(reader, futureClubAddress))
+                    .orElse("");
+            if (futureClub.isBlank()
+                    || futureClub.equalsIgnoreCase(club == null ? "" : club)
+                    || futureClub.equalsIgnoreCase(playingClub == null ? "" : playingClub)) {
+                return new FutureTransfer(false, "", "", "");
+            }
+            DatePair pair = readDatePair(reader, registration + recordLayout.registration().futureTransferDateRel());
+            if (!GameDateFinder.validDayYear(pair.day(), pair.year())) {
+                return new FutureTransfer(false, "", "", "");
+            }
+            LocalDate date = GameDateFinder.dayYearToDate(pair.day(), pair.year());
+            boolean agreed = gameDate != null && date.isAfter(gameDate);
+            String contractEndDate = "";
+            DatePair contractEndPair = readDatePair(reader, registration + recordLayout.registration().futureTransferContractEndDateRel());
+            if (GameDateFinder.validDayYear(contractEndPair.day(), contractEndPair.year())) {
+                contractEndDate = GameDateFinder.dayYearToDate(contractEndPair.day(), contractEndPair.year()).toString();
+            }
+            return new FutureTransfer(agreed, futureClub, date.toString(), contractEndDate);
+        } catch (IOException | RuntimeException ex) {
+            return new FutureTransfer(false, "", "", "");
+        }
+    }
+
+    private java.util.Optional<Long> currentClubAddress(ProcessMemoryReader reader, long record) {
+        return reader.qwordOrNull(record + recordLayout.direct().registrationRefRel())
+                .flatMap(registration -> reader.qwordOrNull(registration + recordLayout.registration().clubRel()))
+                .flatMap(registrationBody -> reader.qwordOrNull(registrationBody + recordLayout.registration().clubBodyRel()));
+    }
+
+    private java.util.Optional<Long> playingClubAddress(ProcessMemoryReader reader, long record) {
+        return reader.qwordOrNull(record + recordLayout.direct().playingClubRefRel())
+                .flatMap(teamBody -> reader.qwordOrNull(teamBody + recordLayout.direct().playingClubBodyRel()));
+    }
+
+    private String playerGender(ProcessMemoryReader reader, long record) throws IOException {
+        int value = reader.readU8(record + recordLayout.direct().genderRel());
+        return (value & 0x10) != 0 ? "female" : "male";
+    }
+
+    private Salary salaryValues(ProcessMemoryReader reader, long record) throws IOException {
+        var registration = reader.qwordOrNull(record + recordLayout.direct().registrationRefRel());
+        if (registration.isEmpty()) {
+            return new Salary(0, 0);
+        }
+        long weeklyRaw = reader.readU32(registration.get() + recordLayout.registration().salaryWeeklyRel());
+        long annualRaw = weeklyRaw * 52;
+        return new Salary(weeklyRaw, Math.round(annualRaw / 1000.0) * 1000);
+    }
+
+    private static DatePair readDatePair(ProcessMemoryReader reader, long address) throws IOException {
+        int day = reader.readU16(address) & DATE_DAY_MASK;
+        int year = reader.readU16(address + 2);
+        return new DatePair(day, year);
+    }
+
+    private static int ageOn(LocalDate dob, LocalDate gameDate) {
+        int age = gameDate.getYear() - dob.getYear();
+        if (gameDate.getMonthValue() < dob.getMonthValue()
+                || (gameDate.getMonthValue() == dob.getMonthValue() && gameDate.getDayOfMonth() < dob.getDayOfMonth())) {
+            age--;
+        }
+        return age;
+    }
+
+    static void applyGameDate(List<Map<String, Object>> rows, LocalDate gameDate) {
+        for (Map<String, Object> row : rows) {
+            String dobValue = String.valueOf(row.getOrDefault("date_of_birth", ""));
+            if (gameDate == null || dobValue.isBlank()) {
+                row.put("age", "");
+                row.put("age_as_of", "");
+            } else {
+                try {
+                    row.put("age", ageOn(LocalDate.parse(dobValue), gameDate));
+                    row.put("age_as_of", gameDate.toString());
+                } catch (DateTimeException ex) {
+                    row.put("age", "");
+                    row.put("age_as_of", "");
+                }
+            }
+            if(!row.containsKey("_future_transfer_profile")) {
+                String futureTransferDate = String.valueOf(row.getOrDefault("future_transfer_date", ""));
+                if (gameDate == null || futureTransferDate.isBlank()) {
+                    row.put("transfer_agreed", false);
+                    row.put("future_transfer_club", "");
+                    row.put("future_transfer_contract_end_date", "");
+                } else {
+                    try {
+                        boolean active = LocalDate.parse(futureTransferDate).isAfter(gameDate);
+                        row.put("transfer_agreed", active);
+                        if (!active) {
+                            row.put("future_transfer_club", "");
+                            row.put("future_transfer_date", "");
+                            row.put("future_transfer_contract_end_date", "");
+                        }
+                    } catch (DateTimeException ex) {
+                        row.put("transfer_agreed", false);
+                        row.put("future_transfer_club", "");
+                        row.put("future_transfer_date", "");
+                        row.put("future_transfer_contract_end_date", "");
+                    }
+                }
+            }
+            applyInjuryRemaining(row, gameDate);
+        }
+    }
+
+    private static void applyInjuryRemaining(Map<String, Object> row, LocalDate gameDate) {
+        if (!Boolean.parseBoolean(String.valueOf(row.getOrDefault("injured", false)))) {
+            row.put("injury_light_training_days_remaining", "");
+            row.put("injury_full_training_days_remaining", "");
+            row.put("injury_min_days_remaining", "");
+            row.put("injury_max_days_remaining", "");
+            row.put("injury_expected_return", "");
+            row.remove("_injury_status");
+            return;
+        }
+        String startDateValue = String.valueOf(row.getOrDefault("injury_start_date", ""));
+        if (gameDate == null || startDateValue.isBlank()) {
+            row.remove("_injury_status");
+            return;
+        }
+        try {
+            LocalDate startDate = LocalDate.parse(startDateValue);
+            long elapsed = java.time.temporal.ChronoUnit.DAYS.between(startDate, gameDate);
+            InjuryStatus injury = (InjuryStatus) row.get("_injury_status");
+            int lightTrainingDays = Math.max(0, injury.lightTrainingTotalDays() - (int) elapsed);
+            int fullTrainingDays = Math.max(lightTrainingDays, injury.fullTrainingTotalDays() - (int) elapsed);
+            row.put("injury_light_training_days_remaining", lightTrainingDays);
+            row.put("injury_full_training_days_remaining", fullTrainingDays);
+            row.put("injury_min_days_remaining", lightTrainingDays);
+            row.put("injury_max_days_remaining", fullTrainingDays);
+            row.put("injury_expected_return", formatInjuryDays(fullTrainingDays));
+        } catch (DateTimeException | ClassCastException ex) {
+            row.put("injury_light_training_days_remaining", "");
+            row.put("injury_full_training_days_remaining", "");
+            row.put("injury_min_days_remaining", "");
+            row.put("injury_max_days_remaining", "");
+            row.put("injury_expected_return", "");
+        } finally {
+            row.remove("_injury_status");
+        }
+    }
+
+    private static String formatInjuryDays(int days) {
+        return days + " days";
+    }
+
+    private static String capitalizeFirst(String value) {
+        if (value == null || value.isBlank()) {
+            return "";
+        }
+        return Character.toUpperCase(value.charAt(0)) + value.substring(1);
+    }
+
+    private static List<String> buildFieldNames() {
+        List<String> names = new ArrayList<>(List.of(
+                "index", "record", "unique_id", "name", "gender", "nationality", "club", "playing_club", "loan_club", "is_loaned_out",
+                "current_reputation", "home_reputation", "world_reputation", "ca", "pa",
+                "asking_price", "asking_price_raw", "joined_club_date", "transfer_listed", "listed_for_loan",
+                "transfer_agreed", "future_transfer_club", "future_transfer_date", "future_transfer_contract_end_date", "injured",
+                "injury", "injury_start_date", "injury_light_training_days_remaining", "injury_full_training_days_remaining",
+                "injury_min_days_remaining", "injury_max_days_remaining", "injury_expected_return",
+                "on_duty", "duty_start_date", "duty_end_date",
+                "contract_end_date", "salary_pa",
+                "salary_weekly_raw", "date_of_birth", "age", "age_as_of", "height_cm"));
+        POSITION_FIELDS.stream().map(FieldDef::name).forEach(names::add);
+        VISIBLE_FIELDS.stream().map(FieldDef::name).forEach(names::add);
+        HIDDEN_DIRECT_FIELDS.stream().map(FieldDef::name).forEach(names::add);
+        names.addAll(List.of("non_playing_profile_hex", "non_playing_profile_sha256"));
+        return List.copyOf(names);
+    }
+
+    public record ExportResult(String gameDate, List<Map<String, Object>> rows) {
+    }
+
+    private record DatePair(int day, int year) {
+    }
+
+    private record Salary(long weeklyRaw, long annualRounded) {
+    }
+
+    private record PlayerStatus(
+            boolean transferListed,
+            boolean listedForLoan,
+            boolean transferAgreed,
+            String futureTransferClub,
+            String futureTransferDate,
+            String futureTransferContractEndDate,
+            boolean injured,
+            InjuryStatus injury) {
+    }
+
+    private record InjuryStatus(boolean injured, String description, String startDate, int lightTrainingTotalDays, int fullTrainingTotalDays) {
+    }
+
+    private record DutyStatus(boolean onDuty, String startDate, String endDate) {
+    }
+
+    private record FutureTransfer(boolean transferAgreed, String club, String date, String contractEndDate) {
+    }
+
+    record PlayerMemoryLayout(int recordRelShift, int historyCopySourceRel, int ca, int pa) {
+        int relative(int rel) {
+            return rel + recordRelShift;
+        }
+    }
+
+}

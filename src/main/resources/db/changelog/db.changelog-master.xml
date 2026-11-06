@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="001-baseline-schema" author="codex">
+        <createTable tableName="competitions">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(1024)"/>
+            <column name="source_address" type="BIGINT"/>
+            <column name="nation" type="VARCHAR(1024)"/>
+            <column name="reputation" type="INT"/>
+            <column name="gender" type="VARCHAR(1024)"/>
+        </createTable>
+
+        <createTable tableName="clubs">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(1024)"/>
+            <column name="source_address" type="BIGINT"/>
+            <column name="gender" type="VARCHAR(1024)"/>
+            <column name="competition" type="VARCHAR(1024)"/>
+            <column name="competition_id" type="BIGINT"/>
+            <column name="reputation" type="INT"/>
+            <column name="nation" type="VARCHAR(1024)"/>
+            <column name="balance" type="BIGINT"/>
+            <column name="transfer_budget" type="BIGINT"/>
+            <column name="payroll_budget" type="BIGINT"/>
+        </createTable>
+
+        <createTable tableName="players">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="player_index" type="VARCHAR(1024)"/>
+            <column name="record_address" type="VARCHAR(1024)"/>
+            <column name="name" type="VARCHAR(1024)"/>
+            <column name="gender" type="VARCHAR(1024)"/>
+            <column name="nationality" type="VARCHAR(1024)"/>
+            <column name="club" type="VARCHAR(1024)"/>
+            <column name="club_id" type="BIGINT"/>
+            <column name="playing_club" type="VARCHAR(1024)"/>
+            <column name="playing_club_id" type="BIGINT"/>
+            <column name="loan_club" type="VARCHAR(1024)"/>
+            <column name="is_loaned_out" type="VARCHAR(1024)"/>
+            <column name="current_reputation" type="INT"/>
+            <column name="home_reputation" type="INT"/>
+            <column name="world_reputation" type="INT"/>
+            <column name="ca" type="INT"/>
+            <column name="pa" type="INT"/>
+            <column name="asking_price" type="BIGINT"/>
+            <column name="asking_price_raw" type="BIGINT"/>
+            <column name="joined_club_date" type="VARCHAR(1024)"/>
+            <column name="transfer_listed" type="BOOLEAN"/>
+            <column name="listed_for_loan" type="BOOLEAN"/>
+            <column name="transfer_agreed" type="BOOLEAN"/>
+            <column name="future_transfer_club" type="VARCHAR(1024)"/>
+            <column name="future_transfer_date" type="VARCHAR(1024)"/>
+            <column name="future_transfer_contract_end_date" type="VARCHAR(1024)"/>
+            <column name="injured" type="BOOLEAN"/>
+            <column name="injury" type="VARCHAR(1024)"/>
+            <column name="injury_start_date" type="VARCHAR(1024)"/>
+            <column name="injury_light_training_days_remaining" type="INT"/>
+            <column name="injury_full_training_days_remaining" type="INT"/>
+            <column name="injury_min_days_remaining" type="INT"/>
+            <column name="injury_max_days_remaining" type="INT"/>
+            <column name="injury_expected_return" type="VARCHAR(1024)"/>
+            <column name="contract_end_date" type="VARCHAR(1024)"/>
+            <column name="salary_pa" type="INT"/>
+            <column name="salary_weekly_raw" type="INT"/>
+            <column name="date_of_birth" type="VARCHAR(1024)"/>
+            <column name="age" type="VARCHAR(1024)"/>
+            <column name="age_as_of" type="VARCHAR(1024)"/>
+            <column name="height_cm" type="INT"/>
+            <column name="goalkeeper" type="INT"/>
+            <column name="defender_left" type="INT"/>
+            <column name="defender_central" type="INT"/>
+            <column name="defender_right" type="INT"/>
+            <column name="wing_back_left" type="INT"/>
+            <column name="defensive_midfielder" type="INT"/>
+            <column name="wing_back_right" type="INT"/>
+            <column name="midfielder_left" type="INT"/>
+            <column name="midfielder_central" type="INT"/>
+            <column name="midfielder_right" type="INT"/>
+            <column name="attacking_midfielder_left" type="INT"/>
+            <column name="attacking_midfielder_central" type="INT"/>
+            <column name="attacking_midfielder_right" type="INT"/>
+            <column name="striker" type="INT"/>
+            <column name="crossing" type="INT"/>
+            <column name="dribbling" type="INT"/>
+            <column name="finishing" type="INT"/>
+            <column name="heading" type="INT"/>
+            <column name="long_shots" type="INT"/>
+            <column name="marking" type="INT"/>
+            <column name="off_the_ball" type="INT"/>
+            <column name="passing" type="INT"/>
+            <column name="penalties" type="INT"/>
+            <column name="tackling" type="INT"/>
+            <column name="vision" type="INT"/>
+            <column name="handling" type="INT"/>
+            <column name="aerial_ability" type="INT"/>
+            <column name="command_of_area" type="INT"/>
+            <column name="communication" type="INT"/>
+            <column name="kicking" type="INT"/>
+            <column name="throwing" type="INT"/>
+            <column name="anticipation" type="INT"/>
+            <column name="decisions" type="INT"/>
+            <column name="one_on_ones" type="INT"/>
+            <column name="positioning" type="INT"/>
+            <column name="reflexes" type="INT"/>
+            <column name="first_touch" type="INT"/>
+            <column name="technique" type="INT"/>
+            <column name="left_foot" type="INT"/>
+            <column name="right_foot" type="INT"/>
+            <column name="flair" type="INT"/>
+            <column name="corners" type="INT"/>
+            <column name="teamwork" type="INT"/>
+            <column name="work_rate" type="INT"/>
+            <column name="long_throws" type="INT"/>
+            <column name="eccentricity" type="INT"/>
+            <column name="rushing_out" type="INT"/>
+            <column name="tendency_to_punch" type="INT"/>
+            <column name="acceleration" type="INT"/>
+            <column name="free_kicks" type="INT"/>
+            <column name="strength" type="INT"/>
+            <column name="stamina" type="INT"/>
+            <column name="pace" type="INT"/>
+            <column name="jumping_reach" type="INT"/>
+            <column name="leadership" type="INT"/>
+            <column name="dirtiness" type="INT"/>
+            <column name="balance" type="INT"/>
+            <column name="bravery" type="INT"/>
+            <column name="consistency" type="INT"/>
+            <column name="aggression" type="INT"/>
+            <column name="agility" type="INT"/>
+            <column name="important_matches" type="INT"/>
+            <column name="injury_proneness" type="INT"/>
+            <column name="versatility" type="INT"/>
+            <column name="natural_fitness" type="INT"/>
+            <column name="determination" type="INT"/>
+            <column name="composure" type="INT"/>
+            <column name="concentration" type="INT"/>
+            <column name="adaptability" type="INT"/>
+            <column name="ambition" type="INT"/>
+            <column name="loyalty" type="INT"/>
+            <column name="pressure" type="INT"/>
+            <column name="professionalism" type="INT"/>
+            <column name="sportsmanship" type="INT"/>
+            <column name="temperament" type="INT"/>
+            <column name="controversy" type="INT"/>
+        </createTable>
+
+        <createTable tableName="load_metadata">
+            <column name="meta_key" type="VARCHAR(100)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="meta_value" type="VARCHAR(1024)"/>
+        </createTable>
+
+        <createTable tableName="fm_role">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="game" type="VARCHAR(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="position_group" type="VARCHAR(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_name" type="VARCHAR(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phase" type="VARCHAR(1024)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="fm_attribute">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="attribute_name" type="VARCHAR(1024)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="fm_role_attribute">
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attribute_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attribute_priority" type="VARCHAR(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sort_order" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="fm_role_attribute_import">
+            <column name="game" type="VARCHAR(1024)"/>
+            <column name="position_group" type="VARCHAR(1024)"/>
+            <column name="role_name" type="VARCHAR(1024)"/>
+            <column name="phase" type="VARCHAR(1024)"/>
+            <column name="attribute_priority" type="VARCHAR(32)"/>
+            <column name="attribute_name" type="VARCHAR(1024)"/>
+            <column name="sort_order" type="INT"/>
+        </createTable>
+
+        <createIndex indexName="idx_competitions_name" tableName="competitions">
+            <column name="name"/>
+        </createIndex>
+        <createIndex indexName="idx_competitions_nation" tableName="competitions">
+            <column name="nation"/>
+        </createIndex>
+        <createIndex indexName="idx_competitions_gender" tableName="competitions">
+            <column name="gender"/>
+        </createIndex>
+        <createIndex indexName="idx_competitions_source_address" tableName="competitions">
+            <column name="source_address"/>
+        </createIndex>
+
+        <createIndex indexName="idx_clubs_name" tableName="clubs">
+            <column name="name"/>
+        </createIndex>
+        <createIndex indexName="idx_clubs_nation" tableName="clubs">
+            <column name="nation"/>
+        </createIndex>
+        <createIndex indexName="idx_clubs_competition" tableName="clubs">
+            <column name="competition"/>
+        </createIndex>
+        <createIndex indexName="idx_clubs_gender" tableName="clubs">
+            <column name="gender"/>
+        </createIndex>
+        <createIndex indexName="idx_clubs_competition_id" tableName="clubs">
+            <column name="competition_id"/>
+        </createIndex>
+        <createIndex indexName="idx_clubs_source_address" tableName="clubs">
+            <column name="source_address"/>
+        </createIndex>
+
+        <createIndex indexName="idx_players_name" tableName="players">
+            <column name="name"/>
+        </createIndex>
+        <createIndex indexName="idx_players_gender" tableName="players">
+            <column name="gender"/>
+        </createIndex>
+        <createIndex indexName="idx_players_nationality" tableName="players">
+            <column name="nationality"/>
+        </createIndex>
+        <createIndex indexName="idx_players_club" tableName="players">
+            <column name="club"/>
+        </createIndex>
+        <createIndex indexName="idx_players_playing_club" tableName="players">
+            <column name="playing_club"/>
+        </createIndex>
+        <createIndex indexName="idx_players_club_id" tableName="players">
+            <column name="club_id"/>
+        </createIndex>
+        <createIndex indexName="idx_players_playing_club_id" tableName="players">
+            <column name="playing_club_id"/>
+        </createIndex>
+
+        <addUniqueConstraint
+                tableName="fm_role"
+                columnNames="game, role_name, phase"
+                constraintName="uk_fm_role"/>
+        <addUniqueConstraint
+                tableName="fm_attribute"
+                columnNames="attribute_name"
+                constraintName="uk_fm_attribute"/>
+        <addPrimaryKey
+                tableName="fm_role_attribute"
+                columnNames="role_id, attribute_id, attribute_priority"
+                constraintName="pk_fm_role_attribute"/>
+
+        <addForeignKeyConstraint
+                baseTableName="clubs"
+                baseColumnNames="competition_id"
+                referencedTableName="competitions"
+                referencedColumnNames="id"
+                constraintName="fk_clubs_competition"
+                onDelete="SET NULL"/>
+        <addForeignKeyConstraint
+                baseTableName="players"
+                baseColumnNames="club_id"
+                referencedTableName="clubs"
+                referencedColumnNames="id"
+                constraintName="fk_players_club"
+                onDelete="SET NULL"/>
+        <addForeignKeyConstraint
+                baseTableName="players"
+                baseColumnNames="playing_club_id"
+                referencedTableName="clubs"
+                referencedColumnNames="id"
+                constraintName="fk_players_playing_club"
+                onDelete="SET NULL"/>
+        <addForeignKeyConstraint
+                baseTableName="fm_role_attribute"
+                baseColumnNames="role_id"
+                referencedTableName="fm_role"
+                referencedColumnNames="id"
+                constraintName="fk_fm_role_attribute_role"
+                onDelete="CASCADE"/>
+        <addForeignKeyConstraint
+                baseTableName="fm_role_attribute"
+                baseColumnNames="attribute_id"
+                referencedTableName="fm_attribute"
+                referencedColumnNames="id"
+                constraintName="fk_fm_role_attribute_attribute"
+                onDelete="CASCADE"/>
+
+        <sql>
+            ALTER TABLE fm_role_attribute
+            ADD CONSTRAINT chk_fm_role_attribute_priority
+            CHECK (attribute_priority IN ('primary', 'secondary'));
+        </sql>
+    </changeSet>
+
+    <changeSet id="002-baseline-role-attribute-data" author="codex">
+        <validCheckSum>9:f8fb2b4ea8256e59d9d23df022c8ee87</validCheckSum>
+        <loadData
+                tableName="fm_role_attribute_import"
+                file="db/data/fm27_positional_roles_attributes_flat.csv"
+                separator=","
+                quotchar="&quot;">
+            <column header="game" name="game" type="STRING"/>
+            <column header="position_group" name="position_group" type="STRING"/>
+            <column header="role" name="role_name" type="STRING"/>
+            <column header="phase" name="phase" type="STRING"/>
+            <column header="attribute_priority" name="attribute_priority" type="STRING"/>
+            <column header="attribute_name" name="attribute_name" type="STRING"/>
+            <column header="sort_order" name="sort_order" type="NUMERIC"/>
+        </loadData>
+        <sql>
+            INSERT INTO fm_role (game, position_group, role_name, phase)
+            SELECT DISTINCT i.game, i.position_group, i.role_name, i.phase
+            FROM fm_role_attribute_import i;
+
+            INSERT INTO fm_attribute (attribute_name)
+            SELECT DISTINCT i.attribute_name
+            FROM fm_role_attribute_import i;
+
+            INSERT INTO fm_role_attribute (role_id, attribute_id, attribute_priority, sort_order)
+            SELECT r.id, a.id, i.attribute_priority, i.sort_order
+            FROM fm_role_attribute_import i
+            JOIN fm_role r
+              ON r.game = i.game
+             AND r.role_name = i.role_name
+             AND r.phase = i.phase
+            JOIN fm_attribute a
+              ON a.attribute_name = i.attribute_name;
+        </sql>
+    </changeSet>
+
+    <changeSet id="003-player-unique-id" author="codex">
+        <addColumn tableName="players">
+            <column name="unique_id" type="BIGINT"/>
+        </addColumn>
+        <createIndex indexName="idx_players_unique_id" tableName="players">
+            <column name="unique_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="004-club-facilities" author="codex">
+        <addColumn tableName="clubs">
+            <column name="training_facilities" type="INT"/>
+            <column name="youth_facilities" type="INT"/>
+            <column name="youth_coaching" type="INT"/>
+            <column name="youth_recruitment" type="INT"/>
+            <column name="corporate_facilities" type="INT"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="005-recruitment-case" author="codex">
+        <createTable tableName="recruitment_case">
+            <column name="player_unique_id" type="BIGINT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="interest_status" type="VARCHAR(32)"/>
+            <column name="deal_stage" type="VARCHAR(32)"/>
+            <column name="quoted_fee" type="BIGINT"/>
+            <column name="quoted_weekly_wage" type="BIGINT"/>
+            <column name="note" type="VARCHAR(2048)"/>
+            <column name="source" type="VARCHAR(32)"/>
+            <column name="observed_game_date" type="VARCHAR(32)"/>
+            <column name="updated_at" type="VARCHAR(64)"/>
+        </createTable>
+        <createIndex indexName="idx_recruitment_case_stage" tableName="recruitment_case">
+            <column name="deal_stage"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="006-tactic-and-career-evidence" author="codex">
+        <createTable tableName="tactic_context">
+            <column name="id" type="INT">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="file_name" type="VARCHAR(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fmf_data" type="BLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fingerprint" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="uploaded_at" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addColumn tableName="recruitment_case">
+            <column name="career_key" type="VARCHAR(256)" defaultValue="legacy">
+                <constraints nullable="false"/>
+            </column>
+            <column name="valid_until_game_date" type="VARCHAR(32)"/>
+        </addColumn>
+        <dropPrimaryKey tableName="recruitment_case"/>
+        <addPrimaryKey tableName="recruitment_case"
+                       columnNames="career_key, player_unique_id"
+                       constraintName="pk_recruitment_case"/>
+        <createIndex indexName="idx_recruitment_case_player" tableName="recruitment_case">
+            <column name="player_unique_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="007-staff" author="codex">
+        <createTable tableName="staff">
+            <column name="id" type="BIGINT" autoIncrement="true"><constraints primaryKey="true" nullable="false"/></column>
+            <column name="staff_index" type="INT"/>
+            <column name="record_address" type="VARCHAR(32)"/>
+            <column name="unique_id" type="BIGINT"/>
+            <column name="name" type="VARCHAR(1024)"/>
+            <column name="gender" type="VARCHAR(16)"/>
+            <column name="nationality" type="VARCHAR(1024)"/>
+            <column name="club" type="VARCHAR(1024)"/>
+            <column name="club_id" type="BIGINT"/>
+            <column name="division" type="VARCHAR(1024)"/>
+            <column name="job_id" type="INT"/>
+            <column name="job" type="VARCHAR(128)"/>
+            <column name="date_of_birth" type="VARCHAR(32)"/>
+            <column name="age" type="INT"/>
+            <column name="age_as_of" type="VARCHAR(32)"/>
+            <column name="salary_weekly_raw" type="BIGINT"/>
+            <column name="contract_end_date" type="VARCHAR(32)"/>
+            <column name="home_reputation" type="INT"/>
+            <column name="current_reputation" type="INT"/>
+            <column name="world_reputation" type="INT"/>
+            <column name="ca" type="INT"/>
+            <column name="pa" type="INT"/>
+            <column name="attacking" type="INT"/>
+            <column name="defending" type="INT"/>
+            <column name="fitness" type="INT"/>
+            <column name="possession" type="INT"/>
+            <column name="technical" type="INT"/>
+            <column name="tactical" type="INT"/>
+            <column name="set_pieces" type="INT"/>
+            <column name="determination" type="INT"/>
+            <column name="people_management" type="INT"/>
+            <column name="motivating" type="INT"/>
+            <column name="judging_player_ability" type="INT"/>
+            <column name="judging_player_potential" type="INT"/>
+            <column name="judging_staff_ability" type="INT"/>
+            <column name="negotiating" type="INT"/>
+            <column name="tactical_knowledge" type="INT"/>
+            <column name="physiotherapy" type="INT"/>
+            <column name="sports_science" type="INT"/>
+            <column name="data_analysis" type="INT"/>
+            <column name="working_with_youngsters" type="INT"/>
+            <column name="goalkeeping_distribution" type="INT"/>
+            <column name="goalkeeping_handling" type="INT"/>
+            <column name="goalkeeping_shot_stopping" type="INT"/>
+        </createTable>
+        <createIndex indexName="idx_staff_unique_id" tableName="staff"><column name="unique_id"/></createIndex>
+        <createIndex indexName="idx_staff_name" tableName="staff"><column name="name"/></createIndex>
+        <createIndex indexName="idx_staff_club" tableName="staff"><column name="club"/></createIndex>
+        <createIndex indexName="idx_staff_job" tableName="staff"><column name="job"/></createIndex>
+        <createIndex indexName="idx_staff_club_id" tableName="staff"><column name="club_id"/></createIndex>
+        <addForeignKeyConstraint baseTableName="staff" baseColumnNames="club_id"
+                                 referencedTableName="clubs" referencedColumnNames="id"
+                                 constraintName="fk_staff_club" onDelete="SET NULL"/>
+    </changeSet>
+
+    <changeSet id="008-staff-role-attributes" author="codex">
+        <preConditions onFail="MARK_RAN">
+            <not><and>
+                <columnExists tableName="staff" columnName="authority"/>
+                <columnExists tableName="staff" columnName="goalkeeping"/>
+            </and></not>
+        </preConditions>
+        <addColumn tableName="staff">
+            <column name="authority" type="INT"/>
+            <column name="goalkeeping" type="INT"/>
+        </addColumn>
+    </changeSet>
+
+    <include file="changes/009-catalog-query-modernization.xml" relativeToChangelogFile="true"/>
+    <include file="changes/010-tactic-disk-source.xml" relativeToChangelogFile="true"/>
+    <include file="changes/011-player-duty-status.xml" relativeToChangelogFile="true"/>
+    <include file="changes/012-player-duty-not-null.xml" relativeToChangelogFile="true"/>
+    <include file="changes/013-managed-club-fixtures.xml" relativeToChangelogFile="true"/>
+    <include file="changes/014-player-contracts.xml" relativeToChangelogFile="true"/>
+    <include file="changes/015-contract-term-references.xml" relativeToChangelogFile="true"/>
+    <include file="changes/016-contract-team-owners.xml" relativeToChangelogFile="true"/>
+    <include file="changes/017-staff-contract-ownership.xml" relativeToChangelogFile="true"/>
+    <include file="changes/018-future-employment-contracts.xml" relativeToChangelogFile="true"/>
+    <include file="changes/019-native-club-identities.xml" relativeToChangelogFile="true"/>
+    <include file="changes/020-non-playing-profiles.xml" relativeToChangelogFile="true"/>
+    <include file="changes/021-club-uefa-coefficients.xml" relativeToChangelogFile="true"/>
+    <include file="changes/022-club-current-wages.xml" relativeToChangelogFile="true"/>
+    <include file="changes/023-club-financial-loans.xml" relativeToChangelogFile="true"/>
+    <include file="changes/024-club-financial-ledger.xml" relativeToChangelogFile="true"/>
+    <include file="changes/025-club-financial-competitions.xml" relativeToChangelogFile="true"/>
+    <include file="changes/026-financial-competition-names.xml" relativeToChangelogFile="true"/>
+    <include file="changes/027-club-financial-history.xml" relativeToChangelogFile="true"/>
+    <include file="changes/028-contract-award-names.xml" relativeToChangelogFile="true"/>
+    <include file="changes/029-contract-competition-references.xml" relativeToChangelogFile="true"/>
+    <include file="changes/030-current-role-catalog.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

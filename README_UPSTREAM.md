@@ -1,0 +1,272 @@
+# FM AI Assistent
+
+FM AI Assistent is a local companion app for **Football Manager 2027** on Windows 11 and Linux.
+
+Visit [fmaiassistant.com](https://fmaiassistant.com/) for the product overview, feature guides and installation walkthrough.
+
+It reads your loaded FM27 save directly from memory so you can:
+
+- search and compare players, staff, clubs and competitions;
+- inspect attributes, positions, contracts, wages and budgets;
+- ask an AI assistant for recruitment, squad and tactical advice;
+- give the AI extra context about your managed club and an exported `.fmf` tactic.
+
+Your FM data and tactic file are processed locally. AI chats send messages and enabled context to the selected provider. OpenRouter optionally uses an API key held only in backend session memory.
+
+The assistant can also diagnose tactic-specific squad depth, compare finalists, find replacements,
+model incoming and outgoing moves, and retain verified recruitment evidence between RAM refreshes.
+
+## Install
+
+Download the latest version from [GitHub Releases](https://github.com/JelmerBouma1985/fm-ai-assistent/releases/latest).
+
+Choose one of the release assets:
+
+| Download | Best for | Requirement |
+|---|---|---|
+| **Desktop application** | Most users | Nothing else to install |
+| **Native image** | A small standalone application | Nothing else to install |
+| **JAR** | Users who already have Java | Java 25 or newer |
+
+### Desktop application (recommended)
+
+Download the desktop application for your operating system, extract it when necessary, and run **FM AI Assistent**.
+
+On Linux, make the downloaded launcher executable if required:
+
+```bash
+chmod +x "FM AI Assistent"
+```
+
+### Native image
+
+Download the native image for your operating system. On Linux:
+
+```bash
+chmod +x fm-ai-assistent
+./fm-ai-assistent
+```
+
+### JAR
+
+Install Java 25 or newer, download the JAR, and run:
+
+```bash
+java -jar fm-ai-assistent.jar
+```
+
+The application is available at [http://127.0.0.1:8080](http://127.0.0.1:8080). The desktop application normally opens this page automatically.
+
+## Use the app
+
+1. Start Football Manager 2027 and load your save.
+2. Start FM AI Assistent as the same computer user as FM27.
+3. Open [http://127.0.0.1:8080](http://127.0.0.1:8080) if it did not open automatically.
+4. Select **Load data**.
+5. Browse the **Players**, **Staff**, **Clubs** and **Competitions** tabs, or open **AI assistent**.
+
+The **Staff** tab includes job, club, division, ability, reputation, salary, contract and English attribute filters. Its dedicated **Coaching roles** filter tab lists all nine assignments and lets you set an independent minimum star rating for each one; a staff member must satisfy every selected role threshold. The table shows every staff member's best training assignment. Select a staff member to inspect all nine FM27 coaching ratings, their role-specific weighted attributes, the calculated 0-20 score and its English quality tier.
+
+For agent-driven staff recruitment, call `fm27_get_staff_coaching_roles` to discover the supported assignment keys and formula, then pass `coachingRole` and `minimumCoachingStars` to `fm27_find_staff`. Use `fm27_get_staff_details` with the returned FM Unique ID to compare the complete attribute and role-rating breakdown.
+
+Select **Load data** again after opening another save, changing clubs or advancing to data you want the app to refresh. Player, staff, club and competition data is extracted from RAM concurrently and written with bounded database batches; the completed results are committed as one atomic local snapshot, so a failed reader or database write leaves the previous snapshot available.
+
+![Player database after loading Football Manager 2027 data](screenshots/players_tab.png)
+
+## Use the AI assistant
+
+The embedded chat supports locally installed **Codex**, **Antigravity** and **GitHub Copilot**, plus **OpenRouter** with an API key and no CLI installation.
+
+1. Complete the one-time setup for your chosen agent below.
+2. Start FM27, load your save and select **Load data**.
+3. Open **AI assistent**.
+4. Choose the agent from the **Agent** list.
+5. Select **Context** to control what is included with your messages.
+6. Start a new chat and ask your question.
+
+Select **Commands** beside the chat input, or type `/`, to see question starters in any chat. Choose a command to fill the input, then edit and send it when ready. You can add requirements after a command, such as `/recruit left back under 25`; they are kept in the expanded question. Press Enter to accept a highlighted suggestion, use the arrow keys to move through suggestions, or press Escape to close them.
+
+| Command | Question starter |
+|---|---|
+| `/squad` | Review squad depth, weak positions and contract risks. |
+| `/lineup` | Build a best XI and alternatives for an uploaded `.fmf` tactic. Upload a tactic in **Context** first. |
+| `/recruit` | Find realistic transfer targets for a position or role. |
+| `/compare` | Compare named players, their club fit and costs. |
+| `/staff` | Find or assess staff and coaching roles. |
+| `/club` | Review a club's finances and squad context. |
+
+Load FM27 data before using these questions. If a needed snapshot or tactic is unavailable, the agent will explain what to load.
+
+![AI assistant with agent selection, conversations and chat input](screenshots/ai-assistent-tab.png)
+
+### OpenRouter setup and privacy
+
+Choose **OpenRouter**, enter your [OpenRouter API key](https://openrouter.ai/settings/keys) in the masked field, and select **Connect**. No agent CLI or additional service is required. The field clears after submission. Keys and conversations are session-only: they are not stored in the database, browser storage or application logs, and are cleared on **Disconnect**, session expiry or shutdown.
+
+Every new conversation starts with the **Free router** (`openrouter/free`). The model picker also lists specific models available to your account that support FM tool calls. Specific `:free` variants with zero listed prompt, completion and request prices can be selected without confirmation. Selecting a paid model or the **Auto router** (`openrouter/auto`) requires confirmation and may incur charges; catalog prices and availability can change. Free availability and rate limits are limited; unavailable capacity produces an error and never switches to paid routing. Model changes are disabled while a response is active. The chat shows the selected route or model and the actual responding model when supplied. The model list follows your OpenRouter privacy and provider restrictions and loads after connecting; if it cannot load, Free and Auto remain available. See [OpenRouter's routing guidance](https://openrouter.zendesk.com/hc/en-us/articles/51679572756123-I-used-openrouter-auto-free-or-auto-and-still-got-charged) and [model catalog API](https://openrouter.ai/docs/api/api-reference/models/get-models).
+
+Messages, enabled managed-club/tactic/snapshot context, and FM tool results reach OpenRouter and its model providers. Your account privacy restrictions are respected; the application never relaxes them to obtain capacity. No optional paid plugins are requested. All existing FM tools may execute automatically, including refreshes, recruitment updates and shortlist creation. OpenRouter has no general shell or filesystem tools.
+
+**Stop** prevents further requests and tool calls; completed local writes remain completed. Read-only tool validation errors are shown in the chat so the assistant can ask for missing information or correct its arguments. If FM data has not been loaded, open your save and select **Load data**; if club detection is unavailable after loading, tell the assistant your club name. Failed writes, unexpected failures and stopped turns require a new chat and are never replayed automatically. Each turn permits at most 20 model requests and 40 sequential tool calls, with a five-minute deadline and a 120-second timeout per HTTP request. Tool results are compacted as JSON where possible and limited to 64 KiB. OpenRouter receives compact views of squad analyses, move plans, role catalogs, lineups, and broad player/staff searches, with IDs and decision values preserved; public MCP responses stay unchanged. If an unusual read-only result remains too large, listed rows are explicitly marked partial with original and sent counts. Other oversized results are omitted with an explicit notice so the assistant can request a narrower read-only result or ask you to narrow the question in the same chat; completed writes are not automatically replayed. Requests are limited to 512 KiB; start a new chat if the history limit is reached. Keep the default loopback address (`127.0.0.1`).
+
+### AI context
+
+The managed club is detected automatically when you select **Load data**.
+
+To add your tactic, select **Context** in the AI assistant and either pick one of the `.fmf` tactic files found in your FM27 `tactics` folder or upload the `.fmf` tactic file exported by FM27, then close the context window. The app converts the tactic into information the AI can understand. A tactic loaded from disk is remembered between restarts and silently reloaded when the file changes on disk.
+
+Use the **Include in AI chats** checkboxes to enable or disable the managed-club and tactic context without removing them from the app.
+
+![AI context settings for the managed club and uploaded tactic](screenshots/ai-context.png)
+
+### Create an FM27 player shortlist
+
+After the agent has found and discussed transfer targets, ask it to create an importable shortlist, for example: `Create an FM27 shortlist called Young centre-backs with these players.` The agent uses each player's FM Unique ID and writes a player-shortlist `.fmf` file directly to the detected FM27 `shortlists` folder.
+
+### Decision workflow
+
+For faster and more reproducible answers, the agent can now use task-level tools instead of assembling every conclusion from raw player rows:
+
+1. Check `fm27_get_data_status` and reuse the loaded snapshot unless it is missing or stale. `fm27_refresh_data` skips a redundant reload by default; unverified freshness alone does not trigger a reload. Use `force: true` for an explicit reload or known game changes since loading (including same-day changes or switching saves). If you already clicked **Load data**, agents should use that snapshot. The live probe checks date/process, not every player or transfer change.
+2. Diagnose depth and the two phases of the loaded tactic with `fm27_analyze_squad`.
+3. Build a globally optimized unique XI with `fm27_optimize_lineup`; one player is never assigned to two slots.
+4. Recruit against both roles of a weak slot with `fm27_recruit_for_tactic_slot`, or use `fm27_transfer_shortlist` for a literal single position/role.
+5. Match a known incumbent with `fm27_find_replacements`, supplying the actual deployed position or tactic slot explicitly.
+6. Compare finalists by FM Unique ID with `fm27_compare_players`.
+7. Record agent-enquiry or in-game evidence with `fm27_update_recruitment_case`.
+8. Test the optimized-XI, depth and financial effect of moves with `fm27_plan_squad_moves` before acting in FM27.
+
+Decision responses include the snapshot identity and loaded-tactic fingerprint. Unknown asking prices, wage demands and sale proceeds remain explicit rather than being treated as zero. The tactic and recruitment board are stored in the local application database. Recruitment evidence is isolated by FM career and authoritative for 30 in-game days by default; expired, other-career and legacy evidence remains visible but cannot override current decisions.
+
+## Set up an AI agent
+
+FM AI Assistent uses the agent's normal local login. It does not ask for a Codex, Gemini or GitHub API key.
+
+### Codex
+
+1. Install the [Codex CLI](https://developers.openai.com/codex/cli/).
+2. Open **AI assistent**, choose **Codex**, and use **Sign in with ChatGPT** when shown.
+3. If Codex cannot see the FM27 tools, run this once in a terminal while FM AI Assistent is running:
+
+```bash
+codex mcp add fm-ai-assistent --url http://127.0.0.1:8080/mcp
+```
+
+Use the **Model** dropdown in the Codex chat header to choose from the models reported by your local Codex installation. The choice applies to the current conversation's next turns; a new chat starts with the model currently shown in the dropdown. Clearing the choice uses the thread's default model. Model changes are disabled while a response is active. Codex asks for approval in the app before using tools that require permission. Each prompt offers **Deny**, **Allow**, **Allow for session** and **Allow always**. The permanent option is enabled when Codex supplies a native persistent command or network rule; that rule continues to apply after Codex or FM AI Assistent restarts.
+
+### Antigravity
+
+1. Install the [Antigravity CLI](https://codelabs.developers.google.com/antigravity-cli-hands-on) (`agy`).
+2. Run `agy` once in a terminal, sign in with Google and approve the workspace when requested.
+3. Add FM AI Assistent to `~/.gemini/config/mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "fm-ai-assistent": {
+      "serverUrl": "http://127.0.0.1:8080/mcp"
+    }
+  }
+}
+```
+
+Antigravity cannot show an approval popup during a headless chat. Add the following FM27 tool permissions to the existing `permissions.allow` list in `~/.gemini/antigravity-cli/settings.json`:
+
+```json
+{
+  "permissions": {
+    "allow": [
+      "mcp(fm-ai-assistent/fm27_find_clubs)",
+      "mcp(fm-ai-assistent/fm27_find_players)",
+      "mcp(fm-ai-assistent/fm27_get_club_context)",
+      "mcp(fm-ai-assistent/fm27_get_player_details)",
+      "mcp(fm-ai-assistent/fm27_find_staff)",
+      "mcp(fm-ai-assistent/fm27_get_staff_details)",
+      "mcp(fm-ai-assistent/fm27_get_staff_coaching_roles)",
+      "mcp(fm-ai-assistent/fm27_get_role_attributes)",
+      "mcp(fm-ai-assistent/fm27_transfer_shortlist)",
+      "mcp(fm-ai-assistent/fm27_get_data_status)",
+      "mcp(fm-ai-assistent/fm27_analyze_squad)",
+      "mcp(fm-ai-assistent/fm27_optimize_lineup)",
+      "mcp(fm-ai-assistent/fm27_recruit_for_tactic_slot)",
+      "mcp(fm-ai-assistent/fm27_compare_players)",
+      "mcp(fm-ai-assistent/fm27_find_replacements)",
+      "mcp(fm-ai-assistent/fm27_plan_squad_moves)",
+      "mcp(fm-ai-assistent/fm27_get_recruitment_board)",
+      "mcp(fm-ai-assistent/fm27_update_recruitment_case)",
+      "mcp(fm-ai-assistent/fm27_refresh_data)",
+      "mcp(fm-ai-assistent/fm27_create_shortlist_file)"
+    ]
+  }
+}
+```
+
+If the file already contains settings or permissions, merge these entries into it instead of replacing the complete file. `fm27_create_shortlist_file` writes one new `.fmf` file, `fm27_update_recruitment_case` writes local decision evidence, and `fm27_refresh_data` replaces the app's local data snapshot. None of these tools writes to the FM27 process; the other listed tools are read-only.
+
+### GitHub Copilot
+
+1. Install [GitHub Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/cli-getting-started).
+2. Start FM AI Assistent, choose **GitHub Copilot**, and select **Sign in with GitHub** if prompted. Complete sign-in in the browser that opens.
+3. Add the application's MCP server:
+
+```bash
+copilot mcp add --transport http fm-ai-assistent http://127.0.0.1:8080/mcp
+```
+
+Do not add it again if `copilot mcp list` already shows `fm-ai-assistent`. The sign-in button runs the CLI's browser flow, so no separate terminal is needed for login. Use the **Model** dropdown to choose an available model for the conversation. Model changes are disabled while a response is active. Copilot permission prompts appear inside the app. For the app's read-only FM27 tools, you can choose **Always allow this MCP tool**.
+
+## Troubleshooting
+
+### No FM27 data is found
+
+- Make sure FM27 is running and a save is fully loaded.
+- Run FM27 and FM AI Assistent as the same computer user.
+- On Windows, use the same administrator level for both applications.
+- Select **Load data** again.
+
+### An AI agent is unavailable
+
+Install the selected CLI, complete its normal login, and restart FM AI Assistent so it can find the new command.
+
+### The AI cannot use FM27 tools
+
+- Keep FM AI Assistent running while using the chat.
+- Check that the agent's MCP server address is `http://127.0.0.1:8080/mcp`.
+- For Antigravity, check that the server name and permission rules both use `fm-ai-assistent`.
+
+### The app does not open
+
+Open [http://127.0.0.1:8080](http://127.0.0.1:8080) manually. If port 8080 is occupied, the app uses the next available port (8081, 8082, and so on). Check the startup log for the selected port and use it in the browser and MCP server address.
+
+Desktop application logs are stored in:
+
+```text
+~/.fm-ai-assistent/fm-ai-assistent.log
+```
+
+## Privacy and safety
+
+FM AI Assistent listens only on your own computer by default. Keep it local: enabled AI agents may access FM27 data, local files and tools after receiving the required permission.
+
+## Development
+
+The project targets JDK 25 and includes a pinned Maven 3.9.12 wrapper. A local Maven installation is not required.
+
+```bash
+./mvnw clean verify
+```
+
+`verify` compiles the backend, runs unit, integration and architecture tests, builds the production Vaadin frontend, creates the executable Spring Boot JAR, generates JaCoCo coverage output, and writes CycloneDX JSON and XML software bills of materials under `target/` (the JSON SBOM is also embedded in the JAR).
+
+Useful focused commands:
+
+```bash
+./mvnw -Dvaadin.skip=true test
+./mvnw -DskipTests package
+./mvnw -DskipTests verify -Pdesktop
+./mvnw -DskipTests clean -Pnative native:compile
+```
+
+The application publishes local operational diagnostics at `/actuator/health` and `/actuator/metrics`. Snapshot status also reports refresh state, extraction timing and RAM-decoding data-quality counters. The CI workflow runs the same clean verification on every branch and pull request and retains test, coverage and SBOM reports.
+
+To publish a release, update `RELEASE_NOTES.md`, then run the **Maven Publish** workflow from the branch you want to release. The workflow converts the current `x.y.z-SNAPSHOT` version to `x.y.z` and commits it, builds all release artifacts from that exact commit, tags it as `vx.y.z`, creates the GitHub Release, and finally commits the next minor version as `x.(y+1).0-SNAPSHOT`. A failed run can be rerun from the same release commit and tag.

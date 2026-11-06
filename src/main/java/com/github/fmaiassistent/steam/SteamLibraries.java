@@ -1,0 +1,157 @@
+package com.github.fmaiassistent.steam;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.OptionalLong;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * Locates Steam libraries on disk by reading {@code libraryfolders.vdf}.
+ * FM27 (Steam appid 4530370) runs under Proton, so per-game user files live below
+ * {@code steamapps/compatdata/4530370/pfx/...} inside whichever library holds the game.
+ * Read-only: never writes to the Steam folders.
+ */
+public final class SteamLibraries {
+    public static final int FM27_APP_ID = 4530370;
+    public static final String DIRECTORY_PROPERTY = "fmaiassistent.steam.directory";
+    static final Pattern VDF_PATH = Pattern.compile("\"path\"\\s+\"([^\"]+)\"");
+    static final Pattern MANIFEST_BUILD_ID = Pattern.compile("\"buildid\"\\s+\"(\\d+)\"");
+    /** Size cap for Steam app manifests (normally about 1 KiB). */
+    static final int MAX_MANIFEST_BYTES = 64 * 1024;
+
+    private SteamLibraries() {
+    }
+
+    /**
+     * Every Steam library root for the given home directory: entries from
+     * {@code libraryfolders.vdf} plus the default location as fallback.
+     */
+    public static List<Path> libraries(Path home) {
+        return libraries(home, steamInstallRoots(home));
+    }
+
+    static List<Path> libraries(Path home, List<Path> installRoots) {
+        Set<Path> libraries = new LinkedHashSet<>();
+        List<Path> roots = new ArrayList<>(installRoots);
+        roots.add(home.resolve(".local/share/Steam"));
+        roots.add(home.resolve(".steam/steam"));
+        for (Path root : roots) {
+            libraries.addAll(parseLibraryFolders(root.resolve("steamapps/libraryfolders.vdf")));
+        }
+        libraries.addAll(installRoots);
+        libraries.add(home.resolve(".local/share/Steam"));
+        return libraries.stream().map(path -> path.toAbsolutePath().normalize()).distinct().toList();
+    }
+
+    private static List<Path> steamInstallRoots(Path home) {
+        String configured = System.getProperty(DIRECTORY_PROPERTY);
+        if (configured != null && !configured.isBlank()) {
+            try {
+                return List.of(Path.of(configured));
+            } catch (RuntimeException invalidPath) {
+                return List.of();
+            }
+        }
+        if (!System.getProperty("os.name", "").toLowerCase(Locale.ROOT).startsWith("windows")
+                || !home.toAbsolutePath().normalize().equals(
+                        Path.of(System.getProperty("user.home")).toAbsolutePath().normalize())) {
+            return List.of();
+        }
+        List<Path> roots = new ArrayList<>();
+        for (String variable : List.of("ProgramFiles(x86)", "ProgramFiles")) {
+            String programFiles = System.getenv(variable);
+            if (programFiles != null && !programFiles.isBlank()) {
+                roots.add(Path.of(programFiles, "Steam"));
+            }
+        }
+        return roots;
+    }
+
+    /**
+     * The Proton user directories ({@code .../pfx/drive_c/users/steamuser}) holding
+     * FM27 per library, in library order.
+     */
+    public static List<Path> fmProtonUserDirectories(Path home) {
+        String prefix = "steamapps/compatdata/" + FM27_APP_ID + "/pfx/drive_c/users/steamuser";
+        return libraries(home).stream()
+                .map(library -> library.resolve(prefix).toAbsolutePath().normalize())
+                .distinct()
+                .toList();
+    }
+
+    /**
+     * The library holding the given Steam app, detected via its
+     * {@code appmanifest_*.acf}; empty when the game is not found in any library.
+     */
+    public static java.util.Optional<Path> libraryWithApp(Path home, int appId) {
+        return libraries(home).stream()
+                .filter(library -> Files.isRegularFile(
+                        library.resolve("steamapps/appmanifest_" + appId + ".acf")))
+                .findFirst();
+    }
+
+    /**
+     * The installed Steam build id for the given app, read from its
+     * {@code appmanifest_*.acf}; empty when the game or manifest is missing,
+     * unreadable, oversized or lacks a numeric build id. Read-only.
+     */
+    public static OptionalLong installedBuildId(Path home, int appId) {
+        var manifest = libraryWithApp(home, appId)
+                .map(library -> library.resolve("steamapps/appmanifest_" + appId + ".acf"));
+        if (manifest.isEmpty()) {
+            return OptionalLong.empty();
+        }
+        String text = readBounded(manifest.get(), MAX_MANIFEST_BYTES);
+        if (text == null) {
+            return OptionalLong.empty();
+        }
+        Matcher matcher = MANIFEST_BUILD_ID.matcher(text);
+        if (!matcher.find()) {
+            return OptionalLong.empty();
+        }
+        try {
+            return OptionalLong.of(Long.parseLong(matcher.group(1)));
+        } catch (NumberFormatException notNumeric) {
+            return OptionalLong.empty();
+        }
+    }
+
+    private static String readBounded(Path file, int limit) {
+        try (InputStream in = Files.newInputStream(file)) {
+            byte[] bytes = in.readNBytes(limit + 1);
+            if (bytes.length > limit) {
+                return null;
+            }
+            return new String(bytes, StandardCharsets.UTF_8);
+        } catch (IOException | RuntimeException exception) {
+            return null;
+        }
+    }
+
+    public static List<Path> parseLibraryFolders(Path vdf) {
+        String text = readBounded(vdf, 256 * 1024);
+        if (text == null) {
+            return List.of();
+        }
+        List<Path> libraries = new ArrayList<>();
+        Matcher matcher = VDF_PATH.matcher(text);
+        while (matcher.find()) {
+            try {
+                libraries.add(Path.of(matcher.group(1).replace("\\\\", "\\"))
+                        .toAbsolutePath().normalize());
+            } catch (RuntimeException ignored) {
+                // Skip malformed entries.
+            }
+        }
+        return List.copyOf(libraries);
+    }
+}

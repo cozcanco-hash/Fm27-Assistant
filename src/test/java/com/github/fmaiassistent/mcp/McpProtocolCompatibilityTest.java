@@ -1,0 +1,302 @@
+package com.github.fmaiassistent.mcp;
+
+import com.github.fmaiassistent.exporter.ClubExporter;
+import com.github.fmaiassistent.exporter.CompetitionExporter;
+import com.github.fmaiassistent.exporter.PlayerExporter;
+import com.github.fmaiassistent.exporter.StaffExporter;
+import com.github.fmaiassistent.repository.DatabaseService;
+import com.github.fmaiassistent.service.SnapshotDatabaseWriter;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = {
+                "app.codex.enabled=false",
+                "app.ai.antigravity.enabled=false",
+                "app.ai.copilot.enabled=false",
+                "spring.datasource.url=jdbc:h2:mem:mcp-protocol-test;DB_CLOSE_DELAY=-1"
+        })
+class McpProtocolCompatibilityTest {
+    private final HttpClient http = HttpClient.newHttpClient();
+
+    @Autowired
+    private ObjectMapper mapper;
+
+    @Value("${local.server.port}")
+    private int port;
+
+    @Autowired
+    private JdbcTemplate jdbc;
+
+    @Autowired
+    private DatabaseService database;
+
+    @Autowired
+    private SnapshotDatabaseWriter snapshotWriter;
+
+    @Autowired
+    private PlatformTransactionManager transactions;
+
+    @Test
+    void batchSnapshotWriterPersistsFieldsAndRelationships() {
+        database.clearAllTables();
+        Map<Long, Long> competitions = snapshotWriter.saveCompetitions(new CompetitionExporter.ExportResult(List.of(
+                Map.of("sourceAddress", 100L, "name", "Test League", "nation", "Netherlands",
+                        "reputation", 150, "gender", "male"))));
+        Map<Long, Long> clubs = snapshotWriter.saveClubs(new ClubExporter.ExportResult(List.of(
+                Map.of("sourceAddress", 200L, "_competition_address", 100L, "name", "Test Club",
+                        "gender", "male", "competition", "Test League", "reputation", 7000,
+                        "nation", "Netherlands"))), competitions);
+        snapshotWriter.savePlayers(new PlayerExporter.ExportResult("2033-06-23", List.of(
+                Map.of("index", "7", "record", "0x123", "unique_id", 300L, "name", "Test Player",
+                        "club", "Test Club", "playing_club", "Test Club", "ca", 150, "pa", 170,
+                        "_club_address", 200L, "_playing_club_address", 200L))), clubs);
+        snapshotWriter.saveStaff(new StaffExporter.ExportResult("2033-06-23", List.of(
+                Map.of("staff_index", 8, "record_address", "0x456", "unique_id", 400L,
+                        "name", "Test Coach", "club", "Test Club", "ca", 160, "pa", 165,
+                        "attacking", 18, "_club_address", 200L))), clubs);
+
+        assertEquals(1, jdbc.queryForObject("""
+                SELECT COUNT(*) FROM players p
+                JOIN clubs c ON c.id = p.club_id
+                JOIN competitions co ON co.id = c.competition_id
+                WHERE p.unique_id = 300 AND c.name = 'Test Club' AND co.name = 'Test League'
+                """, Integer.class));
+        assertEquals(18, jdbc.queryForObject("""
+                SELECT s.attacking FROM staff s
+                JOIN clubs c ON c.id = s.club_id
+                WHERE s.unique_id = 400 AND c.name = 'Test Club'
+                """, Integer.class));
+        database.clearAllTables();
+    }
+
+    @Test
+    void failedSnapshotReplacementRollsBackAndPreservesRecruitmentEvidence() {
+        jdbc.update("INSERT INTO competitions (name) VALUES (?)", "Rollback League");
+        jdbc.update("INSERT INTO recruitment_case (player_unique_id, deal_stage) VALUES (?, ?)",
+                2099999999L, "monitoring");
+
+        assertThrows(IllegalStateException.class, () -> new TransactionTemplate(transactions)
+                .executeWithoutResult(status -> {
+                    database.clearAllTables();
+                    snapshotWriter.saveCompetitions(new CompetitionExporter.ExportResult(List.of(
+                            Map.of("sourceAddress", 999L, "name", "Uncommitted League",
+                                    "nation", "Netherlands", "reputation", 100, "gender", "male"))));
+                    throw new IllegalStateException("simulated RAM read failure");
+                }));
+
+        assertEquals(1, jdbc.queryForObject(
+                "SELECT COUNT(*) FROM competitions WHERE name = 'Rollback League'", Integer.class));
+        assertEquals(0, jdbc.queryForObject(
+                "SELECT COUNT(*) FROM competitions WHERE name = 'Uncommitted League'", Integer.class));
+        assertEquals(1, jdbc.queryForObject(
+                "SELECT COUNT(*) FROM recruitment_case WHERE player_unique_id = 2099999999", Integer.class));
+
+        database.clearAllTables();
+        assertEquals(0, jdbc.queryForObject(
+                "SELECT COUNT(*) FROM competitions WHERE name = 'Rollback League'", Integer.class));
+        assertEquals(1, jdbc.queryForObject(
+                "SELECT COUNT(*) FROM recruitment_case WHERE player_unique_id = 2099999999", Integer.class));
+        jdbc.update("DELETE FROM recruitment_case WHERE player_unique_id = 2099999999");
+    }
+
+    @Test
+    void supportsCopilotAntigravityAndCodexProtocolVersions() throws Exception {
+        for (String protocol : new String[] {"2025-11-25", "2025-06-18"}) {
+            JsonNode initialize = mapper.createObjectNode()
+                    .put("jsonrpc", "2.0")
+                    .put("id", 1)
+                    .put("method", "initialize")
+                    .set("params", mapper.createObjectNode()
+                            .put("protocolVersion", protocol)
+                            .set("capabilities", mapper.createObjectNode())
+                            .set("clientInfo", mapper.createObjectNode()
+                                    .put("name", "compatibility-test")
+                                    .put("version", "1.0")));
+
+            HttpResponse<String> initialized = post(mapper.writeValueAsString(initialize), null, null);
+
+            assertEquals(200, initialized.statusCode());
+            assertEquals(protocol, mapper.readTree(initialized.body())
+                    .path("result").path("protocolVersion").asString());
+            String sessionId = initialized.headers().firstValue("Mcp-Session-Id").orElse(null);
+            assertNotNull(sessionId);
+            HttpResponse<String> ready = post(
+                    "{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}",
+                    sessionId,
+                    protocol);
+            assertEquals(202, ready.statusCode());
+
+            HttpResponse<String> tools = post(
+                    "{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/list\",\"params\":{}}",
+                    sessionId,
+                    protocol);
+            String data = tools.body().lines()
+                    .filter(line -> line.startsWith("data:"))
+                    .map(line -> line.substring("data:".length()))
+                    .findFirst()
+                    .orElse(tools.body());
+            JsonNode listedTools = mapper.readTree(data).path("result").path("tools");
+            assertEquals(22, listedTools.size());
+            if ("2025-11-25".equals(protocol)) {
+                JsonNode beforeCatalog = listedTools.deepCopy();
+                beforeCatalog.valueStream().forEach(tool -> {
+                    if (tool.path("inputSchema").path("properties") instanceof tools.jackson.databind.node.ObjectNode fields) {
+                        fields.remove("responseDetail");
+                    }
+                });
+                System.out.printf("FM_SIZE_AUDIT tools/list before=%d after=%d%n",
+                        mapper.writeValueAsString(beforeCatalog).getBytes(StandardCharsets.UTF_8).length,
+                        mapper.writeValueAsString(listedTools).getBytes(StandardCharsets.UTF_8).length);
+            }
+            Set<String> names = listedTools.valueStream()
+                    .map(tool -> tool.path("name").asString())
+                    .collect(Collectors.toSet());
+            assertTrue(names.containsAll(Set.of(
+                    "fm27_find_clubs",
+                    "fm27_find_players",
+                    "fm27_get_club_context",
+                    "fm27_get_player_details",
+                    "fm27_find_staff",
+                    "fm27_get_staff_details",
+                    "fm27_get_staff_coaching_roles",
+                    "fm27_get_role_attributes",
+                    "fm27_transfer_shortlist",
+                    "fm27_create_shortlist_file",
+                    "fm27_get_data_status",
+                    "fm27_refresh_data",
+                    "fm27_analyze_squad",
+                    "fm27_optimize_lineup",
+                    "fm27_recruit_for_tactic_slot",
+                    "fm27_compare_players",
+                    "fm27_find_replacements",
+                    "fm27_plan_squad_moves",
+                    "fm27_update_recruitment_case",
+                    "fm27_get_recruitment_board",
+                    "fm27_get_managed_club_fixtures",
+                    "fm27_analyze_next_opposition")));
+            JsonNode createShortlist = listedTools.valueStream()
+                    .filter(tool -> "fm27_create_shortlist_file".equals(tool.path("name").asString()))
+                    .findFirst()
+                    .orElseThrow();
+            assertEquals("string", createShortlist.path("inputSchema").path("properties")
+                    .path("shortlistName").path("type").asString());
+            assertEquals("array", createShortlist.path("inputSchema").path("properties")
+                    .path("playerUniqueIds").path("type").asString());
+            JsonNode findStaff = listedTools.valueStream()
+                    .filter(tool -> "fm27_find_staff".equals(tool.path("name").asString()))
+                    .findFirst()
+                    .orElseThrow();
+            assertEquals("object", findStaff.path("inputSchema").path("properties")
+                    .path("minimumAttributes").path("type").asString());
+            assertEquals("number", findStaff.path("inputSchema").path("properties")
+                    .path("minimumCoachingStars").path("type").asString());
+            JsonNode staffDetails = listedTools.valueStream()
+                    .filter(tool -> "fm27_get_staff_details".equals(tool.path("name").asString()))
+                    .findFirst()
+                    .orElseThrow();
+            assertEquals("integer", staffDetails.path("inputSchema").path("properties")
+                    .path("staffUniqueId").path("type").asString());
+            JsonNode scenario = listedTools.valueStream()
+                    .filter(tool -> "fm27_plan_squad_moves".equals(tool.path("name").asString()))
+                    .findFirst()
+                    .orElseThrow();
+            assertEquals("array", scenario.path("inputSchema").path("properties")
+                    .path("quotes").path("type").asString());
+            assertEquals("integer", scenario.path("inputSchema").path("properties")
+                    .path("quotes").path("items").path("properties")
+                    .path("playerUniqueId").path("type").asString());
+            JsonNode optimizer = listedTools.valueStream()
+                    .filter(tool -> "fm27_optimize_lineup".equals(tool.path("name").asString()))
+                    .findFirst()
+                    .orElseThrow();
+            assertEquals("array", optimizer.path("inputSchema").path("properties")
+                    .path("lockedAssignments").path("type").asString());
+            assertEquals("integer", optimizer.path("inputSchema").path("properties")
+                    .path("lockedAssignments").path("items").path("properties")
+                    .path("playerUniqueId").path("type").asString());
+            for (String projected : Set.of("fm27_analyze_squad", "fm27_optimize_lineup",
+                    "fm27_plan_squad_moves", "fm27_get_role_attributes", "fm27_find_players",
+                    "fm27_find_staff", "fm27_get_club_context")) {
+                JsonNode schema = listedTools.valueStream()
+                        .filter(tool -> projected.equals(tool.path("name").asString()))
+                        .findFirst().orElseThrow().path("inputSchema");
+                assertEquals(2, schema.path("properties").path("responseDetail").path("enum").size());
+            }
+            assertTrue(listedTools.valueStream()
+                    .filter(tool -> "fm27_create_shortlist_file".equals(tool.path("name").asString()))
+                    .findFirst().orElseThrow().path("inputSchema").path("properties")
+                    .path("responseDetail").isMissingNode());
+
+            JsonNode compact = toolCall("fm27_get_role_attributes", "{}", sessionId, protocol);
+            JsonNode full = toolCall("fm27_get_role_attributes", "{\"responseDetail\":\"full\"}",
+                    sessionId, protocol);
+            assertEquals("compact", compact.path("_response_detail").path("level").asString());
+            assertTrue(compact.path("roles").get(0).path("primary_attributes").get(0).isString());
+            assertTrue(full.path("roles").get(0).path("primary_attributes").get(0).isObject());
+            assertEquals("compact", toolCall("fm27_get_role_attributes", "[]", sessionId, protocol)
+                    .path("_response_detail").path("level").asString());
+            assertEquals("compact", toolCall("fm27_get_role_attributes", "[{}]", sessionId, protocol)
+                    .path("_response_detail").path("level").asString());
+            assertEquals(0, toolCall("fm27_find_players", "[{\"name\":\"no such player 987654\"}]",
+                    sessionId, protocol).path("count").asInt());
+            HttpResponse<String> badArguments = post(
+                    "{\"jsonrpc\":\"2.0\",\"id\":4,\"method\":\"tools/call\","
+                            + "\"params\":{\"name\":\"fm27_find_players\",\"arguments\":[1,2]}}",
+                    sessionId, protocol);
+            assertEquals(200, badArguments.statusCode());
+            JsonNode error = mapper.readTree(badArguments.body());
+            assertEquals(-32602, error.path("error").path("code").asInt());
+            assertEquals(4, error.path("id").asInt());
+        }
+    }
+
+    private JsonNode toolCall(String name, String args, String sessionId, String protocol) throws Exception {
+        String request = "{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{"
+                + "\"name\":\"" + name + "\",\"arguments\":" + args + "}}";
+        HttpResponse<String> response = post(request, sessionId, protocol);
+        assertEquals(200, response.statusCode());
+        String data = response.body().lines().filter(line -> line.startsWith("data:"))
+                .map(line -> line.substring(5)).findFirst().orElse(response.body());
+        JsonNode result = mapper.readTree(data).path("result");
+        assertTrue(result.path("isError").isMissingNode() || !result.path("isError").asBoolean());
+        return mapper.readTree(result.path("content").get(0).path("text").asString());
+    }
+
+    private HttpResponse<String> post(String body, String sessionId, String protocol) throws Exception {
+        HttpRequest.Builder request = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + port + "/mcp"))
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json, text/event-stream")
+                .POST(HttpRequest.BodyPublishers.ofString(body));
+        if (sessionId != null) {
+            request.header("Mcp-Session-Id", sessionId);
+        }
+        if (protocol != null) {
+            request.header("MCP-Protocol-Version", protocol);
+        }
+        return http.send(request.build(), HttpResponse.BodyHandlers.ofString());
+    }
+}
