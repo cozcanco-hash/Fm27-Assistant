@@ -48,6 +48,14 @@ AI features require the **official Codex CLI**, installed separately, and your o
 
 Squad analysis runs locally; AI chat uses the connected service. Real ChatGPT sign-in and replies still need testing on a user's Mac. Automated tests verify the integration protocol with a fake CLI without consuming AI credits.
 
+## Experimental in-game interface
+
+A C# BepInEx plugin and the desktop app can share one Rust-owned conversation,
+model choice and roster. The game panel is an early development prototype:
+**its rendering has not yet been verified in FM27, and it does not read live
+game data**. The desktop host must remain running. See the
+[build instructions and game acceptance checklist](game-plugin/README.md).
+
 ## Current scope
 
 This is an early companion app. The current Rust version supports demo data and the app's **custom JSON schema**, not automatic imports from every FM export. Live game reading, save-file parsing, `.fmf` decoding, automatic in-game control and the Java reference's recruitment/staff features have not been implemented in the Rust app. FM27 compatibility remains to be verified with actual game data.

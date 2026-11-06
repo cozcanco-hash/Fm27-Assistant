@@ -50,6 +50,7 @@ pub struct CodexBridge {
     session: Mutex<Option<Session>>,
     workspace: PathBuf,
     cancel: Arc<AtomicBool>,
+    executable: Option<PathBuf>,
 }
 
 impl CodexBridge {
@@ -58,6 +59,15 @@ impl CodexBridge {
             session: Mutex::new(None),
             workspace,
             cancel: Arc::new(AtomicBool::new(false)),
+            executable: None,
+        }
+    }
+
+    /// Explicit executable for controlled protocol acceptance checks or a managed CLI install.
+    pub fn with_executable(workspace: PathBuf, executable: PathBuf) -> Self {
+        Self {
+            executable: Some(executable),
+            ..Self::new(workspace)
         }
     }
 
@@ -69,9 +79,21 @@ impl CodexBridge {
             *slot = None;
         }
         if slot.is_none() {
-            let executable = find_executable().ok_or(
-                "Codex CLI bulunamadı. Mac'ine resmi Codex CLI'ı kurup yeniden bağlan.".to_string(),
-            )?;
+            let executable = self
+                .executable
+                .clone()
+                .filter(|p| executable(p))
+                .or_else(|| {
+                    if self.executable.is_none() {
+                        find_executable()
+                    } else {
+                        None
+                    }
+                })
+                .ok_or(
+                    "Codex CLI bulunamadı. Mac'ine resmi Codex CLI'ı kurup yeniden bağlan."
+                        .to_string(),
+                )?;
             std::fs::create_dir_all(&self.workspace)
                 .map_err(|_| "Asistan çalışma klasörü oluşturulamadı.".to_string())?;
             let mut command = Command::new(&executable);
@@ -144,6 +166,20 @@ impl CodexBridge {
         history: Vec<ChatMessage>,
         context: String,
         model: Option<String>,
+        emit: impl FnMut(ChatEvent) + Send,
+    ) -> RpcResult<String> {
+        self.cancel.store(false, Ordering::Release);
+        self.chat_with_cancel(prompt, history, context, model, self.cancel.clone(), emit)
+            .await
+    }
+
+    pub async fn chat_with_cancel(
+        &self,
+        prompt: String,
+        history: Vec<ChatMessage>,
+        context: String,
+        model: Option<String>,
+        cancel: Arc<AtomicBool>,
         mut emit: impl FnMut(ChatEvent) + Send,
     ) -> RpcResult<String> {
         if prompt.trim().is_empty()
@@ -156,11 +192,10 @@ impl CodexBridge {
             return Err("Mesaj veya konuşma geçmişi izin verilen sınırı aşıyor.".into());
         }
         let mut slot = self.session.lock().await;
-        self.cancel.store(false, Ordering::Release);
-        let cancel = self.cancel.clone();
         let workspace = self.workspace.clone();
         let outcome = tokio::time::timeout(Duration::from_secs(150), async {
             let session = self.ensure(&mut slot).await?;
+            if cancel.load(Ordering::Acquire) { return Err("Yanıt durduruldu.".into()); }
             let account = session.rpc("account/read", json!({"refreshToken":false}), &mut |_| Ok(())).await?;
             if account.pointer("/account/type").and_then(Value::as_str) != Some("chatgpt") {
                 return Err("Önce ChatGPT hesabınla giriş yap. Bu uygulama API anahtarıyla istek başlatmaz.".into());
@@ -170,6 +205,7 @@ impl CodexBridge {
             if let Some(model) = model.filter(|m| !m.is_empty()) { params["model"] = json!(model); }
             let thread = session.rpc("thread/start", params, &mut |_| Ok(())).await?;
             let thread_id = thread.pointer("/thread/id").and_then(Value::as_str).ok_or("Codex konuşma oluşturamadı.")?.to_string();
+            if cancel.load(Ordering::Acquire) { return Err("Yanıt durduruldu.".into()); }
             let previous: String = history.iter().map(|m| format!("{}: {}\n", m.role, m.text)).collect();
             let text = format!("<squad_data>\n{context}</squad_data>\n<conversation_data>\n{previous}</conversation_data>\nKullanıcının güncel isteği: {prompt}");
             let mut response = ResponseBuffer::default();

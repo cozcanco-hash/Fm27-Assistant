@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 use std::path::Path;
 
 pub struct Store {
-    connection: Connection,
+    pub(crate) connection: Connection,
     snapshot: Snapshot,
     formation: Formation,
     snapshot_id: i64,
@@ -43,7 +43,11 @@ impl Store {
             CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
             CREATE TABLE IF NOT EXISTS scout_lists (id INTEGER PRIMARY KEY, scope TEXT NOT NULL, name TEXT NOT NULL, UNIQUE(scope,name));
             CREATE TABLE IF NOT EXISTS scout_entries (list_id INTEGER NOT NULL REFERENCES scout_lists(id) ON DELETE CASCADE, player_id INTEGER NOT NULL, name TEXT NOT NULL, PRIMARY KEY(list_id,player_id));
-            CREATE TABLE IF NOT EXISTS player_history (scope TEXT NOT NULL, player_id INTEGER NOT NULL, name TEXT NOT NULL, game_date TEXT NOT NULL, body TEXT NOT NULL, PRIMARY KEY(scope,player_id,game_date));")?;
+            CREATE TABLE IF NOT EXISTS player_history (scope TEXT NOT NULL, player_id INTEGER NOT NULL, name TEXT NOT NULL, game_date TEXT NOT NULL, body TEXT NOT NULL, PRIMARY KEY(scope,player_id,game_date));
+            CREATE TABLE IF NOT EXISTS assistant_conversations (scope TEXT PRIMARY KEY, model TEXT);
+            CREATE TABLE IF NOT EXISTS assistant_messages (id INTEGER PRIMARY KEY, scope TEXT NOT NULL, role TEXT NOT NULL, text TEXT NOT NULL, state TEXT NOT NULL, client TEXT NOT NULL);
+            CREATE INDEX IF NOT EXISTS assistant_messages_scope ON assistant_messages(scope,id);
+            UPDATE assistant_messages SET state='interrupted',text='Uygulama kapanırken yanıt tamamlanamadı.' WHERE state='pending';")?;
         // Length is checked in SQLite before allocating the stored payload.
         if let Some(true) = connection
             .query_row(
@@ -174,7 +178,7 @@ impl Store {
         query_players(&self.snapshot, query, members.as_ref())
     }
 
-    fn scope(&self) -> String {
+    pub fn scope(&self) -> String {
         snapshot_scope(&self.snapshot, self.snapshot_id)
     }
 

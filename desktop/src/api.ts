@@ -1,5 +1,5 @@
-import { Channel, invoke, isTauri } from '@tauri-apps/api/core';
-import type { ChatEvent, ChatMessage, CodexStatus, Dashboard, Formation, PlayerDetail, PlayerHistory, PlayerPage, PlayerQuery, Shortlist } from './types';
+import { invoke, isTauri } from '@tauri-apps/api/core';
+import type { Conversation, GameLinkStatus, CodexStatus, Dashboard, Formation, PlayerDetail, PlayerHistory, PlayerPage, PlayerQuery, Shortlist } from './types';
 
 export const native = isTauri();
 const fixture = () => import('../fixtures/preview-state.json');
@@ -83,12 +83,26 @@ export const api = {
     if (!native) throw new Error('ChatGPT girişi için Mac uygulamasını aç.');
     return invoke('codex_login');
   },
-  async chat(prompt: string, history: ChatMessage[], model: string | null, onEvent: (event: ChatEvent) => void): Promise<string> {
-    if (!native) throw new Error('Gerçek AI sohbeti için Mac uygulamasını aç.');
-    const onEventChannel = new Channel<ChatEvent>();
-    onEventChannel.onmessage = onEvent;
-    return invoke('send_chat', { prompt, history, model, onEvent: onEventChannel });
+  async conversation(): Promise<Conversation> {
+    if (native) return invoke('conversation');
+    return { scope: 'preview', club: 'KUTRA FC', source: 'demo', capturedAt: '', model: null, messages: [], busy: false, live: '', activeTurnId: null, models: [], error: null };
   },
-  async stopChat(): Promise<void> { if (native) return invoke('stop_chat'); },
+  async chat(scope: string, prompt: string): Promise<Conversation> {
+    if (!native) throw new Error('Gerçek AI sohbeti için Mac uygulamasını aç.');
+    return invoke('send_chat', { request: { scope, prompt } });
+  },
+  async setChatModel(scope: string, model: string | null): Promise<Conversation> {
+    if (!native) throw new Error('Model seçimi Mac uygulamasında kullanılabilir.');
+    return invoke('set_chat_model', { scope, model });
+  },
+  async stopChat(turnId: number): Promise<void> { if (native) return invoke('stop_chat', { turnId }); },
+  async gameLink(): Promise<GameLinkStatus> {
+    if (native) return invoke('game_link_status');
+    return { enabled: false, available: false, message: 'Oyun içi bağlantı Mac uygulamasında kullanılabilir.' };
+  },
+  async setGameLink(enabled: boolean): Promise<GameLinkStatus> {
+    if (!native) throw new Error('Oyun içi bağlantı için Mac uygulamasını aç.');
+    return invoke('set_game_link', { enabled });
+  },
   async ready(): Promise<void> { if (native) return invoke('frontend_ready'); },
 };
