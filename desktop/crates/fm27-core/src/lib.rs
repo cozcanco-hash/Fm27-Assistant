@@ -1,5 +1,8 @@
 pub mod analysis;
+pub mod assistant;
+pub mod bridge;
 pub mod codex;
+pub mod conversation;
 pub mod model;
 pub mod scouting;
 pub mod store;

@@ -39,3 +39,7 @@ export const initials = (name: string) => name.split(' ').map(v => v[0]).slice(0
 export const scoreText = (score: number | null | undefined) => score == null ? '—' : Math.round(score).toString();
 export const HIDDEN_LABELS: Record<string, string> = { consistency: 'İstikrar', importantMatches: 'Önemli maçlar', injuryProneness: 'Sakatlık yatkınlığı', versatility: 'Çok yönlülük', professionalism: 'Profesyonellik', ambition: 'Hırs', pressure: 'Baskıyla başa çıkma', temperament: 'Mizaç', loyalty: 'Sadakat', adaptability: 'Uyum sağlama', sportsmanship: 'Sportmenlik', controversy: 'Tartışma eğilimi', dirtiness: 'Sertlik' };
 export const gameDateText = (date: string) => new Intl.DateTimeFormat('tr-TR', { timeZone: 'UTC' }).format(new Date(`${date}T00:00:00Z`));
+
+export interface SharedMessage extends ChatMessage { id: number; state: 'complete' | 'pending' | 'failed' | 'interrupted'; client: 'desktop' | 'game' }
+export interface Conversation { scope: string; club: string; source: Source; capturedAt: string; model: string | null; messages: SharedMessage[]; busy: boolean; live: string; activeTurnId: number | null; models: ModelChoice[]; error: string | null }
+export interface GameLinkStatus { enabled: boolean; available: boolean; message: string }

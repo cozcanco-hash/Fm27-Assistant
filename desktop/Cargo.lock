@@ -791,9 +791,10 @@ dependencies = [
 
 [[package]]
 name = "fm27-core"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "chrono",
+ "getrandom 0.3.4",
  "rusqlite",
  "serde",
  "serde_json",
@@ -805,7 +806,7 @@ dependencies = [
 
 [[package]]
 name = "fm27-desktop"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
  "fm27-core",
  "serde",

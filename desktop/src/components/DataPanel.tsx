@@ -1,9 +1,20 @@
 import { CheckCircle2, Database, FileJson, FolderInput, FlaskConical, LockKeyhole, Monitor, RefreshCw } from 'lucide-react';
-import { native } from '../api';
+import { useEffect, useState } from 'react';
+import { api, native } from '../api';
 import { gameDateText } from '../types';
-import type { Dashboard } from '../types';
+import type { Dashboard, GameLinkStatus } from '../types';
 
 export default function DataPanel({ dashboard, onImport, onDemo, busy }: { dashboard: Dashboard; onImport: () => void; onDemo: () => void; busy: boolean }) {
+  const [link, setLink] = useState<GameLinkStatus | null>(null);
+  const [linkBusy, setLinkBusy] = useState(false);
+  const [linkError, setLinkError] = useState('');
+  useEffect(() => { let active = true; void api.gameLink().then(s => { if (active) setLink(s); }).catch(e => { if (active) setLinkError(String(e)); }); return () => { active = false; }; }, []);
+  async function toggleLink() {
+    setLinkBusy(true); setLinkError('');
+    try { setLink(await api.setGameLink(!link?.available)); }
+    catch (e) { setLinkError(String(e)); }
+    finally { setLinkBusy(false); }
+  }
   return <div className="data-grid"><section className="panel data-panel"><div className="panel-heading"><div><span className="eyebrow">ÇALIŞMA ALANIN</span><h2>Verinin kaynağını bil.</h2></div><Database size={21} className="lime" /></div>
     <div className="source-card"><span className="source-icon"><FlaskConical size={27} /></span><div><strong>{dashboard.source === 'demo' ? 'Kurgusal örnek kadro' : 'Manuel içe aktarılan kadro'}</strong><p>{dashboard.club} · {dashboard.playerCount} oyuncu · {dashboard.season}</p><span className="source-badge">{dashboard.source === 'demo' ? 'ÖRNEK VERİ' : 'MANUEL VERİ'}</span></div></div>
     <dl className="data-details"><div><dt>Kaynak tarihi</dt><dd>{new Date(dashboard.capturedAt).toLocaleString('tr-TR')}</dd></div><div><dt>Oyun tarihi</dt><dd>{dashboard.gameDate ? gameDateText(dashboard.gameDate) : 'Bilinmiyor'}</dd></div><div><dt>Oyuna canlı bağlantı</dt><dd>Henüz eklenmedi</dd></div><div><dt>Veri saklama</dt><dd>{native ? 'Mac’inde, yerel SQLite' : 'Tarayıcı önizlemesi'}</dd></div><div><dt>Özellik ölçeği</dt><dd>1–20 · Yetenek 1–200</dd></div></dl>
@@ -12,6 +23,7 @@ export default function DataPanel({ dashboard, onImport, onDemo, busy }: { dashb
     <div className="feature-item"><CheckCircle2 /><div><h3>Kadro ve rol analizi</h3><p>Üç dizilişi karşılaştır, oyuncu özelliklerini ve rol eşleşmelerini incele.</p></div></div>
     <div className="feature-item"><FileJson /><div><h3>Kendi kadro dosyan</h3><p>Uygulamanın JSON şemasında hazırlanmış bir kadroyu içe aktarabilirsin. En fazla 4 MB / 5.000 oyuncu. Bu dosya FM kayıt dosyası değildir.</p></div></div>
     <div className="feature-item"><CheckCircle2 /><div><h3>Gelişim ve takip listeleri</h3><p>Gelişim takibi için dosyada aynı kariyer kimliği ve oyun tarihi bulunmalı. Son 24 oyun tarihi saklanır. CA/PA ve gizli özellikler dosyada yoksa bilinmiyor gösterilir.</p></div></div>
+    <div className="method-card"><strong>Oyun içinde aynı asistan</strong><p>{link?.message ?? 'Bağlantı kontrol ediliyor…'}</p><button className="button secondary" onClick={() => { void toggleLink(); }} disabled={!native || linkBusy}>{linkBusy ? 'Bağlantı hazırlanıyor…' : link?.enabled ? (link.available ? 'Oyun içi bağlantıyı kapat' : 'Bağlantıyı yeniden aç') : 'Oyun içi bağlantıyı aç'}</button>{link?.available ? <p>Mac’te pencereyi kapattığında asistan arka planda çalışır. Dock’tan tekrar açabilirsin. Tamamen çıkmak için uygulama menüsünden Çık’ı seç.</p> : null}{linkError ? <p className="inline-error" role="alert">{linkError}</p> : null}</div>
     <div className="feature-item"><LockKeyhole /><div><h3>Hesap bilgilerin CLI’da kalır</h3><p>ChatGPT girişini resmi Codex CLI yönetir. Uygulama API anahtarı istemez ve oyun dosyalarını değiştirmez.</p></div></div>
     <div className="method-card"><strong>Puanları nasıl okumalıyım?</strong><p>Rol uyumu, bilinen özelliklerin ağırlıklı ortalamasıdır. Gerekli verinin en az %70’i yoksa puan üretilmez. İlk 11 seçiminde mevki, sakatlık ve kondisyon ayrıca değerlendirilir. FM maç motorunun resmi formülü kullanılmaz.</p></div>
   </section></div>;

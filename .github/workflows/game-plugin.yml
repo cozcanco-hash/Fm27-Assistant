@@ -1,0 +1,49 @@
+name: In-game assistant prototype
+on:
+  push:
+    branches: [main]
+    paths: ['game-plugin/**', 'desktop/**', '.github/workflows/game-plugin.yml']
+  pull_request:
+    paths: ['game-plugin/**', 'desktop/**', '.github/workflows/game-plugin.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: game-plugin-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  protocol:
+    name: C# and Rust shared assistant
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '10.0.x'
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: '1.99.1'
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: desktop -> target
+      - name: Test shared Rust host
+        working-directory: desktop
+        run: cargo test --locked -p fm27-core --test shared_assistant
+      - name: Build isolated protocol host
+        working-directory: desktop
+        run: cargo build --locked -p fm27-core --example bridge_host
+      - name: Check C# client against the real Rust host with a fake model peer
+        run: dotnet run --project game-plugin/tests/FM27.Assistant.Checks -c Release -- desktop/target/debug/examples/bridge_host desktop/crates/fm27-core/tests/fixtures/fake-shared-codex.py
+      - name: Get checksum-pinned compile-time loader references
+        run: python3 game-plugin/scripts/prepare-references.py "$RUNNER_TEMP/fm27-loader-reference"
+      - name: Build managed game plugin
+        run: dotnet build game-plugin/src/FM27.Assistant.Plugin/FM27.Assistant.Plugin.csproj -c Release -p:BepInExCoreDir="$RUNNER_TEMP/fm27-loader-reference"
+      - name: Package experimental plugin without game or loader files
+        run: python3 game-plugin/scripts/package.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FM27-Assistant-in-game-experimental
+          path: game-plugin/artifacts/*.zip
+          if-no-files-found: error
+          retention-days: 14

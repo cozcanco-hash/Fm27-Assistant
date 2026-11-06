@@ -150,9 +150,14 @@ the chat thread requests a read-only sandbox and automatically declines
 command/file-change permission requests. Authentication tokens are neither
 read by our code nor returned to the frontend.
 
-Conversations are held in the UI session, with bounded history supplied to an
-ephemeral Codex thread for each turn. No permanent application chat archive
-is implemented yet. Real ChatGPT sign-in and actual FM27 data still require
+Conversations and model choice are persisted per career in SQLite, up to 40
+messages / 256 KiB of text. Rust supplies bounded completed history to each
+ephemeral Codex turn. The optional C# game panel shares the same conversation
+and pending reply through an authenticated local connection. See
+[the experimental in-game plugin](../game-plugin/README.md). Closing the Mac
+window keeps the assistant in the background while the connection is enabled;
+Quit fully stops it. Game rendering and live data extraction are separate
+acceptance milestones; the current panel uses the desktop roster. Real ChatGPT sign-in and actual FM27 data still require
 testing on the owner's Mac. Protocol tests use a deterministic fake CLI and
 never spend model credits.
 

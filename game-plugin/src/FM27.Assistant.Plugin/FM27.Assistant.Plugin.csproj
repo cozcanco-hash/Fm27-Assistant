@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>FM27.Assistant.Plugin</AssemblyName>
+    <BepInExCoreDir Condition="'$(BepInExCoreDir)' == ''">$(FM27_BEPINEX_CORE)</BepInExCoreDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../FM27.Assistant.Client/FM27.Assistant.Client.csproj" />
+    <Reference Include="BepInEx.Core"><HintPath>$(BepInExCoreDir)/BepInEx.Core.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="BepInEx.Unity.IL2CPP"><HintPath>$(BepInExCoreDir)/BepInEx.Unity.IL2CPP.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+  <Target Name="CheckLoaderReferences" BeforeTargets="ResolveReferences">
+    <Error Condition="!Exists('$(BepInExCoreDir)/BepInEx.Unity.IL2CPP.dll')" Text="Set FM27_BEPINEX_CORE to the BepInEx 6 IL2CPP core directory (or pass -p:BepInExCoreDir=...). No game or loader files are included in this repository." />
+  </Target>
+</Project>
